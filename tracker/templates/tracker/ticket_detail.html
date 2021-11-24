@@ -1,0 +1,23 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<table>
+    {% for label, value in ticket.get_fields %}
+        <tr>
+            <td>{{ label }}</td>
+            <td>{{ value }}</td>
+        </tr>
+    {% endfor %}
+</table>
+    
+<h3>Ticket Status</h3>
+{% if ticket.created_dt %}
+<br>Ticket Submitted: {{ ticket.created_dt }}</br>
+<br>Intake Form Approved Date:</br>
+<br>Intake Form Rejected Date:</br>
+<br>Bucket Created Date:</br>	
+<br>Data Uploaded Started Date:</br>	
+<br>Data Uploaded Completed Date:</br>	
+<br>Gen3 Accepted Date:</br>	
+{% endif %}
+{% endblock %}
