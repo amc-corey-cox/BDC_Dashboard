@@ -12,6 +12,10 @@ black = "*"
 [dev-packages]
 pytest = "*"
 black = "*"
+pipfile-requirements = "*"
 
 [requires]
 python_version = "3.9"
+
+[scripts]
+server = "python manage.py runserver"
