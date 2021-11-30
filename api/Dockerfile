@@ -1,14 +1,29 @@
 # syntax=docker/dockerfile:1
-FROM python:3.4
-ENV PYTHONUNBUFFERED=1
+FROM python:3.8-slim-buster
 
-# install modules
-COPY requirements.txt .
-RUN pip3 install -r requirements.txt
+ENV APP_HOME=/app \
+  PYTHONUNBUFFERED=1 \
+  TINI_VERSION=v0.19.0
 
-ENV APP_HOME /app/api
 WORKDIR ${APP_HOME}
-COPY . ${APP_HOME}
 
+COPY . ./
+
+RUN set eux; \
+  apt-get update; \
+  apt-get install -y \
+    nodejs \
+    wget \
+  ; \
+  # install tini
+  wget https://github.com/krallin/tini/releases/download/$TINI_VERSION/tini -O /sbin/tini; \
+  chmod +x /sbin/tini \
+  ; \
+  # install py modules
+  pip3 install -r requirements.txt; \
+  # clean up cache
+  apt-get clean && rm -rf /var/lib/apt/lists/*
+
+ENTRYPOINT ["/sbin/tini", "--"]
 EXPOSE 8000
-# TODO: add entrypoint
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
