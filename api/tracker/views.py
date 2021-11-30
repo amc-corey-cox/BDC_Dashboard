@@ -1,5 +1,5 @@
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.views.generic import DetailView
+from django.views.generic import DetailView, TemplateView
 from django.views.generic.list import ListView
 from django.urls import reverse_lazy
 from django.forms import Textarea
@@ -18,6 +18,8 @@ from .models import Ticket
 #
 #     return render(request, 'tracker/initiate_ticket.html', {'form': form})
 
+class IndexView(TemplateView):
+    template_name = 'tracker/index.html'
 
 class TicketCreate(CreateView):
     model = Ticket
