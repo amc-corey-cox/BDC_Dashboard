@@ -1,54 +1,44 @@
-{% extends "base_generic.html" %}
-
-{% block content %}
+{% extends "base_generic.html" %} {% block content %}
 <h1>Tickets Dashboard</h1>
-<table border=1>
- 	<tr>
-		<th>Bucket Name</th>
-		<th>Primary Contact</th>
-		<th>Form Submission</th>
-		<th>Ticket Accepted</th>
-		<th>Bucket Created</th>		
-		<th>Data Uploaded Started</th>	
-		<th>Data Uploaded Completed</th>	
-		<th>Gen3 Accepted</th>	
-	<tr>
+<table border="1">
+  <tr>
+    <th>Bucket Name</th>
+    <th>Primary Contact</th>
+    <th>Form Submission</th>
+    <th>Ticket Accepted</th>
+    <th>Bucket Created</th>
+    <th>Data Uploaded Started</th>
+    <th>Data Uploaded Completed</th>
+    <th>Gen3 Accepted</th>
+  </tr>
+
+  <tr>
     <!-- Iterate over object_list -->
     {% for object in object_list %}
     <!-- Display Objects -->
-	<tr>
-		<td>
-			<a href="{% url 'tracker:ticket-update' pk=object.pk %}">{{ object.study_id }}..{{object.consent_code}}</a>
-		</td>
-		<td> 
-        {{object.name}}
-    	</td>  		
-		<td> 
-        {{object.created_dt}}
-    	</td>  
-		<td> 
-        {{object.accepted_dt}}
-    	</td>  
-		<td> 
-        {{object.bucket_created_dt}}
-    	</td> 
-		<td> 
-        {{object.data_upload_started_dt}}
-    	</td> 
-		<td> 
-        {{object.data_upload_competed_dt}}
-    	</td> 
-		<td> 
-        {{object.gen3_accepted_dt}}
-    	</td> 
-    <tr/>
-    <!-- If object_list is empty  -->
-    {% empty %}
-    <tr>
-    	<td>
-	    	No tickets yet.
-	    </td>
-	</tr>
-    {% endfor %}
+  </tr>
+
+  <tr>
+    <td>
+      <a href="{% url 'tracker:ticket-update' pk=object.pk %}"
+        >{{ object.study_id }}..{{object.consent_code}}</a
+      >
+    </td>
+    <td>{{object.name}}</td>
+    <td>{{object.created_dt}}</td>
+    <td>{{object.accepted_dt}}</td>
+    <td>{{object.bucket_created_dt}}</td>
+    <td>{{object.data_upload_started_dt}}</td>
+    <td>{{object.data_upload_competed_dt}}</td>
+    <td>{{object.gen3_accepted_dt}}</td>
+  </tr>
+
+  <tr />
+  <!-- If object_list is empty  -->
+  {% empty %}
+  <tr>
+    <td>No tickets yet.</td>
+  </tr>
+  {% endfor %}
 </table>
 {% endblock %}

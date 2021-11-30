@@ -1,15 +1,18 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <link rel="stylesheet" href="{% static 'tracker/style.css' %}">
-    <title>{% block title %}BioData Catalyst Data Submission Tracker{% endblock %}</title>
-</head>
+  <head>
+    <link
+      href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <title>
+      {% block title %}BioData Catalyst Data Submission Tracker{% endblock %}
+    </title>
+  </head>
 
-<body>
+  <body>
     <h1>BDCAT Data Submission Tracker</h1>
-    <div id="content">
-        {% block content %}{% endblock %}
-    </div>
-</body>
+    <div id="content">{% block content %}{% endblock %}</div>
+  </body>
 </html>
