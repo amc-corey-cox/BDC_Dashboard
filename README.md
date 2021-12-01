@@ -6,7 +6,10 @@ A web-based data tracker for submission process
 
 ### Prerequisites
 
-**[Docker](https://www.docker.com/get-started)**
+- **[Docker](https://www.docker.com/get-started)**
+- Inside the `api` directory, you need 2 files
+  - `.env` with the value `SECRET_KEY`
+  - `db.sqlite3` file for the database
 
 ### Docker Compose
 
