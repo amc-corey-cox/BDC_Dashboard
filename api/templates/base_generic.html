@@ -12,8 +12,9 @@
       rel="stylesheet"
     />
 
-    <!-- Static Style -->
+    <!-- Static CSS -->
     <link rel="stylesheet" href="{% static 'tracker/style.css' %}" />
+    <link rel="icon" href="{% static 'tracker/favicon-32x32.png' %}" />
 
     <title>
       {% block title %}BioData Catalyst Data Submission Tracker{% endblock %}
@@ -24,15 +25,7 @@
     <!-- SideBar Start -->
     <div class="wrapper">
       <div id="sideNav">
-        <div id="navHeader">
-          <img
-            src="{% static 'tracker/favicon-32x32.png' %}"
-            alt="bdcat icon"
-          />
-          <span class="sidebar-header">
-            <h3>BDCat</h3>
-          </span>
-        </div>
+        <img src="{% static 'tracker/bio.svg' %}" alt="bdcat icon" />
         <hr />
         <div class="list-group">
           <a class="list-group-item list-group-item-action" href="/"> Home </a>
