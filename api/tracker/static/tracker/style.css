@@ -1,16 +1,50 @@
 label {
-    font-weight: bold;
+  font-weight: bold;
 }
 .field-helptext {
-    font-size: 12px;
+  font-size: 12px;
 }
 .field-error {
-    font-size: 14px;
-    color: red;
+  font-size: 14px;
+  color: red;
 }
 .field-required {
-    font-weight: bold;
+  font-weight: bold;
 }
 .field-required:after {
-    content: " *";
+  content: " *";
+}
+
+html {
+  font-family: Helvetica;
+}
+
+#content {
+  height: 100%;
+  width: 100%;
+}
+
+.wrapper {
+  display: flex;
+  width: 100%;
+  align-items: stretch;
+}
+#navHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+#sideNav {
+  height: 100%;
+  width: 200px;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  overflow-x: hidden;
+  padding: 10px;
+}
+
+#titleHeader {
+  font-weight: bold;
+  text-align: center;
 }
