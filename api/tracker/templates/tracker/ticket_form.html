@@ -1,6 +1,5 @@
-{% extends "base_generic.html" %} {% block content %} {% if object %}
-<a href="{% url 'tracker:ticket-delete' pk=object.pk %}">Delete this ticket</a>
-{% endif %}
+{% extends "base_generic.html" %} {% block content %}
+<h1 class="text-muted" style="text-align: center">Ticket Item</h1>
 
 <form action="" method="post">
   {% csrf_token %}
@@ -8,9 +7,15 @@
     {{ form.as_p }}
   </table>
   {% if object %}
-  <input type="submit" value="Update" />
+  <input class="btn btn-primary" type="submit" value="Update" />
+
+  <a
+    href="{% url 'tracker:ticket-delete' pk=object.pk %}"
+    class="btn btn-danger"
+    >Delete Ticket</a
+  >
   {% else %}
-  <input type="submit" value="Submit" />
+  <input class="btn btn-primary" type="submit" value="Submit" />
   {% endif %}
 </form>
 {% endblock %}
