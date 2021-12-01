@@ -1,6 +1,6 @@
-# bdcat-data-tracker
+# BioData Catalyst Tracker
 
-A web-based data tracker for submission process
+> A web-based data tracker for submission process
 
 ## Getting started
 
