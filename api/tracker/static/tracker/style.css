@@ -15,8 +15,19 @@ label {
   content: " *";
 }
 
+:root {
+  --color-white: #eee;
+  --color-light-gray: #a0a2a4;
+  --color-primary: #0066cc;
+  --color-secondary: #00ccff;
+  --color-tertiary: #00ffcc;
+  --color-quaternary: #ccffcc;
+  --color-crimson: #b33243;
+  --color-crimson-dark: #5a2a38;
+}
 html {
-  font-family: Helvetica;
+  font-family: "Montserrat, sans-serif";
+  color: #444;
 }
 
 #content {
@@ -30,22 +41,23 @@ html {
   width: 100%;
   align-items: stretch;
 }
-#navHeader {
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-}
 #sideNav {
   height: 100%;
-  width: 200px;
+  width: 250px;
   z-index: 1;
   top: 0;
   left: 0;
   overflow-x: hidden;
   padding: 10px;
 }
+#sideNav img {
+  width: 100%;
+  padding-top: 10px;
+  object-fit: contain;
+}
 
 #titleHeader {
   font-weight: bold;
   text-align: center;
+  color: inherit;
 }

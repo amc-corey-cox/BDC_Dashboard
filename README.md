@@ -1,12 +1,15 @@
-# bdcat-data-tracker
+# BioData Catalyst Tracker
 
-A web-based data tracker for submission process
+> A web-based data tracker for submission process
 
 ## Getting started
 
 ### Prerequisites
 
-**[Docker](https://www.docker.com/get-started)**
+- **[Docker](https://www.docker.com/get-started)**
+- Inside the `api` directory, you need 2 files
+  - `.env` with the value `SECRET_KEY`
+  - `db.sqlite3` file for the database
 
 ### Docker Compose
 
