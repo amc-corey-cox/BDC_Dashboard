@@ -26,11 +26,11 @@
     </td>
     <td>{{ object.name }}</td>
     <td>{{ object.created_dt }}</td>
-    <td>{{ object.accepted_dt }}</td>
+    <td>{{ object.ticket_approved_dt }}</td>
     <td>{{ object.bucket_created_dt }}</td>
-    <td>{{ object.data_upload_started_dt }}</td>
-    <td>{{ object.data_upload_competed_dt }}</td>
-    <td>{{ object.gen3_accepted_dt }}</td>
+    <td>{{ object.data_uploaded_started_dt }}</td>
+    <td>{{ object.data_uploaded_completed_dt }}</td>
+    <td>{{ object.data_accepted_dt }}</td>   
   </tr>
   {% endfor %}
 </table>
