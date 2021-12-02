@@ -23,69 +23,100 @@ from django.urls import reverse
 
 
 class Ticket(models.Model):
-    email = models.EmailField(verbose_name="Email")
+    email = models.EmailField(verbose_name="Email", default="")
     name = models.CharField(
-        max_length=100, verbose_name="Name", help_text="Name of primary contact"
+        max_length=100,
+        verbose_name="Name",
+        help_text="Name of primary contact",
+        default="",
     )
     organization = models.CharField(
         max_length=250,
         verbose_name="Organization",
         help_text="Name of requesting organization",
+        default="",
     )
     study_name = models.CharField(
         max_length=250,
         verbose_name="Study Name",
         help_text="Name of Study or Dataset (if applicable)",
         blank=True,
+        default="",
     )
     dataset_description = models.CharField(
         max_length=2500,
         verbose_name="Dataset Description",
         help_text="Describe the dataset you are uploading",
         blank=True,
+        default="",
     )
     is_test_data = models.BooleanField(
         verbose_name="Is Test Data",
-        help_text="Check this box if this is test data: ",
+        help_text="Check this box if this is test data",
         blank=True,
+        default=False,
     )
     google_email = models.EmailField(
         verbose_name="Google Email",
         help_text="If you're uploading to Google please provide your google email for access",
         blank=True,
+        default="",
     )
     aws_iam = models.CharField(
         max_length=100,
         verbose_name="AWS IAM",
         help_text="If you're uploading to Amazon please provide your AWS IAM",
         blank=True,
+        default="",
     )
     data_size = models.CharField(
         max_length=100,
         verbose_name="Data Size",
         help_text="Please provide an estimated size of your data set(s)",
         blank=True,
+        default="",
     )
-    study_id = models.CharField(max_length=100, verbose_name="Study ID")
-    consent_code = models.CharField(max_length=100, verbose_name="Consent Code")
+    study_id = models.CharField(
+        max_length=100,
+        verbose_name="Study ID",
+        default="",
+    )
+    consent_code = models.CharField(
+        max_length=100,
+        verbose_name="Consent Code",
+        default="",
+    )
+
     created_dt = models.DateTimeField(verbose_name="Created Date", auto_now_add=True)
     ticket_approved_dt = models.DateTimeField(
-        verbose_name="Intake Form Approved Date", null=True, blank=True
+        verbose_name="Intake Form Approved Date",
+        null=True,
+        blank=True,
     )
     ticket_rejected_dt = models.DateTimeField(
-        verbose_name="Intake Form Rejected Date", null=True, blank=True
+        verbose_name="Intake Form Rejected Date",
+        null=True,
+        blank=True,
     )
     bucket_created_dt = models.DateTimeField(
-        verbose_name="Bucket Created Date", null=True, blank=True
+        verbose_name="Bucket Created Date",
+        null=True,
+        blank=True,
     )
     data_uploaded_started_dt = models.DateTimeField(
-        verbose_name="Data Uploaded Started Date", null=True, blank=True
+        verbose_name="Data Uploaded Started Date",
+        null=True,
+        blank=True,
     )
     data_uploaded_completed_dt = models.DateTimeField(
-        verbose_name="Data Uploaded Completed Date", null=True, blank=True
+        verbose_name="Data Uploaded Completed Date",
+        null=True,
+        blank=True,
     )
     data_accepted_dt = models.DateTimeField(
-        verbose_name="Gen3 Accepted Date", null=True, blank=True
+        verbose_name="Gen3 Accepted Date",
+        null=True,
+        blank=True,
     )
 
     def get_absolute_url(self):
