@@ -1,12 +1,12 @@
 # application/forms.py
 
-from django import forms
+from django.forms import ModelForm
 from .models import Ticket
 
 TRUE_FALSE_CHOICES = ((True, "Yes"), (False, "No"))
 
 
-class TicketCreateForm(forms.ModelForm):
+class TicketCreateForm(ModelForm):
     # specify the name of model to use
     class Meta:
         model = Ticket
