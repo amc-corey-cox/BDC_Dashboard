@@ -61,3 +61,8 @@ html {
   text-align: center;
   color: inherit;
 }
+
+.cancel-button {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
