@@ -18,8 +18,10 @@ from .models import Ticket
 #
 #     return render(request, 'tracker/initiate_ticket.html', {'form': form})
 
+
 class IndexView(TemplateView):
-    template_name = 'tracker/index.html'
+    template_name = "tracker/index.html"
+
 
 class TicketCreate(CreateView):
     model = Ticket
