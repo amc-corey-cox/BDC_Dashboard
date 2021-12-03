@@ -33,7 +33,7 @@ html {
 #content {
   height: 100%;
   width: 100%;
-  padding-right: 10px;
+  padding: 0px 20px 0px 10px;
 }
 
 .wrapper {
@@ -60,4 +60,9 @@ html {
   font-weight: bold;
   text-align: center;
   color: inherit;
+}
+
+.cancel-button {
+  color: var(--color-primary);
+  text-decoration: underline;
 }
