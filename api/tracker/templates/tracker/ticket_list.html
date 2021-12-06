@@ -1,7 +1,25 @@
 {% extends "base_generic.html" %} {% block content %}
 <h1 class="text-muted" style="text-align: center">Ticket Dashboard</h1>
 
-<!-- Only display table when not empty -->
+<div id="board">
+  <div class="board-status">
+    <h5>Awaiting Review</h5>
+  </div>
+  <div class="board-status">
+    <h5>Awaiting Bucket</h5>
+  </div>
+  <div class="board-status">
+    <h5>Awaiting Data Upload</h5>
+  </div>
+  <div class="board-status">
+    <h5>Awaiting Gen3 Approval</h5>
+  </div>
+  <div class="board-status">
+    <h5>Gen3 Accepted</h5>
+  </div>
+</div>
+
+<!-- Only display table when not empty
 {% if object_list is not empty %}
 <table class="table table-theme table-row v-middle">
   <thead>
@@ -30,14 +48,15 @@
     <td>{{ object.bucket_created_dt }}</td>
     <td>{{ object.data_uploaded_started_dt }}</td>
     <td>{{ object.data_uploaded_completed_dt }}</td>
-    <td>{{ object.data_accepted_dt }}</td>   
+    <td>{{ object.data_accepted_dt }}</td>
   </tr>
   {% endfor %}
 </table>
 
-<!-- Display alert if it is empty -->
+Display alert if it is empty
 {% else %}
 <div class="alert alert-danger" role="alert" style="text-align: center">
   No tickets yet!
 </div>
-{% endif %} {% endblock %}
+{% endif %} -->
+{% endblock %}
