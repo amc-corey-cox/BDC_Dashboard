@@ -79,39 +79,8 @@ class TicketDetail(DetailView):
         context = super(DetailView, self).get_context_data(*args, **kwargs)
 
         # Compute ticket status and add to context
-        ticket_status = get_ticket_status(self.object)
-        context["status"] = ticket_status[1]
-        context["status_dt"] = ticket_status[0]
-
-        print(self.object.ticket_approved_dt)
+        # ticket_status = get_ticket_status(self.object)
+        # context["status"] = ticket_status[1]
+        # context["status_dt"] = ticket_status[0]
 
         return context
-
-
-# get the ticket status based on the date time history
-def get_ticket_status(ticket):
-    if ticket.ticket_rejected_dt:
-        return (ticket.ticket_rejected_dt, STATUS_TYPES[0])
-    elif ticket.data_accepted_dt:
-        return (ticket.data_accepted_dt, STATUS_TYPES[6])
-    elif ticket.data_uploaded_completed_dt:
-        return (ticket.data_uploaded_completed_dt, STATUS_TYPES[5])
-    elif ticket.data_uploaded_started_dt:
-        return (ticket.data_uploaded_started_dt, STATUS_TYPES[4])
-    elif ticket.bucket_created_dt:
-        return (ticket.bucket_created_dt, STATUS_TYPES[3])
-    elif ticket.ticket_approved_dt:
-        return (ticket.ticket_approved_dt, STATUS_TYPES[2])
-    else:
-        return (ticket.ticket_created_dt, STATUS_TYPES[1])
-
-
-STATUS_TYPES = {
-    0: "Data Intake Form Rejected",
-    1: "Ready for Bucket Creation",
-    2: "Bucket Created; Ready for Data upload",
-    3: "Ready for Data upload",
-    4: "Data upload in Progress",
-    5: "Data upload Complete",
-    6: "Gen3 Accepted",
-}

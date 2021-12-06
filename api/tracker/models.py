@@ -128,6 +128,35 @@ class Ticket(models.Model):
             for field in self.__class__._meta.fields
         ]
 
+    # get the ticket status based on the date time history
+    @property
+    def get_ticket_status(self):
+        if self.ticket_rejected_dt:
+            return (self.ticket_rejected_dt, STATUS_TYPES[0])
+        elif self.data_accepted_dt:
+            return (self.data_accepted_dt, STATUS_TYPES[6])
+        elif self.data_uploaded_completed_dt:
+            return (self.data_uploaded_completed_dt, STATUS_TYPES[5])
+        elif self.data_uploaded_started_dt:
+            return (self.data_uploaded_started_dt, STATUS_TYPES[4])
+        elif self.bucket_created_dt:
+            return (self.bucket_created_dt, STATUS_TYPES[3])
+        elif self.ticket_approved_dt:
+            return (self.ticket_approved_dt, STATUS_TYPES[2])
+        else:
+            return (self.created_dt, STATUS_TYPES[1])
+
+
+STATUS_TYPES = {
+    0: "Data Intake Form Rejected",
+    1: "Ready for Bucket Creation",
+    2: "Bucket Created; Ready for Data upload",
+    3: "Ready for Data upload",
+    4: "Data upload in Progress",
+    5: "Data upload Complete",
+    6: "Gen3 Accepted",
+}
+
 
 # STATUS_TYPES = (
 #         (1, 'Intake Form Submitted'),
