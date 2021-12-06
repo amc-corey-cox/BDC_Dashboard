@@ -6,8 +6,10 @@
   <!-- Right-side util -->
   <div class="col-md-5 col-lg-4 order-md-last">
     <h4 class="d-flex justify-content-between align-items-center">
-      <span class="badge bg-success rounded-pill">{{ status }}</span>
-      <h6 class="text-muted">{{ status_dt }}</h6>
+      <span class="badge bg-success rounded-pill"
+        >{{ ticket.get_ticket_status.1 }}</span
+      >
+      <h6 class="text-muted">Last Update: {{ ticket.get_ticket_status.0 }}</h6>
     </h4>
 
     <!-- Logs -->
