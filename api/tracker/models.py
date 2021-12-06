@@ -156,20 +156,3 @@ STATUS_TYPES = {
     5: "Data upload Complete",
     6: "Gen3 Accepted",
 }
-
-
-# STATUS_TYPES = (
-#         (1, 'Intake Form Submitted'),
-#         (2, 'Data Intake Form Approved; Ready for Bucket Creation'),
-#         (0, 'Data Intake Form Rejected'),
-#         (3, 'Bucket Created; Ready for Data upload'),
-#         (4, 'Data upload in Progress'),
-#         (5, 'Data upload Complete'),
-#         (6, 'Gen3 Accepted')
-# )
-#
-# class Status(models.Model):
-# 	status_type = models.IntegerField(choices=STATUS_TYPES)
-# 	status_dt = models.DateTimeField(auto_now_add=True)
-# 	ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)
-#
