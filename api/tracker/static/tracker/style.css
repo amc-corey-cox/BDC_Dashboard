@@ -88,16 +88,7 @@ html {
   border: 1px solid var(--color-light-gray);
   border-radius: 0.25rem;
 }
-.board-card-title {
-  /* display: flex; */
-  justify-content: center;
-  height: 4rem;
-  padding: 0.625rem;
-  background-color: var(--color-white);
-  text-align: center;
-  white-space: break-spaces;
-}
-.board-card-title h5 {
+.board-card h5 {
   font-weight: bold;
 }
 .text-red {
