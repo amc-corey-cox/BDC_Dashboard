@@ -17,6 +17,7 @@ label {
 
 :root {
   --color-white: #eee;
+  --color-black: #000;
   --color-light-gray: #a0a2a4;
   --color-primary: #0066cc;
   --color-secondary: #00ccff;
@@ -68,7 +69,7 @@ html {
   color: inherit;
 }
 
-.cancel-button {
+.btn-cancel {
   color: var(--color-primary);
   text-decoration: underline;
 }
@@ -99,9 +100,9 @@ html {
 .board-card-title h5 {
   font-weight: bold;
 }
-.red {
-  background-color: var(--color-pale-red);
+.text-red {
+  color: var(--bs-red);
 }
-.yellow {
-  background-color: var(--color-pale-yellow);
+.text-yellow {
+  color: var(--bs-orange);
 }
