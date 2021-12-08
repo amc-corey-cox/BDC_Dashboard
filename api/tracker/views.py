@@ -83,14 +83,15 @@ class TicketsList(ListView):
 
         # iterate through all tickets and sort accordingly
         for object in queryset:
-            # calculate last updated and set color
+            # calculate last updated and set colors
             object.last_updated = (
                 datetime.now(timezone.utc) - object.get_ticket_status[0]
             ).days
+            object.status_color = object.get_ticket_status[2]
             if object.last_updated > 14:
-                object.color = "text-red"
+                object.last_updated_color = "text-red"
             elif object.last_updated > 7:
-                object.color = "text-yellow"
+                object.last_updated_color = "text-yellow"
 
             # filter tickets by status
             status = object.get_ticket_status[1]
@@ -104,7 +105,7 @@ class TicketsList(ListView):
                 # Awaiting Data Upload
                 context["awaiting_data_upload"]
             elif status == STATUS_TYPES[4]:
-                # Data upload in Progress
+                # Data Upload in Progress
                 context["data_upload_in_progress"].append(object)
             elif status == STATUS_TYPES[5]:
                 # Awaiting Gen3 Approval
