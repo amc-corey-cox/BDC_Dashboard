@@ -72,21 +72,28 @@ html {
 }
 
 #board {
-  display: block;
-  white-space: nowrap;
-  overflow-x: auto;
+  display: flex;
+  /* white-space: nowrap; */
+  justify-content: space-around;
+  /* overflow-x: auto; */
 }
-.board-status {
-  display: inline-block;
-  width: 22rem;
+.board-card {
+  /* display: inline-block; */
+  width: 13em;
   /* padding: 0 1rem 1rem 1rem; */
-  vertical-align: top;
-  margin: 10px;
+  /* margin: 10px; */
   border: 1px solid var(--color-light-gray);
   border-radius: 0.25rem;
 }
-.board-status h5 {
-  padding: 1rem;
+.board-card-title {
+  /* display: flex; */
+  justify-content: center;
+  height: 4rem;
+  padding: 0.625rem;
   background-color: var(--color-white);
+  text-align: center;
+  white-space: break-spaces;
+}
+.board-card-title h5 {
   font-weight: bold;
 }
