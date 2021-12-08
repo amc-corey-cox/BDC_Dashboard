@@ -16,12 +16,12 @@
         <p class="card-text">{{ object.study_name }}</p>
         <a
           href="{% url 'tracker:ticket-detail' pk=object.pk %}"
-          class="btn btn-primary"
+          class="btn btn-{{ object.status_color }}"
           role="button"
           >View Ticket</a
         >
       </div>
-      <div class="card-footer {{ object.color }}">
+      <div class="card-footer {{ object.last_updated_color }}">
         {{ object.last_updated }} Days Ago
       </div>
     </div>
@@ -42,12 +42,12 @@
         <p class="card-text">{{ object.study_name }}</p>
         <a
           href="{% url 'tracker:ticket-detail' pk=object.pk %}"
-          class="btn btn-warning"
+          class="btn btn-{{ object.status_color }}"
           role="button"
           >View Ticket</a
         >
       </div>
-      <div class="card-footer {{ object.color }}">
+      <div class="card-footer {{ object.last_updated_color }}">
         {{ object.last_updated }} Days Ago
       </div>
     </div>
@@ -68,12 +68,12 @@
         <p class="card-text">{{ object.study_name }}</p>
         <a
           href="{% url 'tracker:ticket-detail' pk=object.pk %}"
-          class="btn btn-light"
+          class="btn btn-{{ object.status_color }}"
           role="button"
           >View Ticket</a
         >
       </div>
-      <div class="card-footer {{ object.color }}">
+      <div class="card-footer {{ object.last_updated_color }}">
         {{ object.last_updated }} Days Ago
       </div>
     </div>
@@ -94,12 +94,12 @@
         <p class="card-text">{{ object.study_name }}</p>
         <a
           href="{% url 'tracker:ticket-detail' pk=object.pk %}"
-          class="btn btn-secondary"
+          class="btn btn-{{ object.status_color }}"
           role="button"
           >View Ticket</a
         >
       </div>
-      <div class="card-footer {{ object.color }}">
+      <div class="card-footer {{ object.last_updated_color }}">
         {{ object.last_updated }} Days Ago
       </div>
     </div>
@@ -120,12 +120,12 @@
         <p class="card-text">{{ object.study_name }}</p>
         <a
           href="{% url 'tracker:ticket-detail' pk=object.pk %}"
-          class="btn btn-success"
+          class="btn btn-{{ object.status_color }}"
           role="button"
           >View Ticket</a
         >
       </div>
-      <div class="card-footer {{ object.color }}">
+      <div class="card-footer {{ object.last_updated_color }}">
         {{ object.last_updated }} Days Ago
       </div>
     </div>

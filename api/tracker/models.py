@@ -148,16 +148,16 @@ class Ticket(models.Model):
     @property
     def get_ticket_status(self):
         if self.ticket_rejected_dt:
-            return (self.ticket_rejected_dt, STATUS_TYPES[0])
+            return (self.ticket_rejected_dt, STATUS_TYPES[0], "danger")
         elif self.data_accepted_dt:
-            return (self.data_accepted_dt, STATUS_TYPES[6])
+            return (self.data_accepted_dt, STATUS_TYPES[6], "success")
         elif self.data_uploaded_completed_dt:
-            return (self.data_uploaded_completed_dt, STATUS_TYPES[5])
+            return (self.data_uploaded_completed_dt, STATUS_TYPES[5], "secondary")
         elif self.data_uploaded_started_dt:
-            return (self.data_uploaded_started_dt, STATUS_TYPES[4])
+            return (self.data_uploaded_started_dt, STATUS_TYPES[4], "info")
         elif self.bucket_created_dt:
-            return (self.bucket_created_dt, STATUS_TYPES[3])
+            return (self.bucket_created_dt, STATUS_TYPES[3], "info")
         elif self.ticket_approved_dt:
-            return (self.ticket_approved_dt, STATUS_TYPES[2])
+            return (self.ticket_approved_dt, STATUS_TYPES[2], "warning")
         else:
-            return (self.created_dt, STATUS_TYPES[1])
+            return (self.created_dt, STATUS_TYPES[1], "primary")

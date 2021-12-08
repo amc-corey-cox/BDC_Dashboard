@@ -6,7 +6,7 @@
   <!-- Right-side util -->
   <div class="col-md-5 col-lg-4 order-md-last">
     <h4 class="d-flex justify-content-between align-items-center mb-3">
-      <span class="badge bg-success rounded-pill"
+      <span class="badge bg-{{ ticket.get_ticket_status.2 }} rounded-pill"
         >{{ ticket.get_ticket_status.1 }}</span
       >
       <h6 class="text-muted">Last Update: {{ ticket.get_ticket_status.0 }}</h6>
