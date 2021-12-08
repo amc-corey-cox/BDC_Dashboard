@@ -13,17 +13,17 @@
       <!-- Handle Errors -->
       {% if form.errors %}
       <h4 class="d-flex justify-content-between align-items-center mb-3">
-        <span class="text-primary">Errors</span>
         <span class="badge bg-danger rounded-pill"
-          >{{ form.errors|length }}</span
+          >{{ form.errors|length }} Errors</span
         >
+        <h6 class="text-muted">Please fix the following errors</h6>
       </h4>
       <ul class="list-group mb-3">
         {% for field in form %} {% if field.errors %}
-        <li class="list-group-item">
+        <li class="list-group-item d-flex justify-content-between lh-sm">
           <h6 class="my-0">{{ field.label }}</h6>
           {% for error in field.errors %}
-          <small class="text-muted">* {{ error }}</small>
+          <small class="text-muted">{{ error }}</small>
           {% endfor %}
         </li>
         {% endif %} {% endfor %}
@@ -32,7 +32,7 @@
     </div>
 
     <!-- Display Form -->
-    <div class="col-md-7 col-lg-8">
+    <div class="col-md-7 col-lg-8 px-3">
       <h4 class="mb-3">Contact Information</h4>
       <div class="row g-3">
         <!-- Name and Email -->
@@ -229,7 +229,7 @@
         <input class="btn btn-primary btn-lg" type="submit" value="Update" />
         <a
           href="{% url 'tracker:ticket-delete' pk=object.pk %}"
-          class="cancel-button btn btn-lg"
+          class="btn btn-cancel btn-lg"
           role="button"
           >Delete Ticket</a
         >
