@@ -22,6 +22,17 @@ from django.urls import reverse
 # status_dt
 
 
+STATUS_TYPES = {
+    0: "Data Intake Form Rejected",
+    1: "Awaiting Review",
+    2: "Awaiting Bucket Creation",
+    3: "Awaiting Data Upload",
+    4: "Data upload in Progress",
+    5: "Awaiting Gen3 Approval",
+    6: "Gen3 Accepted",
+}
+
+
 class Ticket(models.Model):
     email = models.EmailField(verbose_name="Email", default="")
     name = models.CharField(
@@ -119,6 +130,11 @@ class Ticket(models.Model):
         blank=True,
     )
 
+    # ideally this is used to track ticket updates
+    # last_updated_dt = models.DateTimeField(
+    #     verbose_name="Last Updated Date", auto_now=True
+    # )
+
     def get_absolute_url(self):
         return reverse("tracker:ticket-detail", kwargs={"pk": self.pk})
 
@@ -145,14 +161,3 @@ class Ticket(models.Model):
             return (self.ticket_approved_dt, STATUS_TYPES[2])
         else:
             return (self.created_dt, STATUS_TYPES[1])
-
-
-STATUS_TYPES = {
-    0: "Data Intake Form Rejected",
-    1: "Ready for Bucket Creation",
-    2: "Bucket Created; Ready for Data upload",
-    3: "Ready for Data upload",
-    4: "Data upload in Progress",
-    5: "Data upload Complete",
-    6: "Gen3 Accepted",
-}

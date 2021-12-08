@@ -2,20 +2,134 @@
 <h1 class="text-muted" style="text-align: center">Ticket Dashboard</h1>
 
 <div id="board">
-  <div class="board-status">
-    <h5>Awaiting Review</h5>
+  <div class="board-card">
+    <div class="board-card-title"><h5>Awaiting Review</h5></div>
+    <hr />
+    {% for object in awaiting_review %}
+    <div class="card text-center">
+      <div class="card-header">
+        {{ object.study_id }}..{{ object.consent_code }}
+      </div>
+      <div class="card-body">
+        <h5 class="card-title"></h5>
+        <p class="card-text">TODO: Details here</p>
+        <a
+          href="{% url 'tracker:ticket-detail' pk=object.pk %}"
+          class="btn btn-primary"
+          role="button"
+          >View Ticket</a
+        >
+      </div>
+      <div class="card-footer text-muted">
+        {{ object.last_updated }} Days Ago
+      </div>
+    </div>
+    <hr />
+    {% endfor %}
   </div>
-  <div class="board-status">
-    <h5>Awaiting Bucket</h5>
+
+  <div class="board-card">
+    <div class="board-card-title"><h5>Awaiting Bucket Creation</h5></div>
+    <hr />
+    {% for object in awaiting_bucket_creation %}
+    <div class="card text-center">
+      <div class="card-header">
+        {{ object.study_id }}..{{ object.consent_code }}
+      </div>
+      <div class="card-body">
+        <h5 class="card-title"></h5>
+        <p class="card-text">TODO: Details here</p>
+        <a
+          href="{% url 'tracker:ticket-detail' pk=object.pk %}"
+          class="btn btn-primary"
+          role="button"
+          >View Ticket</a
+        >
+      </div>
+      <div class="card-footer text-muted">
+        {{ object.last_updated }} Days Ago
+      </div>
+    </div>
+    <hr />
+    {% endfor %}
   </div>
-  <div class="board-status">
-    <h5>Awaiting Data Upload</h5>
+
+  <div class="board-card">
+    <div class="board-card-title"><h5>Awaiting Data Upload</h5></div>
+    <hr />
+    {% for object in awaiting_data_upload %}
+    <div class="card text-center">
+      <div class="card-header">
+        {{ object.study_id }}..{{ object.consent_code }}
+      </div>
+      <div class="card-body">
+        <h5 class="card-title"></h5>
+        <p class="card-text">TODO: Details here</p>
+        <a
+          href="{% url 'tracker:ticket-detail' pk=object.pk %}"
+          class="btn btn-primary"
+          role="button"
+          >View Ticket</a
+        >
+      </div>
+      <div class="card-footer text-muted">
+        {{ object.last_updated }} Days Ago
+      </div>
+    </div>
+    <hr />
+    {% endfor %}
   </div>
-  <div class="board-status">
-    <h5>Awaiting Gen3 Approval</h5>
+
+  <div class="board-card">
+    <div class="board-card-title"><h5>Awaiting Gen3 Approval</h5></div>
+    <hr />
+    {% for object in awaiting_gen3_approval %}
+    <div class="card text-center">
+      <div class="card-header">
+        {{ object.study_id }}..{{ object.consent_code }}
+      </div>
+      <div class="card-body">
+        <h5 class="card-title"></h5>
+        <p class="card-text">TODO: Details here</p>
+        <a
+          href="{% url 'tracker:ticket-detail' pk=object.pk %}"
+          class="btn btn-primary"
+          role="button"
+          >View Ticket</a
+        >
+      </div>
+      <div class="card-footer text-muted">
+        {{ object.last_updated }} Days Ago
+      </div>
+    </div>
+    <hr />
+    {% endfor %}
   </div>
-  <div class="board-status">
-    <h5>Gen3 Accepted</h5>
+
+  <div class="board-card">
+    <div class="board-card-title"><h5>Gen3 Accepted</h5></div>
+    <hr />
+    {% for object in gen3_accepted %}
+    <div class="card text-center">
+      <div class="card-header">
+        {{ object.study_id }}..{{ object.consent_code }}
+      </div>
+      <div class="card-body">
+        <h5 class="card-title"></h5>
+        <p class="card-text">TODO: Details here</p>
+        <a
+          href="{% url 'tracker:ticket-detail' pk=object.pk %}"
+          class="btn btn-primary"
+          role="button"
+          >View Ticket</a
+        >
+      </div>
+      <div class="card-footer text-muted">
+        {{ object.last_updated }} Days Ago
+      </div>
+    </div>
+    <hr />
+    {% endfor %}
   </div>
 </div>
 
