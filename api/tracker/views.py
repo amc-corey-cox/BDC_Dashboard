@@ -103,7 +103,7 @@ class TicketsList(ListView):
                 context["awaiting_bucket_creation"].append(object)
             elif status == STATUS_TYPES[3]:
                 # Awaiting Data Upload
-                context["awaiting_data_upload"]
+                context["awaiting_data_upload"].append(object)
             elif status == STATUS_TYPES[4]:
                 # Data Upload in Progress
                 context["data_upload_in_progress"].append(object)
