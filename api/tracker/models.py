@@ -154,9 +154,9 @@ class Ticket(models.Model):
         elif self.data_uploaded_completed_dt:
             return (self.data_uploaded_completed_dt, STATUS_TYPES[5], "secondary")
         elif self.data_uploaded_started_dt:
-            return (self.data_uploaded_started_dt, STATUS_TYPES[4], "info")
+            return (self.data_uploaded_started_dt, STATUS_TYPES[4], "dark")
         elif self.bucket_created_dt:
-            return (self.bucket_created_dt, STATUS_TYPES[3], "info")
+            return (self.bucket_created_dt, STATUS_TYPES[3], "dark")
         elif self.ticket_approved_dt:
             return (self.ticket_approved_dt, STATUS_TYPES[2], "warning")
         else:

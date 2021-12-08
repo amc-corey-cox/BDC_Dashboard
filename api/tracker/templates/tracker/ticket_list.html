@@ -55,10 +55,29 @@
   </div>
 
   <div class="board-card">
-    <div class="alert alert-light text-center" role="alert">
+    <div class="alert alert-dark text-center" role="alert">
       <h5>Awaiting Data Upload</h5>
     </div>
     {% for object in awaiting_data_upload %}
+    <div class="card text-center mx-2">
+      <div class="card-header">
+        <strong> {{ object.study_id }}..{{ object.consent_code }} </strong>
+      </div>
+      <div class="card-body">
+        <h5 class="card-title"></h5>
+        <p class="card-text">{{ object.study_name }}</p>
+        <a
+          href="{% url 'tracker:ticket-detail' pk=object.pk %}"
+          class="btn btn-{{ object.status_color }}"
+          role="button"
+          >View Ticket</a
+        >
+      </div>
+      <div class="card-footer {{ object.last_updated_color }}">
+        {{ object.last_updated }} Days Ago
+      </div>
+    </div>
+    {% endfor %} {% for object in data_upload_in_progress %}
     <div class="card text-center mx-2">
       <div class="card-header">
         <strong> {{ object.study_id }}..{{ object.consent_code }} </strong>
