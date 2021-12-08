@@ -88,9 +88,9 @@ class TicketsList(ListView):
                 datetime.now(timezone.utc) - object.get_ticket_status[0]
             ).days
             if object.last_updated > 14:
-                object.color = "red"
+                object.color = "text-red"
             elif object.last_updated > 7:
-                object.color = "yellow"
+                object.color = "text-yellow"
 
             # filter tickets by status
             status = object.get_ticket_status[1]
