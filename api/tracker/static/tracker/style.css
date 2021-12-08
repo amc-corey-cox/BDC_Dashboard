@@ -24,6 +24,8 @@ label {
   --color-quaternary: #ccffcc;
   --color-crimson: #b33243;
   --color-crimson-dark: #5a2a38;
+  --color-pale-yellow: #ffbf00;
+  --color-pale-red: #ff4000;
 }
 html {
   font-family: "Montserrat, sans-serif";
@@ -96,4 +98,10 @@ html {
 }
 .board-card-title h5 {
   font-weight: bold;
+}
+.red {
+  background-color: var(--color-pale-red);
+}
+.yellow {
+  background-color: var(--color-pale-yellow);
 }
