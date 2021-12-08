@@ -28,11 +28,15 @@
         </li>
         {% endif %} {% endfor %}
       </ul>
-      {% else %}
+      {% else %} {% if object %}
       <h4 class="d-flex justify-content-between align-items-center mb-3">
         <span class="badge bg-danger rounded-pill">Editting Form</span>
       </h4>
-      {% endif %}
+      {% else %}
+      <h4 class="d-flex justify-content-between align-items-center mb-3">
+        <span class="badge bg-info rounded-pill">Creating Ticket</span>
+      </h4>
+      {% endif %} {% endif %}
     </div>
 
     <!-- Display Form -->
