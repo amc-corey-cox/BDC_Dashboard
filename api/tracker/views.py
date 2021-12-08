@@ -11,6 +11,14 @@ class IndexView(TemplateView):
     template_name = "tracker/index.html"
 
 
+class UserDocsView(TemplateView):
+    template_name = "tracker/user_docs.html"
+
+
+class CustodianInfoView(TemplateView):
+    template_name = "tracker/custodian_instructions.html"
+
+
 class TicketCreate(CreateView):
     model = Ticket
     fields = [
