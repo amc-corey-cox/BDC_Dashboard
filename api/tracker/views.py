@@ -73,15 +73,19 @@ class TicketsList(ListView):
         context["gen3_accepted"] = []
         context["rejected"] = []
 
-        # filter tickets by status
+        # iterate through all tickets and sort accordingly
         for object in queryset:
-            # update ticket with status and last_updated date
-            status = object.get_ticket_status[1]
-            last_updated = (
+            # calculate last updated and set color
+            object.last_updated = (
                 datetime.now(timezone.utc) - object.get_ticket_status[0]
             ).days
-            object.last_updated = last_updated
+            if object.last_updated > 14:
+                object.color = "red"
+            elif object.last_updated > 7:
+                object.color = "yellow"
 
+            # filter tickets by status
+            status = object.get_ticket_status[1]
             if status == STATUS_TYPES[1]:
                 # Awaiting Review
                 context["awaiting_review"].append(object)
