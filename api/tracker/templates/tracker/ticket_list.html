@@ -3,18 +3,19 @@
 
 <div id="board">
   <div class="board-card">
-    <div class="board-card-title"><h5>Awaiting Review</h5></div>
-    <hr />
+    <div class="alert alert-primary text-center" role="alert">
+      <h5>Awaiting Review</h5>
+    </div>
     {% for object in awaiting_review %}
-    <div class="card text-center">
+    <div class="card text-center m-2">
       <div class="card-header">
-        {{ object.study_id }}..{{ object.consent_code }}
+        <strong> {{ object.study_id }}..{{ object.consent_code }} </strong>
       </div>
       <div class="card-body">
         <h5 class="card-title"></h5>
-        <p class="card-text">TODO: Details here</p>
+        <p class="card-text">{{ object.study_name }}</p>
         <a
-          href="{% url 'tracker:ticket-update' pk=object.pk %}"
+          href="{% url 'tracker:ticket-detail' pk=object.pk %}"
           class="btn btn-primary"
           role="button"
           >View Ticket</a
@@ -24,24 +25,24 @@
         {{ object.last_updated }} Days Ago
       </div>
     </div>
-    <hr />
     {% endfor %}
   </div>
 
   <div class="board-card">
-    <div class="board-card-title"><h5>Awaiting Bucket Creation</h5></div>
-    <hr />
+    <div class="alert alert-warning text-center" role="alert">
+      <h5>Awaiting Bucket Creation</h5>
+    </div>
     {% for object in awaiting_bucket_creation %}
-    <div class="card text-center">
+    <div class="card text-center mx-2">
       <div class="card-header">
-        {{ object.study_id }}..{{ object.consent_code }}
+        <strong> {{ object.study_id }}..{{ object.consent_code }} </strong>
       </div>
       <div class="card-body">
         <h5 class="card-title"></h5>
-        <p class="card-text">TODO: Details here</p>
+        <p class="card-text">{{ object.study_name }}</p>
         <a
-          href="{% url 'tracker:ticket-update' pk=object.pk %}"
-          class="btn btn-primary"
+          href="{% url 'tracker:ticket-detail' pk=object.pk %}"
+          class="btn btn-warning"
           role="button"
           >View Ticket</a
         >
@@ -50,24 +51,24 @@
         {{ object.last_updated }} Days Ago
       </div>
     </div>
-    <hr />
     {% endfor %}
   </div>
 
   <div class="board-card">
-    <div class="board-card-title"><h5>Awaiting Data Upload</h5></div>
-    <hr />
+    <div class="alert alert-light text-center" role="alert">
+      <h5>Awaiting Data Upload</h5>
+    </div>
     {% for object in awaiting_data_upload %}
-    <div class="card text-center">
+    <div class="card text-center mx-2">
       <div class="card-header">
-        {{ object.study_id }}..{{ object.consent_code }}
+        <strong> {{ object.study_id }}..{{ object.consent_code }} </strong>
       </div>
       <div class="card-body">
         <h5 class="card-title"></h5>
-        <p class="card-text">TODO: Details here</p>
+        <p class="card-text">{{ object.study_name }}</p>
         <a
-          href="{% url 'tracker:ticket-update' pk=object.pk %}"
-          class="btn btn-primary"
+          href="{% url 'tracker:ticket-detail' pk=object.pk %}"
+          class="btn btn-light"
           role="button"
           >View Ticket</a
         >
@@ -76,24 +77,24 @@
         {{ object.last_updated }} Days Ago
       </div>
     </div>
-    <hr />
     {% endfor %}
   </div>
 
   <div class="board-card">
-    <div class="board-card-title"><h5>Awaiting Gen3 Approval</h5></div>
-    <hr />
+    <div class="alert alert-secondary text-center" role="alert">
+      <h5>Awaiting Gen3 Approval</h5>
+    </div>
     {% for object in awaiting_gen3_approval %}
-    <div class="card text-center">
+    <div class="card text-center mx-2">
       <div class="card-header">
-        {{ object.study_id }}..{{ object.consent_code }}
+        <strong> {{ object.study_id }}..{{ object.consent_code }} </strong>
       </div>
       <div class="card-body">
         <h5 class="card-title"></h5>
-        <p class="card-text">TODO: Details here</p>
+        <p class="card-text">{{ object.study_name }}</p>
         <a
-          href="{% url 'tracker:ticket-update' pk=object.pk %}"
-          class="btn btn-primary"
+          href="{% url 'tracker:ticket-detail' pk=object.pk %}"
+          class="btn btn-secondary"
           role="button"
           >View Ticket</a
         >
@@ -102,24 +103,24 @@
         {{ object.last_updated }} Days Ago
       </div>
     </div>
-    <hr />
     {% endfor %}
   </div>
 
   <div class="board-card">
-    <div class="board-card-title"><h5>Gen3 Accepted</h5></div>
-    <hr />
+    <div class="alert alert-success text-center" role="alert">
+      <h5>Gen3 Accepted</h5>
+    </div>
     {% for object in gen3_accepted %}
-    <div class="card text-center">
+    <div class="card text-center mx-2">
       <div class="card-header">
-        {{ object.study_id }}..{{ object.consent_code }}
+        <strong> {{ object.study_id }}..{{ object.consent_code }} </strong>
       </div>
       <div class="card-body">
         <h5 class="card-title"></h5>
-        <p class="card-text">TODO: Details here</p>
+        <p class="card-text">{{ object.study_name }}</p>
         <a
-          href="{% url 'tracker:ticket-update' pk=object.pk %}"
-          class="btn btn-primary"
+          href="{% url 'tracker:ticket-detail' pk=object.pk %}"
+          class="btn btn-success"
           role="button"
           >View Ticket</a
         >
@@ -128,7 +129,6 @@
         {{ object.last_updated }} Days Ago
       </div>
     </div>
-    <hr />
     {% endfor %}
   </div>
 </div>
