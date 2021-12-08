@@ -6,18 +6,6 @@ from django.urls import reverse_lazy
 from datetime import datetime, timezone
 from .models import Ticket, STATUS_TYPES
 
-# initiate a submission ticket
-# def create_ticket(request):
-#     if request.method == "POST":
-#         form = TicketCreateUpdateForm(request.POST)
-#         if form.is_valid():
-#             # Do something with the form data like send an email.
-#             return HttpResponseRedirect(reverse('confirm_initiated_ticket'))
-#     else:
-#         form = SubmissionForm()
-#
-#     return render(request, 'tracker/initiate_ticket.html', {'form': form})
-
 
 class IndexView(TemplateView):
     template_name = "tracker/index.html"
@@ -125,9 +113,5 @@ class TicketDetail(DetailView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(DetailView, self).get_context_data(*args, **kwargs)
-
-        # add ticket status to context
-        # context["status"] = self.object.get_ticket_status[1]
-        # context["last_updated"] = self.object.get_ticket_status[0]
 
         return context
