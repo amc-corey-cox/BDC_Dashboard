@@ -1,4 +1,5 @@
-<h1 id="readme">README</h1>
+{% extends "base_generic.html" %} {% block content %}
+<h1 class="text-muted" style="text-align: center">Data Custodian Instructions</h1>
 <p>Repo for experimenting with data preparation and upload for the BDCat project.</p>
 <p>Please be sure you are always using the latest <a href="https://github.com/NimbusInformatics/bdcat-ingest-prototype/releases">release</a>.</p>
 <p>For Data Custodians:
@@ -125,3 +126,4 @@ python3 process<span class="hljs-selector-class">.py</span> --gs --tsv sample<sp
 <li>s3_modified_date - the date that the file was last uploaded or modified</li>
 <li>s3_file_size - the file size reported by aws</li>
 </ul>
+{% endblock %}
