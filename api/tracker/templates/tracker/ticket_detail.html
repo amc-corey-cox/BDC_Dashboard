@@ -1,23 +1,257 @@
-{% extends "base_generic.html" %}
+{% extends "base_generic.html" %} {% load widget_tweaks %} {% block content %}
 
-{% block content %}
-<table>
-    {% for label, value in ticket.get_fields %}
-        <tr>
-            <td>{{ label }}</td>
-            <td>{{ value }}</td>
-        </tr>
-    {% endfor %}
-</table>
-    
-<h3>Ticket Status</h3>
-{% if ticket.created_dt %}
-<br>Ticket Submitted: {{ ticket.created_dt }}</br>
-<br>Intake Form Approved Date:</br>
-<br>Intake Form Rejected Date:</br>
-<br>Bucket Created Date:</br>	
-<br>Data Uploaded Started Date:</br>	
-<br>Data Uploaded Completed Date:</br>	
-<br>Gen3 Accepted Date:</br>	
-{% endif %}
+<h1 class="text-muted" style="text-align: center">Ticket Details</h1>
+
+<div class="row g-2">
+  <!-- Right-side util -->
+  <div class="col-md-5 col-lg-4 order-md-last">
+    <h4 class="d-flex justify-content-between align-items-center mb-3">
+      <span class="badge bg-{{ ticket.get_ticket_status.2 }} rounded-pill"
+        >{{ ticket.get_ticket_status.1 }}</span
+      >
+      <h6 class="text-muted">Last Update: {{ ticket.get_ticket_status.0 }}</h6>
+    </h4>
+
+    <!-- Logs -->
+    <ul class="list-group mb-3">
+      <li class="list-group-item d-flex justify-content-between lh-sm">
+        <!-- <h6 class="my-0">{{ ticket.created_dt.verbose_name }}</h6> -->
+        <h6 class="my-0">Created Date</h6>
+        <small class="text-muted">{{ ticket.created_dt }}</small>
+      </li>
+      {% if ticket.ticket_approved_dt %}
+      <li class="list-group-item d-flex justify-content-between lh-sm">
+        <h6 class="my-0">Intake Form Approved Date</h6>
+        <small class="text-muted">{{ ticket.ticket_approved_dt }}</small>
+      </li>
+      {% endif %} {% if ticket.bucket_created_dt %}
+      <li class="list-group-item d-flex justify-content-between lh-sm">
+        <h6 class="my-0">Bucket Created Date</h6>
+        <small class="text-muted">{{ ticket.bucket_created_dt }}</small>
+      </li>
+      {% endif %} {% if ticket.data_uploaded_started_dt %}
+      <li class="list-group-item d-flex justify-content-between lh-sm">
+        <h6 class="my-0">Data Uploaded Started Date</h6>
+        <small class="text-muted">{{ ticket.data_uploaded_started_dt }}</small>
+      </li>
+      {% endif %} {% if ticket.data_uploaded_completed_dt %}
+      <li class="list-group-item d-flex justify-content-between lh-sm">
+        <h6 class="my-0">Data Uploaded Completed Date</h6>
+        <small class="text-muted"
+          >{{ ticket.data_uploaded_completed_dt }}</small
+        >
+      </li>
+      {% endif %} {% if ticket.ticket_rejected_dt %}
+      <li class="list-group-item d-flex justify-content-between lh-sm">
+        <h6 class="my-0">Intake Form Rejected Date</h6>
+        <small class="text-muted">{{ ticket.ticket_rejected_dt }}</small>
+      </li>
+      {% endif %}
+    </ul>
+
+    <!-- Update Ticket Button -->
+    <div class="row px-5">
+      <a
+        href="{% url 'tracker:ticket-update' pk=object.pk %}"
+        class="btn btn-primary btn-md"
+        role="button"
+        >Update Ticket</a
+      >
+    </div>
+  </div>
+
+  <!-- Main Ticket Details -->
+  <div class="col-md-7 col-lg-8 px-3">
+    <h4 class="mb-3">Contact Information</h4>
+    <div class="row g-3">
+      <!-- Name and Email -->
+      <div class="col-sm-6">
+        <label for="{{ form.name.id_for_label }}" class="form-label"
+          >Name</label
+        >
+        <input
+          type="text"
+          class="form-control"
+          value="{{ ticket.name }}"
+          disabled
+        />
+        <div class="form-text">Name of primary contact</div>
+      </div>
+      <div class="col-sm-6">
+        <label for="{{ form.email.id_for_label }}" class="form-label"
+          >Email</label
+        >
+        <input
+          type="text"
+          class="form-control"
+          value="{{ ticket.email }}"
+          disabled
+        />
+      </div>
+
+      <!-- Organization -->
+      <div class="col-12">
+        <label for="{{ form.organization.id_for_label }}" class="form-label"
+          >Organization</label
+        >
+        <input
+          type="text"
+          class="form-control"
+          value="{{ ticket.organization }}"
+          disabled
+        />
+        <div class="form-text">Name of requesting organization</div>
+      </div>
+
+      <hr class="my-4" />
+    </div>
+
+    <h4 class="mb-3">Study Information</h4>
+    <div class="row g-3">
+      <!-- Study Name -->
+      <div class="col-12">
+        <label for="{{ form.study_name.id_for_label }}" class="form-label"
+          >Study Name</label
+        >
+        <input
+          type="text"
+          class="form-control"
+          value="{{ ticket.study_name }}"
+          disabled
+        />
+        <div class="form-text">Name of Study or Dataset (if applicable)</div>
+      </div>
+
+      <!-- Study ID and Consent Code -->
+      <div class="col-sm-6">
+        <label for="{{ form.study_id.id_for_label }}" class="form-label"
+          >Study ID</label
+        >
+        <input
+          type="text"
+          class="form-control"
+          value="{{ ticket.study_id }}"
+          disabled
+        />
+      </div>
+      <div class="col-sm-6">
+        <label for="{{ ticket.consent_code.id_for_label }}" class="form-label"
+          >Consent Code</label
+        >
+        <input
+          type="text"
+          class="form-control"
+          value="{{ ticket.consent_code }}"
+          disabled
+        />
+      </div>
+      <hr class="my-4" />
+    </div>
+
+    <h4 class="mb-3">Dataset Information</h4>
+    <div class="row g-3">
+      <!-- Dataset Description -->
+      <div class="col-12">
+        <label
+          for="{{ form.dataset_description.id_for_label }}"
+          class="form-label"
+          >Dataset Description</label
+        >
+        <textarea
+          class="form-control"
+          id="{{ form.dataset_description.auto_id }}"
+          rows="12"
+          disabled
+        >
+{{ ticket.dataset_description }}</textarea
+        >
+      </div>
+
+      <!-- GMail and AWS-->
+      <div class="col-sm-6">
+        <label for="{{ form.google_email.id_for_label }}" class="form-label"
+          >Google Email</label
+        >
+        <input
+          type="text"
+          class="form-control"
+          value="{{ ticket.google_email }}"
+          disabled
+        />
+        <div class="form-text">
+          If you're uploading to Google please provide your google email for
+          access
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <label for="{{ form.aws_iam.id_for_label }}" class="form-label"
+          >AWS IAM</label
+        >
+        <input
+          type="text"
+          class="form-control"
+          value="{{ ticket.aws_iam }}"
+          disabled
+        />
+      </div>
+
+      <!-- Data Size -->
+      <div class="col-sm-3">
+        <label for="{{ form.data_size.id_for_label }}" class="form-label"
+          >Data Size</label
+        >
+        <input
+          type="text"
+          class="form-control"
+          value="{{ ticket.data_size }}"
+          disabled
+        />
+      </div>
+
+      <!-- Test Data Checkbox -->
+      <div class="col-12">
+        <div class="form-check">
+          <input
+            type="checkbox"
+            class="form-check-input"
+            id="{{form.is_test_data.auto_id }}"
+            name="{{ form.is_test_data.name }}"
+            {%
+            if
+            ticket.is_test_data
+            %}
+            checked
+            {%
+            endif
+            %}
+            disabled
+          />
+          <label
+            class="form-check-label"
+            for="{{ form.is_test_data.id_for_label }}"
+            >Check this box if this is test data
+          </label>
+        </div>
+      </div>
+      <hr class="my-4" />
+    </div>
+
+    <!-- Handle Create/Update Buttons -->
+    <div class="row">
+      <a
+        href="{% url 'tracker:ticket-update' pk=object.pk %}"
+        class="btn btn-primary btn-lg"
+        role="button"
+        >Update</a
+      >
+      <a
+        href="{% url 'tracker:ticket-delete' pk=object.pk %}"
+        class="btn btn-cancel btn-lg"
+        role="button"
+        >Delete Ticket</a
+      >
+    </div>
+  </div>
+</div>
+
 {% endblock %}
