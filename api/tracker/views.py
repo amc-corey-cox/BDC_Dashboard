@@ -120,6 +120,34 @@ class TicketsList(ListView):
         return context
 
 
+class RejectedTicketsList(ListView):
+    model = Ticket
+    template_name = "tracker/ticket_rejected_list.html"
+    context_object_name = "tickets"
+
+    def get_context_data(self, **kwargs):
+        context = super(ListView, self).get_context_data(**kwargs)
+        queryset = self.object_list
+
+        # generate a list of status types
+        context["rejected"] = []
+
+        # iterate through all tickets and sort rejected tickets
+        for object in queryset:
+            # Data Intake Form Rejected
+            status = object.get_ticket_status[1]
+            if status == STATUS_TYPES[0]:
+                object.last_updated = (
+                    datetime.now(timezone.utc) - object.get_ticket_status[0]
+                ).days
+                object.status_color = object.get_ticket_status[2]
+
+                # filter tickets by status
+                context["rejected"].append(object)
+
+        return context
+
+
 class TicketDetail(DetailView):
     model = Ticket
     context_object_name = "ticket"

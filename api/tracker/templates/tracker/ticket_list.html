@@ -152,44 +152,9 @@
   </div>
 </div>
 
-<!-- Only display table when not empty
-{% if object_list is not empty %}
-<table class="table table-theme table-row v-middle">
-  <thead>
-    <tr class="bg-light">
-      <th id="bucketName">Bucket Name</th>
-      <th id="primaryContact">Primary Contact</th>
-      <th id="submissionDate">Form Submission</th>
-      <th id="ticketStatus">Ticket Accepted</th>
-      <th id="bucketCreationStatus">Bucket Created</th>
-      <th id="dataUploadStartDate">Data Uploaded Started</th>
-      <th id="dataUploadEndDate">Data Uploaded Completed</th>
-      <th id="gen3Status">Gen3 Accepted</th>
-    </tr>
-  </thead>
-
-  {% for object in object_list %}
-  <tr>
-    <td>
-      <a href="{% url 'tracker:ticket-update' pk=object.pk %}"
-        >{{ object.study_id }}..{{ object.consent_code }}</a
-      >
-    </td>
-    <td>{{ object.name }}</td>
-    <td>{{ object.created_dt }}</td>
-    <td>{{ object.ticket_approved_dt }}</td>
-    <td>{{ object.bucket_created_dt }}</td>
-    <td>{{ object.data_uploaded_started_dt }}</td>
-    <td>{{ object.data_uploaded_completed_dt }}</td>
-    <td>{{ object.data_accepted_dt }}</td>
-  </tr>
-  {% endfor %}
-</table>
-
-Display alert if it is empty
-{% else %}
-<div class="alert alert-danger" role="alert" style="text-align: center">
-  No tickets yet!
+<div class="row">
+  <a href="/rejected" class="btn btn-cancel btn-md" role="button"
+    >View Rejected Tickets</a
+  >
 </div>
-{% endif %} -->
 {% endblock %}
