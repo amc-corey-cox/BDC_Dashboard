@@ -22,6 +22,17 @@ from django.urls import reverse
 # status_dt
 
 
+STATUS_TYPES = {
+    0: "Data Intake Form Rejected",
+    1: "Awaiting Review",
+    2: "Awaiting Bucket Creation",
+    3: "Awaiting Data Upload",
+    4: "Data upload in Progress",
+    5: "Awaiting Gen3 Approval",
+    6: "Gen3 Accepted",
+}
+
+
 class Ticket(models.Model):
     email = models.EmailField(verbose_name="Email", default="")
     name = models.CharField(
@@ -119,6 +130,11 @@ class Ticket(models.Model):
         blank=True,
     )
 
+    # ideally this is used to track ticket updates
+    # last_updated_dt = models.DateTimeField(
+    #     verbose_name="Last Updated Date", auto_now=True
+    # )
+
     def get_absolute_url(self):
         return reverse("tracker:ticket-detail", kwargs={"pk": self.pk})
 
@@ -128,19 +144,20 @@ class Ticket(models.Model):
             for field in self.__class__._meta.fields
         ]
 
-
-# STATUS_TYPES = (
-#         (1, 'Intake Form Submitted'),
-#         (2, 'Data Intake Form Approved; Ready for Bucket Creation'),
-#         (0, 'Data Intake Form Rejected'),
-#         (3, 'Bucket Created; Ready for Data upload'),
-#         (4, 'Data upload in Progress'),
-#         (5, 'Data upload Complete'),
-#         (6, 'Gen3 Accepted')
-# )
-#
-# class Status(models.Model):
-# 	status_type = models.IntegerField(choices=STATUS_TYPES)
-# 	status_dt = models.DateTimeField(auto_now_add=True)
-# 	ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)
-#
+    # get the ticket status based on the date time history
+    @property
+    def get_ticket_status(self):
+        if self.ticket_rejected_dt:
+            return (self.ticket_rejected_dt, STATUS_TYPES[0], "danger")
+        elif self.data_accepted_dt:
+            return (self.data_accepted_dt, STATUS_TYPES[6], "success")
+        elif self.data_uploaded_completed_dt:
+            return (self.data_uploaded_completed_dt, STATUS_TYPES[5], "secondary")
+        elif self.data_uploaded_started_dt:
+            return (self.data_uploaded_started_dt, STATUS_TYPES[4], "dark")
+        elif self.bucket_created_dt:
+            return (self.bucket_created_dt, STATUS_TYPES[3], "dark")
+        elif self.ticket_approved_dt:
+            return (self.ticket_approved_dt, STATUS_TYPES[2], "warning")
+        else:
+            return (self.created_dt, STATUS_TYPES[1], "primary")

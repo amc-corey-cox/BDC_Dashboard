@@ -1,7 +1,158 @@
 {% extends "base_generic.html" %} {% block content %}
 <h1 class="text-muted" style="text-align: center">Ticket Dashboard</h1>
 
-<!-- Only display table when not empty -->
+<div id="board">
+  <div class="board-card">
+    <div class="alert alert-primary text-center" role="alert">
+      <h5>Awaiting Review</h5>
+    </div>
+    {% for object in awaiting_review %}
+    <div class="card text-center m-2">
+      <div class="card-header">
+        <strong> {{ object.study_id }}..{{ object.consent_code }} </strong>
+      </div>
+      <div class="card-body">
+        <h5 class="card-title"></h5>
+        <p class="card-text">{{ object.study_name }}</p>
+        <a
+          href="{% url 'tracker:ticket-detail' pk=object.pk %}"
+          class="btn btn-{{ object.status_color }}"
+          role="button"
+          >View Ticket</a
+        >
+      </div>
+      <div class="card-footer {{ object.last_updated_color }}">
+        {{ object.last_updated }} Days Ago
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="board-card">
+    <div class="alert alert-warning text-center" role="alert">
+      <h5>Awaiting Bucket Creation</h5>
+    </div>
+    {% for object in awaiting_bucket_creation %}
+    <div class="card text-center mx-2">
+      <div class="card-header">
+        <strong> {{ object.study_id }}..{{ object.consent_code }} </strong>
+      </div>
+      <div class="card-body">
+        <h5 class="card-title"></h5>
+        <p class="card-text">{{ object.study_name }}</p>
+        <a
+          href="{% url 'tracker:ticket-detail' pk=object.pk %}"
+          class="btn btn-{{ object.status_color }}"
+          role="button"
+          >View Ticket</a
+        >
+      </div>
+      <div class="card-footer {{ object.last_updated_color }}">
+        {{ object.last_updated }} Days Ago
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="board-card">
+    <div class="alert alert-dark text-center" role="alert">
+      <h5>Awaiting Data Upload</h5>
+    </div>
+    {% for object in awaiting_data_upload %}
+    <div class="card text-center mx-2">
+      <div class="card-header">
+        <strong> {{ object.study_id }}..{{ object.consent_code }} </strong>
+      </div>
+      <div class="card-body">
+        <h5 class="card-title"></h5>
+        <p class="card-text">{{ object.study_name }}</p>
+        <a
+          href="{% url 'tracker:ticket-detail' pk=object.pk %}"
+          class="btn btn-{{ object.status_color }}"
+          role="button"
+          >View Ticket</a
+        >
+      </div>
+      <div class="card-footer {{ object.last_updated_color }}">
+        {{ object.last_updated }} Days Ago
+      </div>
+    </div>
+    {% endfor %} {% for object in data_upload_in_progress %}
+    <div class="card text-center mx-2">
+      <div class="card-header">
+        <strong> {{ object.study_id }}..{{ object.consent_code }} </strong>
+      </div>
+      <div class="card-body">
+        <h5 class="card-title"></h5>
+        <p class="card-text">{{ object.study_name }}</p>
+        <a
+          href="{% url 'tracker:ticket-detail' pk=object.pk %}"
+          class="btn btn-{{ object.status_color }}"
+          role="button"
+          >View Ticket</a
+        >
+      </div>
+      <div class="card-footer {{ object.last_updated_color }}">
+        {{ object.last_updated }} Days Ago
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="board-card">
+    <div class="alert alert-secondary text-center" role="alert">
+      <h5>Awaiting Gen3 Approval</h5>
+    </div>
+    {% for object in awaiting_gen3_approval %}
+    <div class="card text-center mx-2">
+      <div class="card-header">
+        <strong> {{ object.study_id }}..{{ object.consent_code }} </strong>
+      </div>
+      <div class="card-body">
+        <h5 class="card-title"></h5>
+        <p class="card-text">{{ object.study_name }}</p>
+        <a
+          href="{% url 'tracker:ticket-detail' pk=object.pk %}"
+          class="btn btn-{{ object.status_color }}"
+          role="button"
+          >View Ticket</a
+        >
+      </div>
+      <div class="card-footer {{ object.last_updated_color }}">
+        {{ object.last_updated }} Days Ago
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="board-card">
+    <div class="alert alert-success text-center" role="alert">
+      <h5>Gen3 Accepted</h5>
+    </div>
+    {% for object in gen3_accepted %}
+    <div class="card text-center mx-2">
+      <div class="card-header">
+        <strong> {{ object.study_id }}..{{ object.consent_code }} </strong>
+      </div>
+      <div class="card-body">
+        <h5 class="card-title"></h5>
+        <p class="card-text">{{ object.study_name }}</p>
+        <a
+          href="{% url 'tracker:ticket-detail' pk=object.pk %}"
+          class="btn btn-{{ object.status_color }}"
+          role="button"
+          >View Ticket</a
+        >
+      </div>
+      <div class="card-footer {{ object.last_updated_color }}">
+        {{ object.last_updated }} Days Ago
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Only display table when not empty
 {% if object_list is not empty %}
 <table class="table table-theme table-row v-middle">
   <thead>
@@ -30,14 +181,15 @@
     <td>{{ object.bucket_created_dt }}</td>
     <td>{{ object.data_uploaded_started_dt }}</td>
     <td>{{ object.data_uploaded_completed_dt }}</td>
-    <td>{{ object.data_accepted_dt }}</td>   
+    <td>{{ object.data_accepted_dt }}</td>
   </tr>
   {% endfor %}
 </table>
 
-<!-- Display alert if it is empty -->
+Display alert if it is empty
 {% else %}
 <div class="alert alert-danger" role="alert" style="text-align: center">
   No tickets yet!
 </div>
-{% endif %} {% endblock %}
+{% endif %} -->
+{% endblock %}

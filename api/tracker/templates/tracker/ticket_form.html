@@ -13,26 +13,34 @@
       <!-- Handle Errors -->
       {% if form.errors %}
       <h4 class="d-flex justify-content-between align-items-center mb-3">
-        <span class="text-primary">Errors</span>
         <span class="badge bg-danger rounded-pill"
-          >{{ form.errors|length }}</span
+          >{{ form.errors|length }} Errors</span
         >
+        <h6 class="text-muted">Please fix the following errors</h6>
       </h4>
       <ul class="list-group mb-3">
         {% for field in form %} {% if field.errors %}
-        <li class="list-group-item">
+        <li class="list-group-item d-flex justify-content-between lh-sm">
           <h6 class="my-0">{{ field.label }}</h6>
           {% for error in field.errors %}
-          <small class="text-muted">* {{ error }}</small>
+          <small class="text-muted">{{ error }}</small>
           {% endfor %}
         </li>
         {% endif %} {% endfor %}
       </ul>
-      {% endif %}
+      {% else %} {% if object %}
+      <h4 class="d-flex justify-content-between align-items-center mb-3">
+        <span class="badge bg-danger rounded-pill">Editting Form</span>
+      </h4>
+      {% else %}
+      <h4 class="d-flex justify-content-between align-items-center mb-3">
+        <span class="badge bg-info rounded-pill">Creating Ticket</span>
+      </h4>
+      {% endif %} {% endif %}
     </div>
 
     <!-- Display Form -->
-    <div class="col-md-7 col-lg-8">
+    <div class="col-md-7 col-lg-8 px-3">
       <h4 class="mb-3">Contact Information</h4>
       <div class="row g-3">
         <!-- Name and Email -->
@@ -47,7 +55,6 @@
             name="{{ form.name.name }}"
             placeholder="{{ form.name.label }}"
             value="{{ form.name.value }}"
-            required
           />
           <div class="form-text">{{ form.name.help_text }}</div>
         </div>
@@ -56,13 +63,12 @@
             >{{ form.email.label }}</label
           >
           <input
-            type="email"
+            type="text"
             class="form-control"
             id="{{ form.email.auto_id }}"
             name="{{ form.email.name }}"
             placeholder="{{ form.email.label }}"
             value="{{ form.email.value }}"
-            required
           />
         </div>
 
@@ -78,7 +84,6 @@
             name="{{ form.organization.name }}"
             placeholder="{{ form.organization.label }}"
             value="{{ form.organization.value }}"
-            required
           />
           <div class="form-text">{{ form.organization.help_text }}</div>
         </div>
@@ -116,7 +121,6 @@
             name="{{ form.study_id.name }}"
             placeholder="{{ form.study_id.label }}"
             value="{{ form.study_id.value }}"
-            required
           />
           <div class="form-text">{{ form.study_id.help_text }}</div>
         </div>
@@ -131,7 +135,6 @@
             name="{{ form.consent_code.name }}"
             placeholder="{{ form.consent_code.label }}"
             value="{{ form.consent_code.value }}"
-            required
           />
         </div>
         <hr class="my-4" />
@@ -177,13 +180,12 @@
             >{{ form.aws_iam.label }}</label
           >
           <input
-            type="aws_iam"
+            type="text"
             class="form-control"
             id="{{ form.aws_iam.auto_id }}"
             name="{{ form.aws_iam.name }}"
             placeholder="{{ form.aws_iam.label }}"
             value="{{ form.aws_iam.value }}"
-            required
           />
         </div>
 
@@ -225,9 +227,8 @@
               >{{ form.is_test_data.help_text }}</label
             >
           </div>
-
-          <hr class="my-4" />
         </div>
+        <hr class="my-4" />
       </div>
 
       <!-- Handle Create/Update Buttons -->
@@ -236,7 +237,7 @@
         <input class="btn btn-primary btn-lg" type="submit" value="Update" />
         <a
           href="{% url 'tracker:ticket-delete' pk=object.pk %}"
-          class="cancel-button btn btn-lg"
+          class="btn btn-cancel btn-lg"
           role="button"
           >Delete Ticket</a
         >
