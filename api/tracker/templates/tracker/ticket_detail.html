@@ -165,6 +165,7 @@
         >
 {{ ticket.dataset_description }}</textarea
         >
+        <div class="form-text">Describe the dataset you are uploading</div>
       </div>
 
       <!-- GMail and AWS-->
@@ -193,10 +194,14 @@
           value="{{ ticket.aws_iam }}"
           disabled
         />
+        <div class="form-text">
+          If you're uploading to Amazon please provide your AWS IAM (ex:
+          arn:aws:iam::123456789012:user/username)
+        </div>
       </div>
 
       <!-- Data Size -->
-      <div class="col-sm-3">
+      <div class="col-sm-4">
         <label for="{{ form.data_size.id_for_label }}" class="form-label"
           >Data Size</label
         >
@@ -206,6 +211,9 @@
           value="{{ ticket.data_size }}"
           disabled
         />
+        <div class="form-text">
+          Please provide an estimated size of your data set(s)
+        </div>
       </div>
 
       <!-- Test Data Checkbox -->

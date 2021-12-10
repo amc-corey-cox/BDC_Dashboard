@@ -10,6 +10,9 @@ urlpatterns = [
     path("<int:pk>/update/", views.TicketUpdate.as_view(), name="ticket-update"),
     path("<int:pk>/delete/", views.TicketDelete.as_view(), name="ticket-delete"),
     path("list/", views.TicketsList.as_view(), name="tickets-list"),
+    path(
+        "rejected/", views.RejectedTicketsList.as_view(), name="rejected-tickets-list"
+    ),
     path("<int:pk>/detail/", views.TicketDetail.as_view(), name="ticket-detail"),
     path("user_docs/", views.UserDocsView.as_view(), name="user-docs"),
     path(
