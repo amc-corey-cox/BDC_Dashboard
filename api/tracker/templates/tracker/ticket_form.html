@@ -158,6 +158,7 @@
           >
 {{ form.dataset_description.value }}</textarea
           >
+          <div class="form-text">{{ form.dataset_description.help_text }}</div>
         </div>
 
         <!-- GMail and AWS-->
@@ -187,10 +188,11 @@
             placeholder="{{ form.aws_iam.label }}"
             value="{{ form.aws_iam.value }}"
           />
+          <div class="form-text">{{ form.aws_iam.help_text }}</div>
         </div>
 
         <!-- Data Size -->
-        <div class="col-sm-3">
+        <div class="col-sm-4">
           <label for="{{ form.data_size.id_for_label }}" class="form-label"
             >{{ form.data_size.label }}</label
           >
@@ -202,6 +204,7 @@
             placeholder="{{ form.data_size.label }}"
             value="{{ form.data_size.value }}"
           />
+          <div class="form-text">{{ form.data_size.help_text }}</div>
         </div>
 
         <!-- Test Data Checkbox -->
