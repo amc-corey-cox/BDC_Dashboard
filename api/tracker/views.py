@@ -58,6 +58,44 @@ class TicketUpdate(UpdateView):
         "consent_code",
     ]
 
+    # add status to context
+    def get_context_data(self, **kwargs):
+        context = super(UpdateView, self).get_context_data(**kwargs)
+        context["status"] = self.object.get_ticket_status
+
+        return context
+
+    # handle ticket status logic
+    def form_valid(self, form):
+        status_update = self.request.POST.get("status_update")
+        ticket = form.save(commit=False)
+
+        if status_update == "Approve":
+            # set status to "Awaiting Bucket Creation"
+            ticket.ticket_approved_dt = datetime.now(timezone.utc)
+        if status_update == "Mark as Completed":
+            # set status to "Awaiting Data Upload"
+            ticket.bucket_created_dt = datetime.now(timezone.utc)
+        if status_update == "Mark as Uploaded":
+            # set status to "Awaiting Gen3 Approval"
+            if ticket.data_uploaded_started_dt is None:
+                ticket.data_uploaded_started_dt = datetime.now(timezone.utc)
+            ticket.data_uploaded_completed_dt = datetime.now(timezone.utc)
+        if status_update == "Mark as Approved":
+            # set status to "Awaiting Data Download"
+            ticket.data_accepted_dt = datetime.now(timezone.utc)
+        if status_update == "Revive Ticket":
+            # remove rejected timestamp
+            ticket.ticket_rejected_dt = None
+        if status_update == "Reject Ticket":
+            # add rejected timestamp
+            ticket.ticket_rejected_dt = datetime.now(timezone.utc)
+
+        ticket.save()
+        self.object = ticket
+
+        return super().form_valid(form)
+
 
 class TicketDelete(DeleteView):
     model = Ticket
