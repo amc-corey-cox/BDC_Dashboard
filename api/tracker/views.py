@@ -70,18 +70,18 @@ class TicketUpdate(UpdateView):
         status_update = self.request.POST.get("status_update")
         ticket = form.save(commit=False)
 
-        if status_update == "Approve":
+        if status_update == "Approve Ticket":
             # set status to "Awaiting Bucket Creation"
             ticket.ticket_approved_dt = datetime.now(timezone.utc)
-        if status_update == "Mark as Completed":
+        if status_update == "Mark Bucket Created":
             # set status to "Awaiting Data Upload"
             ticket.bucket_created_dt = datetime.now(timezone.utc)
-        if status_update == "Mark as Uploaded":
+        if status_update == "Mark as Data Uploaded":
             # set status to "Awaiting Gen3 Approval"
             if ticket.data_uploaded_started_dt is None:
                 ticket.data_uploaded_started_dt = datetime.now(timezone.utc)
             ticket.data_uploaded_completed_dt = datetime.now(timezone.utc)
-        if status_update == "Mark as Approved":
+        if status_update == "Mark as Gen3 Approved":
             # set status to "Awaiting Data Download"
             ticket.data_accepted_dt = datetime.now(timezone.utc)
         if status_update == "Revive Ticket":
