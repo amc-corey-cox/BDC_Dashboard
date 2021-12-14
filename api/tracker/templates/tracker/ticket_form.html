@@ -46,7 +46,7 @@
           class="btn btn-success btn-md mb-2"
           type="submit"
           name="status_update"
-          value="Approve"
+          value="Approve Ticket"
         />
         <input
           class="btn btn-danger btn-md"
@@ -59,28 +59,28 @@
           class="btn btn-success btn-md mb-2"
           type="submit"
           name="status_update"
-          value="Mark as Completed"
+          value="Mark Bucket Created"
         />
         {% endif %} {% if "Awaiting Data Upload" in status %}
         <input
           class="btn btn-success btn-md mb-2"
           type="submit"
           name="status_update"
-          value="Mark as Uploaded"
+          value="Mark as Data Uploaded"
         />
         {% endif %} {% if "Data upload in Progress" in status %}
         <input
           class="btn btn-success btn-md mb-2"
           type="submit"
           name="status_update"
-          value="Mark as Uploaded"
+          value="Mark as Data Uploaded"
         />
         {% endif %} {% if "Awaiting Gen3 Approval" in status %}
         <input
           class="btn btn-success btn-md mb-2"
           type="submit"
           name="status_update"
-          value="Mark as Approved"
+          value="Mark as Gen3 Approved"
         />
         {% endif %} {% if "Data Intake Form Rejected" in status %}
         <input
