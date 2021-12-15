@@ -28,15 +28,81 @@
         </li>
         {% endif %} {% endfor %}
       </ul>
-      {% else %} {% if object %}
-      <h4 class="d-flex justify-content-between align-items-center mb-3">
-        <span class="badge bg-danger rounded-pill">Editing Form</span>
-      </h4>
       {% else %}
+      <!-- Badge Logic -->
+      {% if object is None %}
       <h4 class="d-flex justify-content-between align-items-center mb-3">
         <span class="badge bg-info rounded-pill">Creating Ticket</span>
       </h4>
+      {% else %}
+      <h4 class="d-flex justify-content-between align-items-center mb-3">
+        <span class="badge bg-{{ status.2 }} rounded-pill">{{ status.1 }}</span>
+      </h4>
+      <h6 class="text-muted">Last Update: {{ ticket.get_ticket_status.0 }}</h6>
       {% endif %} {% endif %}
+      <div class="row px-5">
+        {% if "Awaiting Review" in status %}
+        <input
+          class="btn btn-success btn-md mb-2"
+          type="submit"
+          name="status_update"
+          value="Approve Ticket"
+        />
+        <input
+          class="btn btn-danger btn-md"
+          type="submit"
+          name="status_update"
+          value="Reject Ticket"
+        />
+        {% endif %} {% if "Awaiting Bucket Creation" in status %}
+        <input
+          class="btn btn-success btn-md mb-2"
+          type="submit"
+          name="status_update"
+          value="Mark Bucket Created"
+        />
+        {% endif %} {% if "Awaiting Data Upload" in status %}
+        <input
+          class="btn btn-success btn-md mb-2"
+          type="submit"
+          name="status_update"
+          value="Mark as Data Uploaded"
+        />
+        {% endif %} {% if "Data upload in Progress" in status %}
+        <input
+          class="btn btn-success btn-md mb-2"
+          type="submit"
+          name="status_update"
+          value="Mark as Data Uploaded"
+        />
+        {% endif %} {% if "Awaiting Gen3 Approval" in status %}
+        <input
+          class="btn btn-success btn-md mb-2"
+          type="submit"
+          name="status_update"
+          value="Mark as Gen3 Approved"
+        />
+        {% endif %} {% if "Data Intake Form Rejected" in status %}
+        <input
+          class="btn btn-success btn-md mb-2"
+          type="submit"
+          name="status_update"
+          value="Revive Ticket"
+        />
+        {% endif %}
+      </div>
+      {% if object %}
+      <hr />
+      <div class="row px-5">
+        <input class="btn btn-primary btn-md" type="submit" value="Update" />
+        <a
+          href="{% url 'tracker:ticket-detail' pk=object.pk %}"
+          class="btn btn-cancel btn-md"
+          role="button"
+          >Cancel Changes</a
+        >
+      </div>
+      {% endif %}
     </div>
 
     <!-- Display Form -->
