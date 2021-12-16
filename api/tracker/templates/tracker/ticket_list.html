@@ -12,8 +12,9 @@
         <strong> {{ object.study_id }}..{{ object.consent_code }} </strong>
       </div>
       <div class="card-body">
-        <h5 class="card-title"></h5>
+        {% if object.study_name %}
         <p class="card-text">{{ object.study_name }}</p>
+        {% endif %}
         <a
           href="{% url 'tracker:ticket-detail' pk=object.pk %}"
           class="btn btn-{{ object.status_color }}"
@@ -33,13 +34,14 @@
       <h5>Awaiting Bucket Creation</h5>
     </div>
     {% for object in awaiting_bucket_creation %}
-    <div class="card text-center mx-2">
+    <div class="card text-center m-2">
       <div class="card-header">
         <strong> {{ object.study_id }}..{{ object.consent_code }} </strong>
       </div>
       <div class="card-body">
-        <h5 class="card-title"></h5>
+        {% if object.study_name %}
         <p class="card-text">{{ object.study_name }}</p>
+        {% endif %}
         <a
           href="{% url 'tracker:ticket-detail' pk=object.pk %}"
           class="btn btn-{{ object.status_color }}"
@@ -59,13 +61,14 @@
       <h5>Awaiting Data Upload</h5>
     </div>
     {% for object in awaiting_data_upload %}
-    <div class="card text-center mx-2">
+    <div class="card text-center m-2">
       <div class="card-header">
         <strong> {{ object.study_id }}..{{ object.consent_code }} </strong>
       </div>
       <div class="card-body">
-        <h5 class="card-title"></h5>
+        {% if object.study_name %}
         <p class="card-text">{{ object.study_name }}</p>
+        {% endif %}
         <a
           href="{% url 'tracker:ticket-detail' pk=object.pk %}"
           class="btn btn-{{ object.status_color }}"
@@ -78,13 +81,14 @@
       </div>
     </div>
     {% endfor %} {% for object in data_upload_in_progress %}
-    <div class="card text-center mx-2">
+    <div class="card text-center m-2">
       <div class="card-header">
         <strong> {{ object.study_id }}..{{ object.consent_code }} </strong>
       </div>
       <div class="card-body">
-        <h5 class="card-title"></h5>
+        {% if object.study_name %}
         <p class="card-text">{{ object.study_name }}</p>
+        {% endif %}
         <a
           href="{% url 'tracker:ticket-detail' pk=object.pk %}"
           class="btn btn-{{ object.status_color }}"
@@ -104,13 +108,14 @@
       <h5>Awaiting Gen3 Approval</h5>
     </div>
     {% for object in awaiting_gen3_approval %}
-    <div class="card text-center mx-2">
+    <div class="card text-center m-2">
       <div class="card-header">
         <strong> {{ object.study_id }}..{{ object.consent_code }} </strong>
       </div>
       <div class="card-body">
-        <h5 class="card-title"></h5>
+        {% if object.study_name %}
         <p class="card-text">{{ object.study_name }}</p>
+        {% endif %}
         <a
           href="{% url 'tracker:ticket-detail' pk=object.pk %}"
           class="btn btn-{{ object.status_color }}"
@@ -130,13 +135,14 @@
       <h5>Gen3 Accepted</h5>
     </div>
     {% for object in gen3_accepted %}
-    <div class="card text-center mx-2">
+    <div class="card text-center m-2">
       <div class="card-header">
         <strong> {{ object.study_id }}..{{ object.consent_code }} </strong>
       </div>
       <div class="card-body">
-        <h5 class="card-title"></h5>
+        {% if object.study_name %}
         <p class="card-text">{{ object.study_name }}</p>
+        {% endif %}
         <a
           href="{% url 'tracker:ticket-detail' pk=object.pk %}"
           class="btn btn-{{ object.status_color }}"
