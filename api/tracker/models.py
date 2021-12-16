@@ -106,6 +106,14 @@ class Ticket(models.Model):
         default="",
     )
 
+    ticket_review_comment = models.CharField(
+        max_length=1000,
+        verbose_name="Ticket Review Comment",
+        help_text="Please provide a comment for approval or rejection",
+        blank=True,
+        default="",
+    )
+
     created_dt = models.DateTimeField(verbose_name="Created Date", auto_now_add=True)
     ticket_approved_dt = models.DateTimeField(
         verbose_name="Intake Form Approved Date",
@@ -139,9 +147,9 @@ class Ticket(models.Model):
     )
 
     # ideally this is used to track ticket updates
-    # last_updated_dt = models.DateTimeField(
-    #     verbose_name="Last Updated Date", auto_now=True
-    # )
+    last_updated_dt = models.DateTimeField(
+        verbose_name="Last Updated Date", auto_now=True
+    )
 
     def get_absolute_url(self):
         return reverse("tracker:ticket-detail", kwargs={"pk": self.pk})
