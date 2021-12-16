@@ -42,8 +42,6 @@
       {% endif %} {% endif %}
       <div class="row my-2 px-5">
         {% if "Awaiting Review" in status %}
-        <!-- Show -->
-
         <textarea
           class="form-control mb-2"
           id="{{ form.ticket_review_comment.auto_id }}"
@@ -53,7 +51,6 @@
         >
 {{ form.ticket_review_comment.value }}</textarea
         >
-
         <input
           class="btn btn-success btn-md mb-2"
           type="submit"

@@ -71,9 +71,25 @@ class TicketUpdate(UpdateView):
         status_update = self.request.POST.get("status_update")
         ticket = form.save(commit=False)
 
+        # these two require a comment
+        if status_update == "Approve Ticket" or status_update == "Reject Ticket":
+            ticket.ticket_review_comment = self.request.POST.get(
+                "ticket_review_comment"
+            )
+            # enforce comment is added
+            if not ticket.ticket_review_comment:
+                form.add_error(
+                    "ticket_review_comment", "A comment is required for this action."
+                )
+                return super().form_invalid(form)
+
+        # check which status button was clicked
         if status_update == "Approve Ticket":
             # set status to "Awaiting Bucket Creation"
             ticket.ticket_approved_dt = datetime.now(timezone.utc)
+        if status_update == "Reject Ticket":
+            # add rejected timestamp
+            ticket.ticket_rejected_dt = datetime.now(timezone.utc)
         if status_update == "Mark Bucket Created":
             # set status to "Awaiting Data Upload"
             ticket.bucket_created_dt = datetime.now(timezone.utc)
@@ -88,9 +104,6 @@ class TicketUpdate(UpdateView):
         if status_update == "Revive Ticket":
             # remove rejected timestamp
             ticket.ticket_rejected_dt = None
-        if status_update == "Reject Ticket":
-            # add rejected timestamp
-            ticket.ticket_rejected_dt = datetime.now(timezone.utc)
 
         ticket.save()
         self.object = ticket
