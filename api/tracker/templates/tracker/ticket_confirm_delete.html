@@ -1,30 +1,33 @@
 {% extends "base_generic.html" %} {% block content %}
-<h1 class="text-muted" style="text-align: center; font-weight: bold">
-  Delete Ticket
-</h1>
+<h1 class="text-muted" style="text-align: center">Delete Ticket</h1>
 
-<div class="container">
-  <div class="card text-center">
-    <div class="card-body">
-      <div class="alert alert-danger" role="alert">
-        <h5 class="card-title">
-          Warning! Deleting <strong>{{ ticket.study_id }}...</strong>
-        </h5>
-        <hr />
-        <p class="card-text">Are you sure you want to delete this ticket?</p>
-      </div>
-
-      <form action="" method="POST">
-        {% csrf_token %}
-        <input class="btn btn-danger" type="submit" value="Confirm" />
-        <a
-          href="{% url 'tracker:ticket-update' pk=object.pk %}"
-          class="btn btn-secondary"
-          >Cancel</a
+<form action="" method="POST">
+  {% csrf_token %}
+  <div class="card text-center m-2">
+    <div class="alert alert-danger text-center" role="alert">
+      <h2 class="display-4">
+        Warning! Deleting
+        <a href="{% url 'tracker:ticket-detail' pk=object.pk %}"
+          >{{ ticket.study_id }}...</a
         >
-      </form>
+      </h2>
+    </div>
+    <div class="card-body mb-2">
+      <p>{{ ticket.study_name }}</p>
+      <p>{{ ticket.name }} ({{ ticket.email }})</p>
+    </div>
+    <div class="card-footer">
+      <p>
+        <strong>Are you sure you want to delete this ticket?</strong>
+      </p>
+      <input class="btn btn-danger" type="submit" value="Confirm" />
+      <a
+        href="{% url 'tracker:ticket-update' pk=object.pk %}"
+        class="btn btn-secondary"
+        >Cancel</a
+      >
     </div>
   </div>
-</div>
+</form>
 
 {% endblock %}
