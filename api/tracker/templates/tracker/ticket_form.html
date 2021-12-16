@@ -28,14 +28,17 @@
         </li>
         {% endif %} {% endfor %}
       </ul>
-      {% else %} {% if object %}
-      <h4 class="d-flex justify-content-between align-items-center mb-3">
-        <span class="badge bg-danger rounded-pill">Editing Form</span>
-      </h4>
       {% else %}
+      <!-- Badge Logic -->
+      {% if object is None %}
       <h4 class="d-flex justify-content-between align-items-center mb-3">
         <span class="badge bg-info rounded-pill">Creating Ticket</span>
       </h4>
+      {% else %}
+      <h4 class="d-flex justify-content-between align-items-center mb-3">
+        <span class="badge bg-{{ status.2 }} rounded-pill">{{ status.1 }}</span>
+      </h4>
+      <h6 class="text-muted">Last Update: {{ ticket.get_ticket_status.0 }}</h6>
       {% endif %} {% endif %}
       <div class="row my-2 px-5">
         {% if "Awaiting Review" in status %}
