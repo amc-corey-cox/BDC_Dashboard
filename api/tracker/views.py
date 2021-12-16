@@ -56,6 +56,7 @@ class TicketUpdate(UpdateView):
         "data_size",
         "study_id",
         "consent_code",
+        "ticket_review_comment",
     ]
 
 

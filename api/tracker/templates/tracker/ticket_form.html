@@ -37,6 +37,81 @@
         <span class="badge bg-info rounded-pill">Creating Ticket</span>
       </h4>
       {% endif %} {% endif %}
+      <div class="row my-2 px-5">
+        {% if "Awaiting Review" in status %}
+        <!-- Show -->
+
+        <textarea
+          class="form-control mb-2"
+          id="{{ form.ticket_review_comment.auto_id }}"
+          name="{{ form.ticket_review_comment.name }}"
+          placeholder="{{ form.ticket_review_comment.help_text }}"
+          rows="3"
+        >
+{{ form.ticket_review_comment.value }}</textarea
+        >
+
+        <input
+          class="btn btn-success btn-md mb-2"
+          type="submit"
+          name="status_update"
+          value="Approve Ticket"
+        />
+        <input
+          class="btn btn-danger btn-md"
+          type="submit"
+          name="status_update"
+          value="Reject Ticket"
+        />
+        {% endif %} {% if "Awaiting Bucket Creation" in status %}
+        <input
+          class="btn btn-success btn-md mb-2"
+          type="submit"
+          name="status_update"
+          value="Mark Bucket Created"
+        />
+        {% endif %} {% if "Awaiting Data Upload" in status %}
+        <input
+          class="btn btn-success btn-md mb-2"
+          type="submit"
+          name="status_update"
+          value="Mark as Data Uploaded"
+        />
+        {% endif %} {% if "Data upload in Progress" in status %}
+        <input
+          class="btn btn-success btn-md mb-2"
+          type="submit"
+          name="status_update"
+          value="Mark as Data Uploaded"
+        />
+        {% endif %} {% if "Awaiting Gen3 Approval" in status %}
+        <input
+          class="btn btn-success btn-md mb-2"
+          type="submit"
+          name="status_update"
+          value="Mark as Gen3 Approved"
+        />
+        {% endif %} {% if "Data Intake Form Rejected" in status %}
+        <input
+          class="btn btn-success btn-md mb-2"
+          type="submit"
+          name="status_update"
+          value="Revive Ticket"
+        />
+        {% endif %}
+      </div>
+      {% if object %}
+      <hr />
+      <div class="row px-5">
+        <input class="btn btn-primary btn-md" type="submit" value="Update" />
+        <a
+          href="{% url 'tracker:ticket-detail' pk=object.pk %}"
+          class="btn btn-cancel btn-md"
+          role="button"
+          >Cancel Changes</a
+        >
+      </div>
+      {% endif %}
     </div>
 
     <!-- Display Form -->
