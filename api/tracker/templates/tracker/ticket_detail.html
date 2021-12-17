@@ -91,7 +91,6 @@
           value="{{ ticket.name }}"
           disabled
         />
-        <div class="form-text">Name of primary contact</div>
       </div>
       <div class="col-sm-6">
         <label for="{{ form.email.id_for_label }}" class="form-label"
@@ -116,7 +115,6 @@
           value="{{ ticket.organization }}"
           disabled
         />
-        <div class="form-text">Name of requesting organization</div>
       </div>
 
       <hr class="my-4" />
@@ -135,7 +133,6 @@
           value="{{ ticket.study_name }}"
           disabled
         />
-        <div class="form-text">Name of Study or Dataset (if applicable)</div>
       </div>
 
       <!-- Study ID and Consent Code -->
@@ -181,7 +178,6 @@
         >
 {{ ticket.dataset_description }}</textarea
         >
-        <div class="form-text">Describe the dataset you are uploading</div>
       </div>
 
       <!-- GMail and AWS-->
@@ -195,10 +191,6 @@
           value="{{ ticket.google_email }}"
           disabled
         />
-        <div class="form-text">
-          If you're uploading to Google please provide your google email for
-          access
-        </div>
       </div>
       <div class="col-sm-6">
         <label for="{{ form.aws_iam.id_for_label }}" class="form-label"
@@ -210,10 +202,6 @@
           value="{{ ticket.aws_iam }}"
           disabled
         />
-        <div class="form-text">
-          If you're uploading to Amazon please provide your AWS IAM (ex:
-          arn:aws:iam::123456789012:user/username)
-        </div>
       </div>
 
       <!-- Data Size -->
@@ -227,9 +215,6 @@
           value="{{ ticket.data_size }}"
           disabled
         />
-        <div class="form-text">
-          Please provide an estimated size of your data set(s)
-        </div>
       </div>
 
       <!-- Test Data Checkbox -->
