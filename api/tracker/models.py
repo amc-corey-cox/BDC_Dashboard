@@ -39,7 +39,7 @@ AWS_IAM_VALIDATOR = RegexValidator(
     "AWS IAM format invalid. Please use the following format: arn:aws:iam::123456789012:user/username",
 )
 GOOGLE_EMAIL_VALIDATOR = RegexValidator()
-STUDY_ID_AND_CONSENT_CODE_REGEX = r"^[a-z][a-z0-9.]{0,59}[a-z]$"
+STUDY_ID_AND_CONSENT_CODE_REGEX = r"^[a-z0-9][a-z0-9.]{0,59}[a-z0-9]$"
 STUDY_ID_VALIDATOR = RegexValidator(
     STUDY_ID_AND_CONSENT_CODE_REGEX,
     "Study ID format invalid",
