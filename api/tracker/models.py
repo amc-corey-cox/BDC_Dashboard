@@ -35,8 +35,18 @@ STATUS_TYPES = {
 
 
 AWS_IAM_VALIDATOR = RegexValidator(
-    r"arn:aws:iam::[0-9]{12}:user/[a-zA-Z0-9-_]{1,64}",
-    "AWS IAM format invalid",
+    r"^arn:aws:iam::[0-9]{12}:user/[a-zA-Z0-9-_]{1,64}$",
+    "AWS IAM format invalid. Please use the following format: arn:aws:iam::123456789012:user/username",
+)
+GOOGLE_EMAIL_VALIDATOR = RegexValidator()
+STUDY_ID_AND_CONSENT_CODE_REGEX = r"^[a-z0-9][a-z0-9.]{0,59}[a-z0-9]$"
+STUDY_ID_VALIDATOR = RegexValidator(
+    STUDY_ID_AND_CONSENT_CODE_REGEX,
+    "Study ID format invalid",
+)
+CONSENT_CODE_VALIDATOR = RegexValidator(
+    STUDY_ID_AND_CONSENT_CODE_REGEX,
+    "Consent Code format invalid",
 )
 
 
@@ -57,8 +67,7 @@ class Ticket(models.Model):
     study_name = models.CharField(
         max_length=250,
         verbose_name="Study Name",
-        help_text="Name of Study or Dataset (if applicable)",
-        blank=True,
+        help_text="Name of Study or Dataset",
         default="",
     )
     dataset_description = models.CharField(
@@ -76,14 +85,14 @@ class Ticket(models.Model):
     )
     google_email = models.EmailField(
         verbose_name="Google Email",
-        help_text="If you're uploading to Google please provide your google email for access",
+        help_text="If you're uploading to Google, please provide your google email for access",
         blank=True,
         default="",
     )
     aws_iam = models.CharField(
         max_length=100,
         verbose_name="AWS IAM",
-        help_text="If you're uploading to Amazon please provide your AWS IAM (ex: arn:aws:iam::123456789012:user/username)",
+        help_text="If you're uploading to Amazon, please provide your AWS IAM (ex: arn:aws:iam::123456789012:user/username)",
         blank=True,
         default="",
         validators=[AWS_IAM_VALIDATOR],
@@ -98,11 +107,23 @@ class Ticket(models.Model):
     study_id = models.CharField(
         max_length=100,
         verbose_name="Study ID",
+        help_text="Please refer to Data Custodian Instructions for more information",
         default="",
+        validators=[STUDY_ID_VALIDATOR],
     )
     consent_code = models.CharField(
         max_length=100,
         verbose_name="Consent Code",
+        help_text="Please refer to Data Custodian Instructions for more information",
+        default="",
+        validators=[CONSENT_CODE_VALIDATOR],
+    )
+
+    ticket_review_comment = models.CharField(
+        max_length=1000,
+        verbose_name="Ticket Review Comment",
+        help_text="Please provide a comment for approval or rejection",
+        blank=True,
         default="",
     )
 
@@ -139,9 +160,9 @@ class Ticket(models.Model):
     )
 
     # ideally this is used to track ticket updates
-    # last_updated_dt = models.DateTimeField(
-    #     verbose_name="Last Updated Date", auto_now=True
-    # )
+    last_updated_dt = models.DateTimeField(
+        verbose_name="Last Updated Date", auto_now=True
+    )
 
     def get_absolute_url(self):
         return reverse("tracker:ticket-detail", kwargs={"pk": self.pk})

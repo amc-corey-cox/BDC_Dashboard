@@ -40,8 +40,17 @@
       </h4>
       <h6 class="text-muted">Last Update: {{ ticket.get_ticket_status.0 }}</h6>
       {% endif %} {% endif %}
-      <div class="row px-5">
+      <div class="row my-2 px-5">
         {% if "Awaiting Review" in status %}
+        <textarea
+          class="form-control mb-2"
+          id="{{ form.ticket_review_comment.auto_id }}"
+          name="{{ form.ticket_review_comment.name }}"
+          placeholder="{{ form.ticket_review_comment.help_text }}"
+          rows="3"
+        >
+{{ form.ticket_review_comment.value }}</textarea
+        >
         <input
           class="btn btn-success btn-md mb-2"
           type="submit"
@@ -202,6 +211,7 @@
             placeholder="{{ form.consent_code.label }}"
             value="{{ form.consent_code.value }}"
           />
+          <div class="form-text">{{ form.consent_code.help_text }}</div>
         </div>
         <hr class="my-4" />
       </div>
