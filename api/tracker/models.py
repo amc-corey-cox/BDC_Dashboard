@@ -25,11 +25,11 @@ from django.core.validators import RegexValidator
 
 STATUS_TYPES = {
     0: "Data Intake Form Rejected",
-    1: "Awaiting Review",
-    2: "Awaiting Bucket Creation",
-    3: "Awaiting Data Upload",
-    4: "Data upload in Progress",
-    5: "Awaiting Gen3 Approval",
+    1: "Awaiting NHLBI Review",
+    2: "Awaiting NHLBI Cloud Bucket Creation",
+    3: "Awaiting Custodian Upload Start",
+    4: "Awaiting Custodian Upload Complete",
+    5: "Awaiting Gen3 Acceptance",
     6: "Gen3 Accepted",
 }
 
