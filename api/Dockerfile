@@ -12,7 +12,6 @@ COPY . ./
 RUN set eux; \
   apt-get update; \
   apt-get install -y \
-    nodejs \
     wget \
   ; \
   # install tini
