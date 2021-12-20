@@ -40,27 +40,26 @@ html {
 }
 
 .side-nav {
-  width: 250px;
+  width: 20vw;
   z-index: 999;
   position: fixed;
   top: 0;
   bottom: 0;
 }
 .side-nav img {
-  width: 250px;
-  line-height: 70px;
+  width: 18vw;
   display: block;
   margin-left: auto;
   margin-right: auto;
   top: 0;
-  padding: 5px;
+  padding: 1;
 }
 
 #content {
   min-height: 100vh;
-  margin-left: 250px;
+  margin-left: 20vw;
   overflow: hidden;
-  padding: 10px;
+  padding: 1;
 }
 
 #titleHeader {
@@ -69,23 +68,16 @@ html {
   color: inherit;
 }
 
-.btn-cancel {
-  color: var(--color-primary);
-  text-decoration: underline;
-}
-
 #board {
   display: flex;
-  /* white-space: nowrap; */
-  justify-content: space-around;
-  /* overflow-x: auto; */
+  overflow-x: auto;
 }
-.board-card {
+.board-panel {
   /* display: inline-block; */
-  width: 13em;
+  width: 12rem;
   /* padding: 0 1rem 1rem 1rem; */
-  /* margin: 10px; */
-  border: 1px solid var(--color-light-gray);
+  margin: 0.25rem;
+  border: 0.1rem solid var(--color-light-gray);
   border-radius: 0.25rem;
 }
 .board-card h5 {
@@ -96,4 +88,9 @@ html {
 }
 .text-yellow {
   color: var(--bs-orange);
+}
+
+.btn-cancel {
+  color: var(--color-primary);
+  text-decoration: underline;
 }

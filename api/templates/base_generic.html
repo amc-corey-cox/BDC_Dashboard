@@ -31,9 +31,8 @@
   </head>
 
   <body>
-    <!-- SideBar Start -->
     <div class="wrapper">
-      <div class="side-nav m-2">
+      <div class="side-nav p-2">
         <img
           class="logo"
           src="{% static 'tracker/bio.svg' %}"
@@ -60,14 +59,10 @@
           </a>
         </div>
       </div>
-      <!-- Sidebar End -->
-
-      <!-- Content Start -->
       <div id="content">
         <h1 id="titleHeader" class="display-4">Data Submission Tracker</h1>
         {% block content %}{% endblock %}
       </div>
-      <!-- Content End -->
     </div>
 
     <!-- Tooltip Script -->
