@@ -1,7 +1,7 @@
 {% extends "base_generic.html" %} {% load widget_tweaks %} {% block content %}
 <h1 class="text-muted" style="text-align: center">Ticket Item</h1>
 
-<form class="needs-validation pb-5" method="post">
+<form id="ticket-form" class="needs-validation pb-5" method="post">
   <div class="row g-2">
     {% csrf_token %}
 
@@ -104,10 +104,7 @@
       <hr />
       <div class="row px-5">
         <input class="btn btn-primary btn-md" type="submit" value="Update" />
-        <a
-          href="{% url 'tracker:ticket-detail' pk=object.pk %}"
-          class="btn btn-cancel btn-md"
-          role="button"
+        <a href="PLACEHOLDER" class="btn btn-cancel btn-md" role="button"
           >Cancel Changes</a
         >
       </div>
@@ -268,18 +265,37 @@
         </div>
 
         <!-- Data Size -->
-        <div class="col-sm-4">
+        <div class="col-sm-12">
           <label for="{{ form.data_size.id_for_label }}" class="form-label"
             >{{ form.data_size.label }}</label
           >
-          <input
-            type="text"
-            class="form-control"
-            id="{{ form.data_size.auto_id }}"
-            name="{{ form.data_size.name }}"
-            placeholder="{{ form.data_size.label }}"
-            value="{{ form.data_size.value }}"
-          />
+          <!-- <div class="row"> -->
+          <div class="col-sm-3">
+            <input
+              type="text"
+              class="form-control"
+              id="id_data_size"
+              name="{{ form.data_size.name }}"
+              placeholder="{{ form.data_size.label }}"
+              value="{{ form.data_size.value }}"
+            />
+          </div>
+          <!-- <div class="col-sm-6">
+              <select
+                class="form-select"
+                id="id_data_size_unit"
+                placeholder="Select Unit"
+                value="{{ form.data_unit.value }}"
+                aria-label="Data Size Unit Select"
+              >
+                <option selected>Select Unit</option>
+                <option value="MB">MB</option>
+                <option value="GB">GB</option>
+                <option value="TB">TB</option>
+                <option value="PB">PB</option>
+              </select>
+            </div> -->
+          <!-- </div> -->
           <div class="form-text">{{ form.data_size.help_text }}</div>
         </div>
 
@@ -313,7 +329,13 @@
       <!-- Handle Create/Update Buttons -->
       <div class="row">
         {% if object %}
-        <input class="btn btn-primary btn-lg" type="submit" value="Update" />
+        <button
+          class="btn btn-primary btn-lg"
+          type="button"
+          onclick="submit_form()"
+        >
+          Update Ticket
+        </button>
         <a
           href="{% url 'tracker:ticket-delete' pk=object.pk %}"
           class="btn btn-cancel btn-lg"
@@ -331,6 +353,25 @@
     </div>
   </div>
 </form>
+
+<script>
+  function show_summary() {
+    $("#ticket-form").hide();
+  }
+  function show_form() {
+    $("#ticket-form").show();
+  }
+
+  function submit_form() {
+    $("#id_data_size").val(function () {
+      return this.value.toUpperCase();
+    });
+
+    $("#ticket-form").submit();
+  }
+
+  // show_summary();
+</script>
 
 <!-- DEBUG -->
 <!-- {{ form.as_table }} -->
