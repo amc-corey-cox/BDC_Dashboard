@@ -33,6 +33,12 @@ STATUS_TYPES = {
     6: "Gen3 Accepted",
 }
 
+DATA_UNIT_CHOICES = (
+    ("mb", "MB"),
+    ("gb", "GB"),
+    ("tb", "TB"),
+    ("pb", "PB"),
+)
 
 AWS_IAM_VALIDATOR = RegexValidator(
     r"^arn:aws:iam::[0-9]{12}:user/[a-zA-Z0-9-_]{1,64}$",
@@ -47,6 +53,10 @@ STUDY_ID_VALIDATOR = RegexValidator(
 CONSENT_CODE_VALIDATOR = RegexValidator(
     STUDY_ID_AND_CONSENT_CODE_REGEX,
     "Consent Code format invalid",
+)
+DATA_SIZE_VALIDATOR = RegexValidator(
+    r"^[0-9]{1,5}(.[0-9]{1,5})?\s?(MB|GB|TB|PB)$",
+    "Data Size format invalid",
 )
 
 
@@ -100,9 +110,9 @@ class Ticket(models.Model):
     data_size = models.CharField(
         max_length=100,
         verbose_name="Data Size",
-        help_text="Please provide an estimated size of your data set(s)",
-        blank=True,
+        help_text="Please provide an estimated size of your data set(s) (ex. 100 GB)",
         default="",
+        validators=[DATA_SIZE_VALIDATOR],
     )
     study_id = models.CharField(
         max_length=100,
