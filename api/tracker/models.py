@@ -165,7 +165,7 @@ class Ticket(models.Model):
     )
 
     def get_absolute_url(self):
-        return reverse("tracker:ticket-detail", kwargs={"pk": self.pk})
+        return reverse("tracker:ticket-update", kwargs={"pk": self.pk})
 
     def get_fields(self):
         return [

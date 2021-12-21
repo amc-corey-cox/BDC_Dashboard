@@ -7,7 +7,7 @@
     <div class="alert alert-danger text-center" role="alert">
       <h2 class="display-4">
         Warning! Deleting
-        <a href="{% url 'tracker:ticket-detail' pk=object.pk %}"
+        <a href="{% url 'tracker:ticket-update' pk=object.pk %}"
           >{{ ticket.study_id }}...</a
         >
       </h2>

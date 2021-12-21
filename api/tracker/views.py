@@ -200,11 +200,27 @@ class RejectedTicketsList(ListView):
         return context
 
 
-class TicketDetail(DetailView):
-    model = Ticket
-    context_object_name = "ticket"
+# class TicketDetail(DetailView):
+#     model = Ticket
+#     context_object_name = "ticket"
 
-    def get_context_data(self, *args, **kwargs):
-        context = super(DetailView, self).get_context_data(*args, **kwargs)
+#     success_url = reverse_lazy("tracker:tickets-list")
 
-        return context
+#     def get_context_data(self, *args, **kwargs):
+#         context = super(DetailView, self).get_context_data(*args, **kwargs)
+
+#         return context
+
+#     def post(self, status_update, *args, **kwargs):
+#         self.object = self.get_object()
+#         form = self.get_form()
+#         ticket = form.save(commit=False)
+
+#         if status_update == "Approve Ticket":
+#             # set status to "Awaiting Bucket Creation"
+#             self.object.ticket_approved_dt = datetime.now(timezone.utc)
+
+#         ticket.save()
+#         self.object = ticket
+
+#         return super(TicketDetail, self).form_valid(form)
