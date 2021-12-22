@@ -71,34 +71,30 @@ class TicketUpdate(UpdateView):
         status_update = self.request.POST.get("status_update")
         ticket = form.save(commit=False)
 
-        # these two require a comment
-        if status_update == "Approve Ticket" or status_update == "Reject Ticket":
-            ticket.ticket_review_comment = self.request.POST.get(
-                "ticket_review_comment"
-            )
-            # enforce comment is added
-            if not ticket.ticket_review_comment:
-                form.add_error(
-                    "ticket_review_comment", "A comment is required for this action."
-                )
-                return super().form_invalid(form)
-
         # check which status button was clicked
         if status_update == "Approve Ticket":
-            # set status to "Awaiting Bucket Creation"
+            # add approval timestamp
             ticket.ticket_approved_dt = datetime.now(timezone.utc)
         if status_update == "Reject Ticket":
             # add rejected timestamp
             ticket.ticket_rejected_dt = datetime.now(timezone.utc)
-        if status_update == "Mark Bucket Created":
-            # set status to "Awaiting Data Upload"
+        if (
+            status_update == "Mark Bucket Created"
+        ):  # FIXME - What should the wording be?
+            # add bucket created timestamp
             ticket.bucket_created_dt = datetime.now(timezone.utc)
-        if status_update == "Mark as Data Uploaded":
+        if (
+            status_update == "Mark Data Upload Started"
+        ):  # FIXME - What should the wording be?
             # set status to "Awaiting Gen3 Approval"
-            if ticket.data_uploaded_started_dt is None:
-                ticket.data_uploaded_started_dt = datetime.now(timezone.utc)
+            ticket.data_uploaded_started_dt = datetime.now(timezone.utc)
+        if (
+            status_update == "Mark Data Uploaded Complete"
+        ):  # FIXME - What should the wording be?
             ticket.data_uploaded_completed_dt = datetime.now(timezone.utc)
-        if status_update == "Mark as Gen3 Approved":
+        if (
+            status_update == "Mark as Gen3 Approved"
+        ):  # FIXME - What should the wording be?
             # set status to "Awaiting Data Download"
             ticket.data_accepted_dt = datetime.now(timezone.utc)
         if status_update == "Revive Ticket":
