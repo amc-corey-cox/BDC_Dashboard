@@ -56,7 +56,7 @@ CONSENT_CODE_VALIDATOR = RegexValidator(
 )
 DATA_SIZE_VALIDATOR = RegexValidator(
     r"^[0-9]{1,5}(.[0-9]{1,5})?\s?(MB|GB|TB|PB)$",
-    "Data Size format invalid",
+    "Data Size format invalid. Please add a unit of measurement (MB, GB, TB, PB)",
 )
 
 
