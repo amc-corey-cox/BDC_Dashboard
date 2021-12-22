@@ -27,8 +27,8 @@ STATUS_TYPES = {
     0: "Data Intake Form Rejected",
     1: "Awaiting NHLBI Review",
     2: "Awaiting NHLBI Cloud Bucket Creation",
-    3: "Awaiting Custodian Upload Start",
-    4: "Awaiting Custodian Upload Complete",
+    3: "Awaiting Data Custodian Upload Start",
+    4: "Awaiting Data Custodian Upload Complete",
     5: "Awaiting Gen3 Acceptance",
     6: "Gen3 Accepted",
 }
