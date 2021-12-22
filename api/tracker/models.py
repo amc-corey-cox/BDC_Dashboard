@@ -61,13 +61,13 @@ DATA_SIZE_VALIDATOR = RegexValidator(
 
 
 class Ticket(models.Model):
-    email = models.EmailField(verbose_name="Email", default="")
     name = models.CharField(
         max_length=100,
         verbose_name="Name",
         help_text="Name of primary contact",
         default="",
     )
+    email = models.EmailField(verbose_name="Email", default="")
     organization = models.CharField(
         max_length=250,
         verbose_name="Organization",
@@ -80,18 +80,34 @@ class Ticket(models.Model):
         help_text="Name of Study or Dataset",
         default="",
     )
+    study_id = models.CharField(
+        max_length=100,
+        verbose_name="Study ID",
+        help_text="Please refer to Data Custodian Instructions for more information",
+        default="",
+        validators=[STUDY_ID_VALIDATOR],
+    )
+    consent_code = models.CharField(
+        max_length=100,
+        verbose_name="Consent Code",
+        help_text="Please refer to Data Custodian Instructions for more information",
+        default="",
+        validators=[CONSENT_CODE_VALIDATOR],
+    )
+    data_size = models.CharField(
+        max_length=100,
+        verbose_name="Data Size",
+        help_text="Please provide an estimated size of your data set(s) (ex. 100 GB)",
+        default="",
+        validators=[DATA_SIZE_VALIDATOR],
+    )
+
     dataset_description = models.CharField(
         max_length=2500,
         verbose_name="Dataset Description",
         help_text="Describe the dataset you are uploading",
         blank=True,
         default="",
-    )
-    is_test_data = models.BooleanField(
-        verbose_name="Is Test Data",
-        help_text="Check this box if this is test data",
-        blank=True,
-        default=False,
     )
     google_email = models.EmailField(
         verbose_name="Google Email",
@@ -107,26 +123,11 @@ class Ticket(models.Model):
         default="",
         validators=[AWS_IAM_VALIDATOR],
     )
-    data_size = models.CharField(
-        max_length=100,
-        verbose_name="Data Size",
-        help_text="Please provide an estimated size of your data set(s) (ex. 100 GB)",
-        default="",
-        validators=[DATA_SIZE_VALIDATOR],
-    )
-    study_id = models.CharField(
-        max_length=100,
-        verbose_name="Study ID",
-        help_text="Please refer to Data Custodian Instructions for more information",
-        default="",
-        validators=[STUDY_ID_VALIDATOR],
-    )
-    consent_code = models.CharField(
-        max_length=100,
-        verbose_name="Consent Code",
-        help_text="Please refer to Data Custodian Instructions for more information",
-        default="",
-        validators=[CONSENT_CODE_VALIDATOR],
+    is_test_data = models.BooleanField(
+        verbose_name="Is Test Data",
+        help_text="Check this box if this is test data",
+        blank=True,
+        default=False,
     )
 
     ticket_review_comment = models.CharField(
