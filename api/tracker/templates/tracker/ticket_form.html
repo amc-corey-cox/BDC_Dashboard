@@ -118,7 +118,7 @@
         <!-- Name and Email -->
         <div class="col-sm-6">
           <label for="{{ form.name.id_for_label }}" class="form-label"
-            >{{ form.name.label }}</label
+            ><span class="required">*</span>{{ form.name.label }}</label
           >
           <input
             type="text"
@@ -132,7 +132,7 @@
         </div>
         <div class="col-sm-6">
           <label for="{{ form.email.id_for_label }}" class="form-label"
-            >{{ form.email.label }}</label
+            ><span class="required">*</span>{{ form.email.label }}</label
           >
           <input
             type="text"
@@ -147,7 +147,7 @@
         <!-- Organization -->
         <div class="col-12">
           <label for="{{ form.organization.id_for_label }}" class="form-label"
-            >{{ form.organization.label }}</label
+            ><span class="required">*</span>{{ form.organization.label }}</label
           >
           <input
             type="text"
@@ -168,7 +168,7 @@
         <!-- Study Name -->
         <div class="col-12">
           <label for="{{ form.study_name.id_for_label }}" class="form-label"
-            >{{ form.study_name.label }}</label
+            ><span class="required">*</span>{{ form.study_name.label }}</label
           >
           <input
             type="text"
@@ -184,7 +184,7 @@
         <!-- Study ID and Consent Code -->
         <div class="col-sm-6">
           <label for="{{ form.study_id.id_for_label }}" class="form-label"
-            >{{ form.study_id.label }}</label
+            ><span class="required">*</span>{{ form.study_id.label }}</label
           >
           <input
             type="text"
@@ -198,7 +198,7 @@
         </div>
         <div class="col-sm-6">
           <label for="{{ form.consent_code.id_for_label }}" class="form-label"
-            >{{ form.consent_code.label }}</label
+            ><span class="required">*</span>{{ form.consent_code.label }}</label
           >
           <input
             type="text"
@@ -267,7 +267,7 @@
         <!-- Data Size -->
         <div class="col-sm-12">
           <label for="{{ form.data_size.id_for_label }}" class="form-label"
-            >{{ form.data_size.label }}</label
+            ><span class="required">*</span>{{ form.data_size.label }}</label
           >
           <!-- <div class="row"> -->
           <div class="col-sm-3">
@@ -334,7 +334,7 @@
           type="button"
           onclick="submit_form()"
         >
-          Update Ticket
+          Submit Changes
         </button>
         <a
           href="{% url 'tracker:ticket-delete' pk=object.pk %}"

@@ -94,3 +94,7 @@ html {
   color: var(--color-primary);
   text-decoration: underline;
 }
+.required {
+  font-weight: bold;
+  color: red;
+}
