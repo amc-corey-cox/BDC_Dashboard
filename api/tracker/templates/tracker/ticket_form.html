@@ -1,6 +1,9 @@
 {% extends "base_generic.html" %} {% load widget_tweaks %} {% block content %}
 <h1 class="text-muted" style="text-align: center">Ticket Item</h1>
 
+<button onclick="show_summary()">yes</button>
+<button onclick="show_form()">yes</button>
+
 <form id="ticket-form" class="needs-validation pb-5" method="post">
   <div class="row g-2">
     {% csrf_token %}
@@ -14,7 +17,7 @@
       {% if form.errors %}
       <h4 class="d-flex justify-content-between align-items-center mb-3">
         <span class="badge bg-danger rounded-pill"
-          >{{ form.errors|length }} Errors</span
+          >{{ form.errors|length }} Error(s)</span
         >
         <h6 class="text-muted">Please fix the following errors</h6>
       </h4>
@@ -28,7 +31,8 @@
         </li>
         {% endif %} {% endfor %}
       </ul>
-      {% else %}
+      {% endif %}
+
       <!-- Badge Logic -->
       {% if object is None %}
       <h4 class="d-flex justify-content-between align-items-center mb-3">
@@ -38,16 +42,76 @@
       <h4 class="d-flex justify-content-between align-items-center mb-3">
         <span class="badge bg-{{ status.2 }} rounded-pill">{{ status.1 }}</span>
       </h4>
+
+      <!-- Logs -->
       <h6 class="text-muted">Last Update: {{ ticket.get_ticket_status.0 }}</h6>
-      {% endif %} {% endif %}
+      <ul class="list-group mb-3">
+        <li class="list-group-item d-flex justify-content-between lh-sm">
+          <h6 class="my-0">Created Date</h6>
+          <small class="text-muted">{{ ticket.created_dt }}</small>
+        </li>
+        {% if ticket.ticket_approved_dt %}
+        <li class="list-group-item flex-column justify-content-between lh-sm">
+          <div class="d-flex w-100 justify-content-between">
+            <h6 class="my-0">Data Intake Form Accepted Date</h6>
+            <small class="text-muted">{{ ticket.ticket_approved_dt }}</small>
+          </div>
+          {% if ticket.ticket_review_comment %}
+          <hr />
+          <small class="text-muted text-end"
+            ><strong>Reason: </strong>{{ ticket.ticket_review_comment }}</small
+          >
+          {% endif %}
+        </li>
+        {% endif %} {% if ticket.bucket_created_dt %}
+        <li class="list-group-item d-flex justify-content-between lh-sm">
+          <h6 class="my-0">NHLBI Bucket Created Date</h6>
+          <small class="text-muted">{{ ticket.bucket_created_dt }}</small>
+        </li>
+        {% endif %} {% if ticket.data_uploaded_started_dt %}
+        <li class="list-group-item d-flex justify-content-between lh-sm">
+          <h6 class="my-0">Data Custodian Upload Started Date</h6>
+          <small class="text-muted"
+            >{{ ticket.data_uploaded_started_dt }}</small
+          >
+        </li>
+        {% endif %} {% if ticket.data_uploaded_completed_dt %}
+        <li class="list-group-item d-flex justify-content-between lh-sm">
+          <h6 class="my-0">Data Upload Completed Date</h6>
+          <small class="text-muted"
+            >{{ ticket.data_uploaded_completed_dt }}</small
+          >
+        </li>
+        {% endif %} {% if ticket.data_accepted_dt %}
+        <li class="list-group-item d-flex justify-content-between lh-sm">
+          <h6 class="my-0">Gen3 Accepted Date</h6>
+          <small class="text-muted">{{ ticket.data_accepted_dt }}</small>
+        </li>
+        {% endif %} {% if ticket.ticket_rejected_dt %}
+        <li class="list-group-item flex-column justify-content-between lh-sm">
+          <div class="d-flex w-100 justify-content-between">
+            <h6 class="my-0">Data Intake Form Rejected Date</h6>
+            <small class="text-muted">{{ ticket.ticket_rejected_dt }}</small>
+          </div>
+          {% if ticket.ticket_review_comment %}
+          <hr />
+          <small class="text-muted text-end"
+            ><strong>Reason: </strong>{{ ticket.ticket_review_comment }}</small
+          >
+          {% endif %}
+        </li>
+        {% endif %} {% endif %}
+      </ul>
+
+      <!-- Button Logic -->
       <div class="row my-2 px-5">
-        {% if "Awaiting Review" in status %}
+        {% if "Awaiting NHLBI Review" in status %}
         <textarea
           class="form-control mb-2"
           id="{{ form.ticket_review_comment.auto_id }}"
           name="{{ form.ticket_review_comment.name }}"
           placeholder="{{ form.ticket_review_comment.help_text }}"
-          rows="3"
+          rows="9"
         >
 {{ form.ticket_review_comment.value }}</textarea
         >
@@ -63,28 +127,28 @@
           name="status_update"
           value="Reject Ticket"
         />
-        {% endif %} {% if "Awaiting Bucket Creation" in status %}
+        {% endif %} {% if "Awaiting NHLBI Cloud Bucket Creation" in status %}
         <input
           class="btn btn-success btn-md mb-2"
           type="submit"
           name="status_update"
           value="Mark Bucket Created"
         />
-        {% endif %} {% if "Awaiting Data Upload" in status %}
+        {% endif %} {% if "Awaiting Data Custodian Upload Start" in status %}
         <input
           class="btn btn-success btn-md mb-2"
           type="submit"
           name="status_update"
           value="Mark as Data Uploaded"
         />
-        {% endif %} {% if "Data upload in Progress" in status %}
+        {% endif %} {% if "Awaiting Data Custodian Upload Complete" in status %}
         <input
           class="btn btn-success btn-md mb-2"
           type="submit"
           name="status_update"
           value="Mark as Data Uploaded"
         />
-        {% endif %} {% if "Awaiting Gen3 Approval" in status %}
+        {% endif %} {% if "Awaiting Gen3 Acceptance" in status %}
         <input
           class="btn btn-success btn-md mb-2"
           type="submit"
@@ -103,18 +167,17 @@
       {% if object %}
       <hr />
       <div class="row px-5">
-        <input class="btn btn-primary btn-md" type="submit" value="Update" />
-        <a href="PLACEHOLDER" class="btn btn-cancel btn-md" role="button"
-          >Cancel Changes</a
-        >
+        <button class="btn btn-danger btn-md mb-2" onclick="show_form()">
+          Edit Ticket
+        </button>
       </div>
       {% endif %}
     </div>
 
     <!-- Display Form -->
     <div class="col-md-7 col-lg-8 px-3">
-      <h4 class="mb-3">Contact Information</h4>
-      <div class="row g-3">
+      <h4 class="mb-3 form-element">Contact Information</h4>
+      <div class="row g-3 form-element">
         <!-- Name and Email -->
         <div class="col-sm-6">
           <label for="{{ form.name.id_for_label }}" class="form-label"
@@ -161,8 +224,8 @@
         <hr class="my-4" />
       </div>
 
-      <h4 class="mb-3">Study Information</h4>
-      <div class="row g-3">
+      <h4 class="mb-3 form-element">Study Information</h4>
+      <div class="row g-3 form-element">
         <!-- Study Name -->
         <div class="col-12">
           <label for="{{ form.study_name.id_for_label }}" class="form-label"
@@ -210,8 +273,8 @@
         <hr class="my-4" />
       </div>
 
-      <h4 class="mb-3">Dataset Information</h4>
-      <div class="row g-3">
+      <h4 class="mb-3 form-element">Dataset Information</h4>
+      <div class="row g-3 form-element">
         <!-- Dataset Description -->
         <div class="col-12">
           <label
@@ -291,7 +354,6 @@
                 <option value="PB">PB</option>
               </select>
             </div> -->
-          <!-- </div> -->
           <div class="form-text">{{ form.data_size.help_text }}</div>
         </div>
 
@@ -322,8 +384,11 @@
         <hr class="my-4" />
       </div>
 
+      <!-- Ticket Detail -->
+      <div id="ticket-detail">nnn</div>
+
       <!-- Handle Create/Update Buttons -->
-      <div class="row">
+      <div class="row g-3">
         {% if object %}
         <button
           class="btn btn-primary btn-lg"
@@ -352,10 +417,12 @@
 
 <script>
   function show_summary() {
-    $("#ticket-form").hide();
+    $("#ticket-detail").show();
+    $(".form-element").hide();
   }
   function show_form() {
-    $("#ticket-form").show();
+    $(".form-element").show();
+    $("#ticket-detail").hide();
   }
 
   function submit_form() {
@@ -366,7 +433,7 @@
     $("#ticket-form").submit();
   }
 
-  // show_summary();
+  show_form();
 </script>
 
 <!-- DEBUG -->
