@@ -25,14 +25,20 @@ from django.core.validators import RegexValidator
 
 STATUS_TYPES = {
     0: "Data Intake Form Rejected",
-    1: "Awaiting Review",
-    2: "Awaiting Bucket Creation",
-    3: "Awaiting Data Upload",
-    4: "Data upload in Progress",
-    5: "Awaiting Gen3 Approval",
+    1: "Awaiting NHLBI Review",
+    2: "Awaiting NHLBI Cloud Bucket Creation",
+    3: "Awaiting Data Custodian Upload Start",
+    4: "Awaiting Data Custodian Upload Complete",
+    5: "Awaiting Gen3 Acceptance",
     6: "Gen3 Accepted",
 }
 
+DATA_UNIT_CHOICES = (
+    ("mb", "MB"),
+    ("gb", "GB"),
+    ("tb", "TB"),
+    ("pb", "PB"),
+)
 
 AWS_IAM_VALIDATOR = RegexValidator(
     r"^arn:aws:iam::[0-9]{12}:user/[a-zA-Z0-9-_]{1,64}$",
@@ -48,16 +54,20 @@ CONSENT_CODE_VALIDATOR = RegexValidator(
     STUDY_ID_AND_CONSENT_CODE_REGEX,
     "Consent Code format invalid",
 )
+DATA_SIZE_VALIDATOR = RegexValidator(
+    r"^[0-9]{1,5}(.[0-9]{1,5})?\s?(MB|GB|TB|PB)$",
+    "Data Size format invalid. Please add a unit of measurement (MB, GB, TB, PB)",
+)
 
 
 class Ticket(models.Model):
-    email = models.EmailField(verbose_name="Email", default="")
     name = models.CharField(
         max_length=100,
         verbose_name="Name",
         help_text="Name of primary contact",
         default="",
     )
+    email = models.EmailField(verbose_name="Email", default="")
     organization = models.CharField(
         max_length=250,
         verbose_name="Organization",
@@ -68,40 +78,6 @@ class Ticket(models.Model):
         max_length=250,
         verbose_name="Study Name",
         help_text="Name of Study or Dataset",
-        default="",
-    )
-    dataset_description = models.CharField(
-        max_length=2500,
-        verbose_name="Dataset Description",
-        help_text="Describe the dataset you are uploading",
-        blank=True,
-        default="",
-    )
-    is_test_data = models.BooleanField(
-        verbose_name="Is Test Data",
-        help_text="Check this box if this is test data",
-        blank=True,
-        default=False,
-    )
-    google_email = models.EmailField(
-        verbose_name="Google Email",
-        help_text="If you're uploading to Google, please provide your google email for access",
-        blank=True,
-        default="",
-    )
-    aws_iam = models.CharField(
-        max_length=100,
-        verbose_name="AWS IAM",
-        help_text="If you're uploading to Amazon, please provide your AWS IAM (ex: arn:aws:iam::123456789012:user/username)",
-        blank=True,
-        default="",
-        validators=[AWS_IAM_VALIDATOR],
-    )
-    data_size = models.CharField(
-        max_length=100,
-        verbose_name="Data Size",
-        help_text="Please provide an estimated size of your data set(s)",
-        blank=True,
         default="",
     )
     study_id = models.CharField(
@@ -117,6 +93,41 @@ class Ticket(models.Model):
         help_text="Please refer to Data Custodian Instructions for more information",
         default="",
         validators=[CONSENT_CODE_VALIDATOR],
+    )
+    data_size = models.CharField(
+        max_length=100,
+        verbose_name="Data Size",
+        help_text="Please provide an estimated size of your data set(s) (ex. 100 GB)",
+        default="",
+        validators=[DATA_SIZE_VALIDATOR],
+    )
+
+    dataset_description = models.CharField(
+        max_length=2500,
+        verbose_name="Dataset Description",
+        help_text="Describe the dataset you are uploading",
+        blank=True,
+        default="",
+    )
+    google_email = models.EmailField(
+        verbose_name="Google Email",
+        help_text="If you're uploading to Google, please provide your google email for access",
+        blank=True,
+        default="",
+    )
+    aws_iam = models.CharField(
+        max_length=100,
+        verbose_name="AWS IAM",
+        help_text="If you're uploading to Amazon, please provide your AWS IAM (ex: arn:aws:iam::123456789012:user/username)",
+        blank=True,
+        default="",
+        validators=[AWS_IAM_VALIDATOR],
+    )
+    is_test_data = models.BooleanField(
+        verbose_name="Is Test Data",
+        help_text="Check this box if this is test data",
+        blank=True,
+        default=False,
     )
 
     ticket_review_comment = models.CharField(
@@ -165,7 +176,7 @@ class Ticket(models.Model):
     )
 
     def get_absolute_url(self):
-        return reverse("tracker:ticket-detail", kwargs={"pk": self.pk})
+        return reverse("tracker:ticket-update", kwargs={"pk": self.pk})
 
     def get_fields(self):
         return [
