@@ -118,9 +118,9 @@
         <button class="btn btn-warning btn-md mb-2 ticket-summary" type="button" onclick="show_form()">
           Edit Ticket
         </button>
-        <button class="btn btn-warning btn-md mb-2 form-element" type="button" onclick="show_summary()">
+        <a href="/list" class="btn btn-warning btn-md mb-2 form-element" role="button">
           Undo Changes
-        </button>
+        </a>
       </div>
       {% endif %}
     </div>
@@ -261,19 +261,22 @@
       <div class="ticket-summary">SUMMARY PAGE PLACEHOLDER</div>
 
       <!-- Handle Create/Update Buttons -->
-      <div class="row g-3 form-element">
+      <div class="row g-3">
         {% if object %}
-        <button class="btn btn-primary btn-lg" type="button" onclick="submit_form()">
+        <button class="btn btn-primary btn-lg form-element" type="button" onclick="submit_form()">
           Submit Changes
         </button>
-        <a href="{% url 'tracker:ticket-delete' pk=object.pk %}" class="btn btn-cancel btn-lg" role="button">Delete
+        <a href="{% url 'tracker:ticket-delete' pk=object.pk %}" class="btn btn-outline-danger btn-lg form-element"
+          role="button">Delete
           Ticket</a>
         {% else %}
         <button class="btn btn-primary btn-lg" type="button" onclick="submit_form()">
           Create Ticket
         </button>
         {% endif %}
+
       </div>
+
     </div>
   </div>
 </form>
@@ -296,9 +299,18 @@
 
     $("#ticket-form").submit();
   }
+</script>
 
+{% if object and not form.errors %}
+<script>
   show_summary();
 </script>
+{% else %}
+<script>
+  show_form();
+</script>
+{% endif %}
+
 
 <!-- DEBUG -->
 <!-- {{ form.as_table }} -->
