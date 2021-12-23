@@ -95,16 +95,17 @@
         {% if "Awaiting NHLBI Review" in status %}
         <textarea class="form-control mb-2" id="{{ form.ticket_review_comment.auto_id }}"
           name="{{ form.ticket_review_comment.name }}" placeholder="{{ form.ticket_review_comment.help_text }}"
-          rows="9">
-{{ form.ticket_review_comment.value }}</textarea>
+          rows="9">{{ form.ticket_review_comment.value }}</textarea>
         <input class="btn btn-success btn-md mb-2" type="submit" name="status_update" value="Approve Ticket" />
         <input class="btn btn-danger btn-md" type="submit" name="status_update" value="Reject Ticket" />
         {% endif %} {% if "Awaiting NHLBI Cloud Bucket Creation" in status %}
-        <input class="btn btn-success btn-md mb-2" type="submit" name="status_update" value="Mark Bucket Created" />
+        <input class="btn btn-success btn-md mb-2" type="submit" name="status_update" value="Mark as Bucket Created" />
         {% endif %} {% if "Awaiting Data Custodian Upload Start" in status %}
-        <input class="btn btn-success btn-md mb-2" type="submit" name="status_update" value="Mark as Data Uploaded" />
+        <input class="btn btn-success btn-md mb-2" type="submit" name="status_update"
+          value="Mark as Data Upload Started" />
         {% endif %} {% if "Awaiting Data Custodian Upload Complete" in status %}
-        <input class="btn btn-success btn-md mb-2" type="submit" name="status_update" value="Mark as Data Uploaded" />
+        <input class="btn btn-success btn-md mb-2" type="submit" name="status_update"
+          value="Mark as Data Upload Completed" />
         {% endif %} {% if "Awaiting Gen3 Acceptance" in status %}
         <input class="btn btn-success btn-md mb-2" type="submit" name="status_update" value="Mark as Gen3 Approved" />
         {% endif %} {% if "Data Intake Form Rejected" in status %}

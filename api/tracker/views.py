@@ -78,23 +78,15 @@ class TicketUpdate(UpdateView):
         if status_update == "Reject Ticket":
             # add rejected timestamp
             ticket.ticket_rejected_dt = datetime.now(timezone.utc)
-        if (
-            status_update == "Mark Bucket Created"
-        ):  # FIXME - What should the wording be?
+        if status_update == "Mark as Bucket Created":
             # add bucket created timestamp
             ticket.bucket_created_dt = datetime.now(timezone.utc)
-        if (
-            status_update == "Mark Data Upload Started"
-        ):  # FIXME - What should the wording be?
+        if status_update == "Mark as Data Upload Started":
             # set status to "Awaiting Gen3 Approval"
             ticket.data_uploaded_started_dt = datetime.now(timezone.utc)
-        if (
-            status_update == "Mark Data Uploaded Complete"
-        ):  # FIXME - What should the wording be?
+        if status_update == "Mark as Data Upload Completed":
             ticket.data_uploaded_completed_dt = datetime.now(timezone.utc)
-        if (
-            status_update == "Mark as Gen3 Approved"
-        ):  # FIXME - What should the wording be?
+        if status_update == "Mark as Gen3 Approved":
             # set status to "Awaiting Data Download"
             ticket.data_accepted_dt = datetime.now(timezone.utc)
         if status_update == "Revive Ticket":
