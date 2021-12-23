@@ -123,8 +123,8 @@ class TicketsList(ListView):
         # generate a list of status types
         context["awaiting_review"] = []
         context["awaiting_bucket_creation"] = []
-        context["awaiting_data_upload"] = []
-        context["data_upload_in_progress"] = []
+        context["awaiting_data_upload_start"] = []
+        context["awaiting_data_upload_complete"] = []
         context["awaiting_gen3_approval"] = []
         context["gen3_accepted"] = []
         context["rejected"] = []
@@ -151,10 +151,10 @@ class TicketsList(ListView):
                 context["awaiting_bucket_creation"].append(object)
             elif status == STATUS_TYPES[3]:
                 # Awaiting Data Upload
-                context["awaiting_data_upload"].append(object)
+                context["awaiting_data_upload_start"].append(object)
             elif status == STATUS_TYPES[4]:
                 # Data Upload in Progress
-                context["data_upload_in_progress"].append(object)
+                context["awaiting_data_upload_complete"].append(object)
             elif status == STATUS_TYPES[5]:
                 # Awaiting Gen3 Approval
                 context["awaiting_gen3_approval"].append(object)
