@@ -1,10 +1,10 @@
 {% extends "base_generic.html" %} {% load widget_tweaks %} {% block content %}
 <h1 class="text-muted" style="text-align: center">Ticket Item</h1>
 
-<button onclick="show_summary()">yes</button>
-<button onclick="show_form()">yes</button>
+{% comment %} <button onclick="show_summary()">yes</button>
+<button onclick="show_form()">yes</button> {% endcomment %}
 
-<form id="ticket-form" class="needs-validation pb-5" method="post">
+<form id="ticket-form" class="needs-validation pb-5 pe-2" method="post">
   <div class="row g-2">
     {% csrf_token %}
 
@@ -16,9 +16,7 @@
       <!-- Handle Errors -->
       {% if form.errors %}
       <h4 class="d-flex justify-content-between align-items-center mb-3">
-        <span class="badge bg-danger rounded-pill"
-          >{{ form.errors|length }} Error(s)</span
-        >
+        <span class="badge bg-danger rounded-pill">{{ form.errors|length }} Error(s)</span>
         <h6 class="text-muted">Please fix the following errors</h6>
       </h4>
       <ul class="list-group mb-3">
@@ -58,9 +56,7 @@
           </div>
           {% if ticket.ticket_review_comment %}
           <hr />
-          <small class="text-muted text-end"
-            ><strong>Reason: </strong>{{ ticket.ticket_review_comment }}</small
-          >
+          <small class="text-muted text-end"><strong>Reason: </strong>{{ ticket.ticket_review_comment }}</small>
           {% endif %}
         </li>
         {% endif %} {% if ticket.bucket_created_dt %}
@@ -71,16 +67,12 @@
         {% endif %} {% if ticket.data_uploaded_started_dt %}
         <li class="list-group-item d-flex justify-content-between lh-sm">
           <h6 class="my-0">Data Custodian Upload Started Date</h6>
-          <small class="text-muted"
-            >{{ ticket.data_uploaded_started_dt }}</small
-          >
+          <small class="text-muted">{{ ticket.data_uploaded_started_dt }}</small>
         </li>
         {% endif %} {% if ticket.data_uploaded_completed_dt %}
         <li class="list-group-item d-flex justify-content-between lh-sm">
           <h6 class="my-0">Data Upload Completed Date</h6>
-          <small class="text-muted"
-            >{{ ticket.data_uploaded_completed_dt }}</small
-          >
+          <small class="text-muted">{{ ticket.data_uploaded_completed_dt }}</small>
         </li>
         {% endif %} {% if ticket.data_accepted_dt %}
         <li class="list-group-item d-flex justify-content-between lh-sm">
@@ -95,9 +87,7 @@
           </div>
           {% if ticket.ticket_review_comment %}
           <hr />
-          <small class="text-muted text-end"
-            ><strong>Reason: </strong>{{ ticket.ticket_review_comment }}</small
-          >
+          <small class="text-muted text-end"><strong>Reason: </strong>{{ ticket.ticket_review_comment }}</small>
           {% endif %}
         </li>
         {% endif %} {% endif %}
@@ -106,62 +96,22 @@
       <!-- Button Logic -->
       <div class="row my-2 px-5">
         {% if "Awaiting NHLBI Review" in status %}
-        <textarea
-          class="form-control mb-2"
-          id="{{ form.ticket_review_comment.auto_id }}"
-          name="{{ form.ticket_review_comment.name }}"
-          placeholder="{{ form.ticket_review_comment.help_text }}"
-          rows="9"
-        >
-{{ form.ticket_review_comment.value }}</textarea
-        >
-        <input
-          class="btn btn-success btn-md mb-2"
-          type="submit"
-          name="status_update"
-          value="Approve Ticket"
-        />
-        <input
-          class="btn btn-danger btn-md"
-          type="submit"
-          name="status_update"
-          value="Reject Ticket"
-        />
+        <textarea class="form-control mb-2" id="{{ form.ticket_review_comment.auto_id }}"
+          name="{{ form.ticket_review_comment.name }}" placeholder="{{ form.ticket_review_comment.help_text }}"
+          rows="9">
+{{ form.ticket_review_comment.value }}</textarea>
+        <input class="btn btn-success btn-md mb-2" type="submit" name="status_update" value="Approve Ticket" />
+        <input class="btn btn-danger btn-md" type="submit" name="status_update" value="Reject Ticket" />
         {% endif %} {% if "Awaiting NHLBI Cloud Bucket Creation" in status %}
-        <input
-          class="btn btn-success btn-md mb-2"
-          type="submit"
-          name="status_update"
-          value="Mark Bucket Created"
-        />
+        <input class="btn btn-success btn-md mb-2" type="submit" name="status_update" value="Mark Bucket Created" />
         {% endif %} {% if "Awaiting Data Custodian Upload Start" in status %}
-        <input
-          class="btn btn-success btn-md mb-2"
-          type="submit"
-          name="status_update"
-          value="Mark as Data Uploaded"
-        />
+        <input class="btn btn-success btn-md mb-2" type="submit" name="status_update" value="Mark as Data Uploaded" />
         {% endif %} {% if "Awaiting Data Custodian Upload Complete" in status %}
-        <input
-          class="btn btn-success btn-md mb-2"
-          type="submit"
-          name="status_update"
-          value="Mark as Data Uploaded"
-        />
+        <input class="btn btn-success btn-md mb-2" type="submit" name="status_update" value="Mark as Data Uploaded" />
         {% endif %} {% if "Awaiting Gen3 Acceptance" in status %}
-        <input
-          class="btn btn-success btn-md mb-2"
-          type="submit"
-          name="status_update"
-          value="Mark as Gen3 Approved"
-        />
+        <input class="btn btn-success btn-md mb-2" type="submit" name="status_update" value="Mark as Gen3 Approved" />
         {% endif %} {% if "Data Intake Form Rejected" in status %}
-        <input
-          class="btn btn-success btn-md mb-2"
-          type="submit"
-          name="status_update"
-          value="Revive Ticket"
-        />
+        <input class="btn btn-success btn-md mb-2" type="submit" name="status_update" value="Revive Ticket" />
         {% endif %}
       </div>
       {% if object %}
@@ -180,45 +130,27 @@
       <div class="row g-3 form-element">
         <!-- Name and Email -->
         <div class="col-sm-6">
-          <label for="{{ form.name.id_for_label }}" class="form-label"
-            ><span class="required">*</span>{{ form.name.label }}</label
-          >
-          <input
-            type="text"
-            class="form-control"
-            id="{{ form.name.auto_id }}"
-            name="{{ form.name.name }}"
-            placeholder="{{ form.name.help_text }}"
-            value="{{ form.name.value }}"
-          />
+          <label for="{{ form.name.id_for_label }}" class="form-label"><span
+              class="required">*</span>{{ form.name.label }}</label>
+          <input type="text" class="form-control {% if form.name.errors %}is-invalid{% endif %}"
+            id="{{ form.name.auto_id }}" name="{{ form.name.name }}" placeholder="{{ form.name.help_text }}"
+            value="{{ form.name.value }}" />
         </div>
         <div class="col-sm-6">
-          <label for="{{ form.email.id_for_label }}" class="form-label"
-            ><span class="required">*</span>{{ form.email.label }}</label
-          >
-          <input
-            type="text"
-            class="form-control"
-            id="{{ form.email.auto_id }}"
-            name="{{ form.email.name }}"
-            placeholder="{{ form.email.label }}"
-            value="{{ form.email.value }}"
-          />
+          <label for="{{ form.email.id_for_label }}" class="form-label"><span
+              class="required">*</span>{{ form.email.label }}</label>
+          <input type="text" class="form-control {% if form.email.errors %}is-invalid{% endif %}"
+            id="{{ form.email.auto_id }}" name="{{ form.email.name }}" placeholder="{{ form.email.label }}"
+            value="{{ form.email.value }}" />
         </div>
 
         <!-- Organization -->
         <div class="col-12">
-          <label for="{{ form.organization.id_for_label }}" class="form-label"
-            ><span class="required">*</span>{{ form.organization.label }}</label
-          >
-          <input
-            type="text"
-            class="form-control"
-            id="{{ form.organization.auto_id }}"
-            name="{{ form.organization.name }}"
-            placeholder="{{ form.organization.help_text }}"
-            value="{{ form.organization.value }}"
-          />
+          <label for="{{ form.organization.id_for_label }}" class="form-label"><span
+              class="required">*</span>{{ form.organization.label }}</label>
+          <input type="text" class="form-control {% if form.organization.errors %}is-invalid{% endif %}"
+            id="{{ form.organization.auto_id }}" name="{{ form.organization.name }}"
+            placeholder="{{ form.organization.help_text }}" value="{{ form.organization.value }}" />
         </div>
 
         <hr class="my-4" />
@@ -228,46 +160,29 @@
       <div class="row g-3 form-element">
         <!-- Study Name -->
         <div class="col-12">
-          <label for="{{ form.study_name.id_for_label }}" class="form-label"
-            ><span class="required">*</span>{{ form.study_name.label }}</label
-          >
-          <input
-            type="text"
-            class="form-control"
-            id="{{ form.study_name.auto_id }}"
-            name="{{ form.study_name.name }}"
-            placeholder="{{ form.study_name.help_text }}"
-            value="{{ form.study_name.value }}"
-          />
+          <label for="{{ form.study_name.id_for_label }}" class="form-label"><span
+              class="required">*</span>{{ form.study_name.label }}</label>
+          <input type="text" class="form-control {% if form.study_name.errors %}is-invalid{% endif %}"
+            id="{{ form.study_name.auto_id }}" name="{{ form.study_name.name }}"
+            placeholder="{{ form.study_name.help_text }}" value="{{ form.study_name.value }}" />
         </div>
 
         <!-- Study ID and Consent Code -->
         <div class="col-sm-6">
-          <label for="{{ form.study_id.id_for_label }}" class="form-label"
-            ><span class="required">*</span>{{ form.study_id.label }}</label
-          >
-          <input
-            type="text"
-            class="form-control"
-            id="{{ form.study_id.auto_id }}"
-            name="{{ form.study_id.name }}"
-            placeholder="{{ form.study_id.label }}"
-            value="{{ form.study_id.value }}"
-          />
+          <label for="{{ form.study_id.id_for_label }}" class="form-label"><span
+              class="required">*</span>{{ form.study_id.label }}</label>
+          <input type="text" class="form-control {% if form.study_id.errors %}is-invalid{% endif %}"
+            id="{{ form.study_id.auto_id }}" name="{{ form.study_id.name }}" placeholder="{{ form.study_id.label }}"
+            value="{{ form.study_id.value }}" />
           <div class="form-text">{{ form.study_id.help_text }}</div>
         </div>
         <div class="col-sm-6">
-          <label for="{{ form.consent_code.id_for_label }}" class="form-label"
-            ><span class="required">*</span>{{ form.consent_code.label }}</label
-          >
-          <input
-            type="text"
-            class="form-control"
-            id="{{ form.consent_code.auto_id }}"
-            name="{{ form.consent_code.name }}"
-            placeholder="{{ form.consent_code.label }}"
-            value="{{ form.consent_code.value }}"
-          />
+          <label for="{{ form.consent_code.id_for_label }}" class="form-label"><span
+              class="required">*</span>{{ form.consent_code.label }}</label>
+          <input type="text" class="form-control
+              {% if form.consent_code.errors %}is-invalid{% endif %}" id="{{ form.consent_code.auto_id }}"
+            name="{{ form.consent_code.name }}" placeholder="{{ form.consent_code.label }}"
+            value="{{ form.consent_code.value }}" />
           <div class="form-text">{{ form.consent_code.help_text }}</div>
         </div>
         <hr class="my-4" />
@@ -277,67 +192,39 @@
       <div class="row g-3 form-element">
         <!-- Dataset Description -->
         <div class="col-12">
-          <label
-            for="{{ form.dataset_description.id_for_label }}"
-            class="form-label"
-            >{{ form.dataset_description.label }}</label
-          >
-          <textarea
-            class="form-control"
-            id="{{ form.dataset_description.auto_id }}"
-            name="{{ form.dataset_description.name }}"
-            placeholder="{{ form.dataset_description.help_text }}"
-            rows="12"
-          >
-{{ form.dataset_description.value }}</textarea
-          >
+          <label for="{{ form.dataset_description.id_for_label }}"
+            class="form-label">{{ form.dataset_description.label }}</label>
+          <input type="text" class="form-control {% if form.dataset_description.errors %}is-invalid{% endif %}"
+            id="{{ form.dataset_description.auto_id }}" name="{{ form.dataset_description.name }}"
+            placeholder="{{ form.dataset_description.help_text }}" rows="12">
+          {{ form.dataset_description.value }}</textarea>
         </div>
 
         <!-- GMail and AWS-->
         <div class="col-sm-6">
-          <label for="{{ form.google_email.id_for_label }}" class="form-label"
-            >{{ form.google_email.label }}</label
-          >
-          <input
-            type="text"
-            class="form-control"
-            id="{{ form.google_email.auto_id }}"
-            name="{{ form.google_email.name }}"
-            placeholder="{{ form.google_email.label }}"
-            value="{{ form.google_email.value }}"
-          />
+          <label for="{{ form.google_email.id_for_label }}" class="form-label">{{ form.google_email.label }}</label>
+          <input type="text" class="form-control {% if form.google_email.errors %}is-invalid{% endif %}"
+            id="{{ form.google_email.auto_id }}" name="{{ form.google_email.name }}"
+            placeholder="{{ form.google_email.label }}" value="{{ form.google_email.value }}" />
           <div class="form-text">{{ form.google_email.help_text }}</div>
         </div>
         <div class="col-sm-6">
-          <label for="{{ form.aws_iam.id_for_label }}" class="form-label"
-            >{{ form.aws_iam.label }}</label
-          >
-          <input
-            type="text"
-            class="form-control"
-            id="{{ form.aws_iam.auto_id }}"
-            name="{{ form.aws_iam.name }}"
-            placeholder="arn:aws:iam::123456789012:user/username"
-            value="{{ form.aws_iam.value }}"
-          />
+          <label for="{{ form.aws_iam.id_for_label }}" class="form-label">{{ form.aws_iam.label }}</label>
+          <input type="text" class="form-control {% if form.aws_iam.errors %}is-invalid{% endif %}"
+            id="{{ form.aws_iam.auto_id }}" name="{{ form.aws_iam.name }}"
+            placeholder="arn:aws:iam::123456789012:user/username" value="{{ form.aws_iam.value }}" />
           <div class="form-text">{{ form.aws_iam.help_text }}</div>
         </div>
 
         <!-- Data Size -->
         <div class="col-sm-12">
-          <label for="{{ form.data_size.id_for_label }}" class="form-label"
-            ><span class="required">*</span>{{ form.data_size.label }}</label
-          >
+          <label for="{{ form.data_size.id_for_label }}" class="form-label"><span
+              class="required">*</span>{{ form.data_size.label }}</label>
           <!-- <div class="row"> -->
           <div class="col-sm-3">
-            <input
-              type="text"
-              class="form-control"
-              id="id_data_size"
-              name="{{ form.data_size.name }}"
-              placeholder="100 GB"
-              value="{{ form.data_size.value }}"
-            />
+            <input type="text" class="form-control {% if form.data_size.errors %}is-invalid{% endif %}"
+              id="id_data_size" name="{{ form.data_size.name }}" placeholder="100 GB"
+              value="{{ form.data_size.value }}" />
           </div>
           <!-- <div class="col-sm-6">
               <select
@@ -360,25 +247,10 @@
         <!-- Test Data Checkbox -->
         <div class="col-12">
           <div class="form-check">
-            <input
-              type="checkbox"
-              class="form-check-input"
-              id="{{form.is_test_data.auto_id }}"
-              name="{{ form.is_test_data.name }}"
-              {%
-              if
-              form.is_test_data
-              %}
-              checked
-              {%
-              endif
-              %}
-            />
-            <label
-              class="form-check-label"
-              for="{{ form.is_test_data.id_for_label }}"
-              >{{ form.is_test_data.help_text }}</label
-            >
+            <input type="checkbox" class="form-check-input" id="{{form.is_test_data.auto_id }}"
+              name="{{ form.is_test_data.name }}" {% if form.is_test_data %} checked {% endif %} />
+            <label class="form-check-label"
+              for="{{ form.is_test_data.id_for_label }}">{{ form.is_test_data.help_text }}</label>
           </div>
         </div>
         <hr class="my-4" />
@@ -390,25 +262,13 @@
       <!-- Handle Create/Update Buttons -->
       <div class="row g-3">
         {% if object %}
-        <button
-          class="btn btn-primary btn-lg"
-          type="button"
-          onclick="submit_form()"
-        >
+        <button class="btn btn-primary btn-lg" type="button" onclick="submit_form()">
           Submit Changes
         </button>
-        <a
-          href="{% url 'tracker:ticket-delete' pk=object.pk %}"
-          class="btn btn-cancel btn-lg"
-          role="button"
-          >Delete Ticket</a
-        >
+        <a href="{% url 'tracker:ticket-delete' pk=object.pk %}" class="btn btn-cancel btn-lg" role="button">Delete
+          Ticket</a>
         {% else %}
-        <input
-          class="col btn btn-primary btn-lg"
-          type="submit"
-          value="Submit"
-        />
+        <input class="col btn btn-primary btn-lg" type="submit" value="Submit" />
         {% endif %}
       </div>
     </div>
@@ -420,6 +280,7 @@
     $("#ticket-detail").show();
     $(".form-element").hide();
   }
+
   function show_form() {
     $(".form-element").show();
     $("#ticket-detail").hide();
