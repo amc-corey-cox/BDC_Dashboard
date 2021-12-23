@@ -1,9 +1,6 @@
 {% extends "base_generic.html" %} {% load widget_tweaks %} {% block content %}
 <h1 class="text-muted" style="text-align: center">Ticket Item</h1>
 
-{% comment %} <button onclick="show_summary()">yes</button>
-<button onclick="show_form()">yes</button> {% endcomment %}
-
 <form id="ticket-form" class="needs-validation pb-5 pe-2" method="post">
   <div class="row g-2">
     {% csrf_token %}
@@ -117,8 +114,11 @@
       {% if object %}
       <hr />
       <div class="row px-5">
-        <button class="btn btn-danger btn-md mb-2" onclick="show_form()">
+        <button class="btn btn-warning btn-md mb-2 ticket-summary" type="button" onclick="show_form()">
           Edit Ticket
+        </button>
+        <button class="btn btn-warning btn-md mb-2 form-element" type="button" onclick="show_summary()">
+          Undo Changes
         </button>
       </div>
       {% endif %}
@@ -257,10 +257,10 @@
       </div>
 
       <!-- Ticket Detail -->
-      <div id="ticket-detail">nnn</div>
+      <div class="ticket-summary">SUMMARY PAGE PLACEHOLDER</div>
 
       <!-- Handle Create/Update Buttons -->
-      <div class="row g-3">
+      <div class="row g-3 form-element">
         {% if object %}
         <button class="btn btn-primary btn-lg" type="button" onclick="submit_form()">
           Submit Changes
@@ -268,7 +268,9 @@
         <a href="{% url 'tracker:ticket-delete' pk=object.pk %}" class="btn btn-cancel btn-lg" role="button">Delete
           Ticket</a>
         {% else %}
-        <input class="col btn btn-primary btn-lg" type="submit" value="Submit" />
+        <button class="btn btn-primary btn-lg" type="button" onclick="submit_form()">
+          Create Ticket
+        </button>
         {% endif %}
       </div>
     </div>
@@ -277,13 +279,13 @@
 
 <script>
   function show_summary() {
-    $("#ticket-detail").show();
+    $(".ticket-summary").show();
     $(".form-element").hide();
   }
 
   function show_form() {
     $(".form-element").show();
-    $("#ticket-detail").hide();
+    $(".ticket-summary").hide();
   }
 
   function submit_form() {
@@ -294,7 +296,7 @@
     $("#ticket-form").submit();
   }
 
-  show_form();
+  show_summary();
 </script>
 
 <!-- DEBUG -->
