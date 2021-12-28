@@ -9,7 +9,7 @@ WORKDIR ${APP_HOME}
 
 COPY . ./
 
-RUN set eux; \
+RUN set -eux; \
   apt-get update; \
   apt-get install -y \
     wget \
