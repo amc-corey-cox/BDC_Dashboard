@@ -35,10 +35,18 @@ docker-compose up
 Docker compose should start a Django server on [`http://0.0.0.0:8000/`](http://0.0.0.0:8000/).
 The server is configured to serve the web app so no further configuration is needed
 
-### Roadmap
+## Deployment
 
-- [ ] Migrate DB to Postgres
-  - [ ] Dockerize the Postgres DB
-- [ ] Add admin panel
-- [ ] Add deployment instructions
-- [ ] Add tests(?)
+We will be using [this guide to deploy GCP](https://cloud.google.com/python/django/appengine#macos-64-bit)
+
+### [Permissions](https://cloud.google.com/iam/docs/understanding-roles#predefined)
+
+- [`roles/appengine.appAdmin`](https://cloud.google.com/iam/docs/understanding-roles#app-engine-roles)
+- [`roles/cloudbuild.integrationsOwner`](https://cloud.google.com/iam/docs/understanding-roles#cloud-build-roles)
+- [`roles/cloudsql.admin`](https://cloud.google.com/iam/docs/understanding-roles#cloud-sql-roles)
+- [`roles/secretmanager.admin`](https://cloud.google.com/iam/docs/understanding-roles#secret-manager-roles)
+- [`roles/iam.serviceAccountAdmin`](https://cloud.google.com/iam/docs/understanding-roles#service-accounts-roles)
+- [`roles/serviceusage.serviceUsageAdmin`](https://cloud.google.com/iam/docs/understanding-roles#service-usage-roles)
+- [`roles/storage.admin`](https://cloud.google.com/iam/docs/understanding-roles#cloud-storage-roles)
+
+> NOTE: you will also need to grant yourself the [`roles/iam.serviceAccountUser`](https://cloud.google.com/iam/docs/understanding-roles#service-accounts-roles) on the `App Engine default service account`
