@@ -7,9 +7,18 @@
 ### Prerequisites
 
 - **[Docker](https://www.docker.com/get-started)**
-- Inside the `api` directory, you need 2 files
-  - `.env` with the value `SECRET_KEY`
-  - `db.sqlite3` file for the database
+
+### Environment variables
+
+For local development, you must set the following environment variables in an '.env' file inside the `api` directory:
+
+| name                     | value                                                                                                           | description                                                                                              |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| USE_CLOUD_SQL_AUTH_PROXY | `True`                                                                                                          |                                                                                                          |
+| GOOGLE_CLOUD_PROJECT     |                                                                                                                 | The Project ID for GCP                                                                                   |
+| DATABASE_URL             | `postgres://$DATABASE_USERNAME:$DATABASE_PASSWORD@//cloudsql/$PROJECT_ID:$REGION:$INSTANCE_NAME/$DATABASE_NAME` |                                                                                                          |
+| GS_BUCKET_NAME           | `$PROJECT_ID_$MEDIA_BUCKET`                                                                                     |                                                                                                          |
+| SECRET_KEY               |                                                                                                                 | [Reference](https://cloud.google.com/python/django/appengine#create-django-environment-file-as-a-secret) |
 
 ### Docker Compose
 
@@ -21,7 +30,7 @@ docker-compose up --build
 
 This will spin up a Docker container to serve the app
 
-> NOTE: This may take a few minutes
+> NOTE: This may take a several minutes
 
 You should only need to build this once (or when you make changes to the `Dockerfile`).
 Any subsequent runs do not require the `--build` flag
