@@ -8,6 +8,8 @@ django = "*"
 python-dotenv = "*"
 django-extensions = "*"
 django-widget-tweaks = "*"
+django-environ = "*"
+google-cloud-secret-manager = "*"
 
 [dev-packages]
 pytest = "*"
