@@ -136,3 +136,4 @@ dmypy.json
 
 # GCloud
 cloud_sql_proxy
+service_account.json
