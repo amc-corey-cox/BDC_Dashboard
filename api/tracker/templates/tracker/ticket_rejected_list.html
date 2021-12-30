@@ -17,9 +17,7 @@
     {% for object in rejected %}
     <tr>
       <td>
-        <a href="{% url 'tracker:ticket-update' pk=object.pk %}"
-          >{{ object.study_name }}</a
-        >
+        <a href="{% url 'tracker:ticket-update' pk=object.pk %}">{{ object.study_name }}</a>
       </td>
       <td>{{ object.name }}</td>
       <td>{{ object.ticket_rejected_dt }}</td>

@@ -1,12 +1,15 @@
 {% extends "base_generic.html" %} {% block content %}
 <div class="m-2">
-<h1 class="text-muted" style="text-align: center">Data Custodian Instructions</h1>
-<p>Repo for experimenting with data preparation and upload for the BDCat project.</p>
-<p>Please be sure you are always using the latest <a href="https://github.com/NimbusInformatics/bdcat-ingest-prototype/releases">release</a>.</p>
-<p>For Data Custodians:
-Please be sure not to share any controlled data (PII - personally identifiable information or PHI - personal health information) to unauthorized parties (including the manifest files, if they contain controlled information) including Nimbus. </p>
-<h2 id="setup-instructions-for-ubuntu-20-04-lts">Setup Instructions for Ubuntu 20.04 LTS</h2>
-<pre><code>sudo apt <span class="hljs-keyword">update</span>
+  <h1 class="text-muted" style="text-align: center">Data Custodian Instructions</h1>
+  <p>Repo for experimenting with data preparation and upload for the BDCat project.</p>
+  <p>Please be sure you are always using the latest <a
+      href="https://github.com/NimbusInformatics/bdcat-ingest-prototype/releases">release</a>.</p>
+  <p>For Data Custodians:
+    Please be sure not to share any controlled data (PII - personally identifiable information or PHI - personal health
+    information) to unauthorized parties (including the manifest files, if they contain controlled information)
+    including Nimbus. </p>
+  <h2 id="setup-instructions-for-ubuntu-20-04-lts">Setup Instructions for Ubuntu 20.04 LTS</h2>
+  <pre><code>sudo apt <span class="hljs-keyword">update</span>
 sudo apt -y <span class="hljs-keyword">install</span> python3-pip awscli gcc python-dev python-setuptools libffi-dev
 
 sudo pip3 <span class="hljs-keyword">install</span> boto3
@@ -28,8 +31,9 @@ gsutil config
 
 # <span class="hljs-keyword">load</span> credentials <span class="hljs-keyword">for</span> aws, <span class="hljs-keyword">if</span> necesary
 aws configure
-</code></pre><h2 id="setup-instructions-for-macos">Setup Instructions for MacOS</h2>
-<pre><code>conda <span class="hljs-keyword">create</span> -n python_3_7_4_20200619 python=<span class="hljs-number">3.7</span><span class="hljs-number">.4</span>
+</code></pre>
+  <h2 id="setup-instructions-for-macos">Setup Instructions for MacOS</h2>
+  <pre><code>conda <span class="hljs-keyword">create</span> -n python_3_7_4_20200619 python=<span class="hljs-number">3.7</span><span class="hljs-number">.4</span>
 conda <span class="hljs-keyword">create</span> <span class="hljs-comment">--name nimbus--data-ingest python=3.7.4</span>
 conda <span class="hljs-keyword">activate</span> nimbus<span class="hljs-comment">--data-ingest</span>
 pip <span class="hljs-keyword">install</span> awscli
@@ -37,21 +41,27 @@ pip <span class="hljs-keyword">install</span> boto3
 pip <span class="hljs-keyword">install</span> google-cloud-<span class="hljs-keyword">storage</span>
 pip <span class="hljs-keyword">install</span> <span class="hljs-comment">--upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib</span>
 conda <span class="hljs-keyword">activate</span> nimbus<span class="hljs-comment">--data-ingest</span>
-</code></pre><ol>
-<li><p>Create large file called big_binary.MOV in current directory (should be &gt; 8 MB)</p>
-</li>
-<li><p>Run <code>aws configure</code> / set up google cloud credentials</p>
-</li>
-<li><p>For testing, update study_id fields in sample.tsv. Then create aws/gs s3 buckets with the name <code>&lt;study_id&gt;--&lt;consent_code&gt;</code></p>
-</li>
-</ol>
-<h2 id="running-code">Running Code</h2>
-<pre><code>python3 process<span class="hljs-selector-class">.py</span> --aws --tsv sample<span class="hljs-selector-class">.multifile</span><span class="hljs-selector-class">.tsv</span> 
+</code></pre>
+  <ol>
+    <li>
+      <p>Create large file called big_binary.MOV in current directory (should be &gt; 8 MB)</p>
+    </li>
+    <li>
+      <p>Run <code>aws configure</code> / set up google cloud credentials</p>
+    </li>
+    <li>
+      <p>For testing, update study_id fields in sample.tsv. Then create aws/gs s3 buckets with the name
+        <code>&lt;study_id&gt;--&lt;consent_code&gt;</code></p>
+    </li>
+  </ol>
+  <h2 id="running-code">Running Code</h2>
+  <pre><code>python3 process<span class="hljs-selector-class">.py</span> --aws --tsv sample<span class="hljs-selector-class">.multifile</span><span class="hljs-selector-class">.tsv</span> 
 or
 python3 process<span class="hljs-selector-class">.py</span> --gs --tsv sample<span class="hljs-selector-class">.multifile</span><span class="hljs-selector-class">.tsv</span> 
-</code></pre><p>The output manifest file will be located at sample.mulifile.<timestamp>manifest.tsv</p>
-<h3 id="usage">Usage</h3>
-<pre><code> This script was written <span class="hljs-keyword">for</span> the NIH BioData Catalyst <span class="hljs-keyword">to</span> process <span class="hljs-keyword">an</span> <span class="hljs-built_in">input</span> manifest <span class="hljs-keyword">file</span>
+</code></pre>
+  <p>The output manifest file will be located at sample.mulifile.<timestamp>manifest.tsv</p>
+  <h3 id="usage">Usage</h3>
+  <pre><code> This script was written <span class="hljs-keyword">for</span> the NIH BioData Catalyst <span class="hljs-keyword">to</span> process <span class="hljs-keyword">an</span> <span class="hljs-built_in">input</span> manifest <span class="hljs-keyword">file</span>
  containing <span class="hljs-keyword">file</span> locations <span class="hljs-built_in">and</span> <span class="hljs-keyword">file</span> metadata, <span class="hljs-built_in">and</span> upload the <span class="hljs-keyword">files</span> <span class="hljs-keyword">to</span> Amazon <span class="hljs-built_in">and</span> Google 
  Cloud services.
 
@@ -78,54 +88,71 @@ python3 process<span class="hljs-selector-class">.py</span> --gs --tsv sample<sp
                         <span class="hljs-keyword">first</span> download the <span class="hljs-keyword">file</span>, compute the checksums, then upload the
                        <span class="hljs-keyword">file</span>. This value specifies the largest <span class="hljs-keyword">file</span> size that should <span class="hljs-keyword">be</span>
                        downloaded, in MB
-</code></pre><h2 id="design-doc">Design Doc</h2>
-<p>See <a href="https://docs.google.com/document/d/1bZHUKZPL7Q7onKLSdR3YBrM7oeREC54yf1g_Dpc2yVI/edit">20200608 - Data Ingest Brainstorming</a> for design information.  </p>
-<h2 id="issues">Issues</h2>
-<p>See our <a href="https://github.com/orgs/NimbusInformatics/projects/5">Project Board</a> for tracking issues.</p>
-<h2 id="input-manifest-file-format">Input manifest file format</h2>
-<p>The input manifest file is a TSV file with the following fields. See <a href="sample.cloud.tsv">sample.cloud.tsv</a> for examples:</p>
-<p>Please see <a href="https://docs.google.com/spreadsheets/d/1MxfcWDXhTfFNFKsbRGjGTQkBoTirNktj04lf6L9_jmk/edit#gid=0">NIH Interop - Common Attributes</a> for more details about some of the fields.</p>
-<ul>
-<li>study_registration - External source from which the identifier included in study_id originates</li>
-<li>study_id - required field, see naming restrictions below. Unique identifier that can be used to retrieve more information for a study</li>
-<li>consent_group - required field, see naming restrictions below. </li>
-<li>participant_id - Unique identifier that can be used to retrieve more information for a participant</li>
-<li>specimen_id - Unique identifier that can be used to retrieve more information for a specimen</li>
-<li>experimental_strategy - The experimental strategy used to generate the data file referred to by the ga4gh_drs_uri. (Based on GDC definition)</li>
-<li>input_file_path - required field. Either the local file, s3:// path, or gs:// path to be transferred</li>
-<li>file_format - The format of the data, see possible values from the data_format fields in GDC.  Can use whatever values make sense for the particular implementation.</li>
-<li>file_type - The type of the data, see possible values from the data_type fields in GDC.  Can use whatever values make sense for the particular implementation.</li>
-</ul>
-<h3 id="naming-restrictions-for-study-_id-and-consent-_group">Naming restrictions for study_id and consent_group</h3>
-<ul>
-<li>study_id and consent_group should consist of only lowercase letters and numbers. </li>
-<li>No special character are allowed, except for single periods (.). study_id and consent_group must not begin or end with a period. </li>
-<li>The total number of characters for the study_id and consent_group combined shall not exceed 61 characters. </li>
-<li>The study_id and consent_group combination must be globally unique.</li>
-</ul>
-<h2 id="output-manifest-file-format">Output manifest file format</h2>
-<p>The output manifest file is a TSV file with the following fields.  See <a href="sample.output.s3.manifest.tsv">sample.output.s3.manifest.tsv</a> for examples:</p>
-<ul>
-<li>study_registration</li>
-<li>study_id</li>
-<li>consent_group</li>
-<li>participant_id</li>
-<li>specimen_id</li>
-<li>experimental_strategy</li>
-<li>input_file_path</li>
-<li>file_format</li>
-<li>file_type</li>
-<li>file_name</li>
-<li>ga4gh_drs_uri - unique identifier for resource based on standards listed at <a href="https://ga4gh.github.io/data-repository-service-schemas/preview/release/drs-1.1.0/docs/#_drs_uris">https://ga4gh.github.io/data-repository-service-schemas/preview/release/drs-1.1.0/docs/#_drs_uris</a></li>
-<li>md5sum</li>
-<li>gs_gs_crc32c - checksum provided by google storage in base64 format. Note that all gs* fields will be empty if google storage was not selected</li>
-<li>gs_path - path to google storage file. Note that the path includes the checksum to ensure that files are unique. It is not using the base64 format, which might lead to illegal key names, but instead the unsigned 32-bit integer value</li>
-<li>gs_modified_date - the date that the file was last uploaded or modified</li>
-<li>gs_file_size - the file size reported by google storage</li>
-<li>s3_md5sum - checksum provided by aws. Note that all aws* fields will be empty if google storage was not selected</li>
-<li>s3_path - path to aws file. Note that the path includes the checksum to ensure that files are unique.</li>
-<li>s3_modified_date - the date that the file was last uploaded or modified</li>
-<li>s3_file_size - the file size reported by aws</li>
-</ul>
+</code></pre>
+  <h2 id="design-doc">Design Doc</h2>
+  <p>See <a href="https://docs.google.com/document/d/1bZHUKZPL7Q7onKLSdR3YBrM7oeREC54yf1g_Dpc2yVI/edit">20200608 - Data
+      Ingest Brainstorming</a> for design information. </p>
+  <h2 id="issues">Issues</h2>
+  <p>See our <a href="https://github.com/orgs/NimbusInformatics/projects/5">Project Board</a> for tracking issues.</p>
+  <h2 id="input-manifest-file-format">Input manifest file format</h2>
+  <p>The input manifest file is a TSV file with the following fields. See <a
+      href="sample.cloud.tsv">sample.cloud.tsv</a> for examples:</p>
+  <p>Please see <a
+      href="https://docs.google.com/spreadsheets/d/1MxfcWDXhTfFNFKsbRGjGTQkBoTirNktj04lf6L9_jmk/edit#gid=0">NIH Interop
+      - Common Attributes</a> for more details about some of the fields.</p>
+  <ul>
+    <li>study_registration - External source from which the identifier included in study_id originates</li>
+    <li>study_id - required field, see naming restrictions below. Unique identifier that can be used to retrieve more
+      information for a study</li>
+    <li>consent_group - required field, see naming restrictions below. </li>
+    <li>participant_id - Unique identifier that can be used to retrieve more information for a participant</li>
+    <li>specimen_id - Unique identifier that can be used to retrieve more information for a specimen</li>
+    <li>experimental_strategy - The experimental strategy used to generate the data file referred to by the
+      ga4gh_drs_uri. (Based on GDC definition)</li>
+    <li>input_file_path - required field. Either the local file, s3:// path, or gs:// path to be transferred</li>
+    <li>file_format - The format of the data, see possible values from the data_format fields in GDC. Can use whatever
+      values make sense for the particular implementation.</li>
+    <li>file_type - The type of the data, see possible values from the data_type fields in GDC. Can use whatever values
+      make sense for the particular implementation.</li>
+  </ul>
+  <h3 id="naming-restrictions-for-study-_id-and-consent-_group">Naming restrictions for study_id and consent_group</h3>
+  <ul>
+    <li>study_id and consent_group should consist of only lowercase letters and numbers. </li>
+    <li>No special character are allowed, except for single periods (.). study_id and consent_group must not begin or
+      end with a period. </li>
+    <li>The total number of characters for the study_id and consent_group combined shall not exceed 61 characters. </li>
+    <li>The study_id and consent_group combination must be globally unique.</li>
+  </ul>
+  <h2 id="output-manifest-file-format">Output manifest file format</h2>
+  <p>The output manifest file is a TSV file with the following fields. See <a
+      href="sample.output.s3.manifest.tsv">sample.output.s3.manifest.tsv</a> for examples:</p>
+  <ul>
+    <li>study_registration</li>
+    <li>study_id</li>
+    <li>consent_group</li>
+    <li>participant_id</li>
+    <li>specimen_id</li>
+    <li>experimental_strategy</li>
+    <li>input_file_path</li>
+    <li>file_format</li>
+    <li>file_type</li>
+    <li>file_name</li>
+    <li>ga4gh_drs_uri - unique identifier for resource based on standards listed at <a
+        href="https://ga4gh.github.io/data-repository-service-schemas/preview/release/drs-1.1.0/docs/#_drs_uris">https://ga4gh.github.io/data-repository-service-schemas/preview/release/drs-1.1.0/docs/#_drs_uris</a>
+    </li>
+    <li>md5sum</li>
+    <li>gs_gs_crc32c - checksum provided by google storage in base64 format. Note that all gs* fields will be empty if
+      google storage was not selected</li>
+    <li>gs_path - path to google storage file. Note that the path includes the checksum to ensure that files are unique.
+      It is not using the base64 format, which might lead to illegal key names, but instead the unsigned 32-bit integer
+      value</li>
+    <li>gs_modified_date - the date that the file was last uploaded or modified</li>
+    <li>gs_file_size - the file size reported by google storage</li>
+    <li>s3_md5sum - checksum provided by aws. Note that all aws* fields will be empty if google storage was not selected
+    </li>
+    <li>s3_path - path to aws file. Note that the path includes the checksum to ensure that files are unique.</li>
+    <li>s3_modified_date - the date that the file was last uploaded or modified</li>
+    <li>s3_file_size - the file size reported by aws</li>
+  </ul>
 </div>
 {% endblock %}
