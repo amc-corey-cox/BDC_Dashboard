@@ -106,6 +106,7 @@ if os.getenv("USE_CLOUD_SQL_AUTH_PROXY", None):
     DATABASES["default"]["HOST"] = "proxy"
     DATABASES["default"]["PORT"] = 5432
 
+
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 AUTH_PASSWORD_VALIDATORS = [
@@ -153,8 +154,10 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
+    "formatters": {},
     "handlers": {
         "console": {
+            "level": os.getenv("DJANGO_LOG_LEVEL", "DEBUG"),
             "class": "logging.StreamHandler",
         },
     },
@@ -162,6 +165,7 @@ LOGGING = {
         "django": {
             "handlers": ["console"],
             "level": os.getenv("DJANGO_LOG_LEVEL", "DEBUG"),
+            "propagate": True,
         },
     },
 }
