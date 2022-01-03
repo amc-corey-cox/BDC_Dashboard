@@ -45,8 +45,8 @@ class TicketCreate(CreateView):
 class TicketUpdate(UpdateView):
     model = Ticket
     fields = [
-        "email",
         "name",
+        "email",
         "organization",
         "study_name",
         "dataset_description",
