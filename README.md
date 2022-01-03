@@ -85,3 +85,11 @@ We will be using [this guide to deploy GCP](https://cloud.google.com/python/djan
 ### Instructions
 
 **Ensure all prior setup is complete before continuing**
+
+Navigate to the `api` directory and run:
+
+```
+gcloud app deploy
+```
+
+> NOTE: You must have the Cloud SDK CLI installed and configured to use the `gcloud` command
