@@ -1,0 +1,22 @@
+name: API - Deploy to GCP App Engine
+
+on: push
+
+jobs:
+  deploy:
+    name: Setup and Deploy to App Engine
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: api
+
+    steps:
+      - name: Setup Cloud SDK
+        uses: google-github-actions/setup-gcloud@v0
+        with:
+          project_id: "${{ secrets.PROJECT_ID }}"
+          service_account_key: "${{ secrets.GCP_SA_KEY }}"
+
+      - name: Deploy to App Engine
+        run: gcloud app deploy app.yaml --quiet --no-promote
