@@ -98,13 +98,16 @@ WSGI_APPLICATION = "bdcat_data_submission.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = {"default": env.db()}
-
-# If the flag as been set, configure to use docker proxy
-if os.getenv("USE_CLOUD_SQL_AUTH_PROXY", None):
-    # Use "proxy" for docker-compose and "127.0.0.1" for migrations
-    DATABASES["default"]["HOST"] = "proxy"
-    DATABASES["default"]["PORT"] = 5432
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": env("POSTGRES_DB"),
+        "USER": env("POSTGRES_USER"),
+        "PASSWORD": env("POSTGRES_PASSWORD"),
+        "HOST": env("POSTGRES_HOST"),
+        "PORT": env("POSTGRES_PORT"),
+    }
+}
 
 
 # Password validation
