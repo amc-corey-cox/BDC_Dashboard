@@ -82,7 +82,15 @@ In the GCP Console, create a new Compute Engine instance with your desired confi
 
 #### App Engine
 
-Navigate to the `api` directory and run:
+This repo has been configured to use GitHub Actions to deploy to App Engine on pushes to the `main` branch.
+For this to work, you must have GitHub Secrets with the following:
+
+| name       | description                                         |
+| ---------- | --------------------------------------------------- |
+| PROJECT_ID | The Project ID for GCP                              |
+| GCP_SA_KEY | The full service account key json exported from GCP |
+
+Alternatively, can navigate to the `api` directory and run:
 
 ```
 gcloud app deploy
