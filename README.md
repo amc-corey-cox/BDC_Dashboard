@@ -68,6 +68,14 @@ We will be using [this guide to deploy to GCP](https://cloud.google.com/python/d
 
 **Ensure all prior setup is complete before continuing**
 
+To prepare the project for deployment, run the following commands:
+
+```
+python manage.py collectstatic --noinput
+python manage.py makemigrations
+python manage.py migrate
+```
+
 #### [Secrets Manager](https://cloud.google.com/python/django/appengine#create-django-environment-file-as-a-secret)
 
 In GCP Secret Manager, you must create a secret called `django_settings`.
