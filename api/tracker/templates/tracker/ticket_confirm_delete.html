@@ -3,29 +3,124 @@
 
 <form action="" method="POST">
   {% csrf_token %}
-  <div class="card text-center m-2">
-    <div class="alert alert-danger text-center" role="alert">
-      <h2 class="display-4">
-        Warning! Deleting
-        <a href="{% url 'tracker:ticket-update' pk=object.pk %}"
-          >{{ ticket.study_id }}...</a
-        >
-      </h2>
+  <div class="row g-2">
+
+    <!-- Right-side util -->
+    <div class="col-md-5 col-lg-4 order-md-last">
+      <div class="card text-center m-2">
+        <div class="alert alert-danger text-center" role="alert">
+          <h2 class="display-4">
+            Warning!
+          </h2>
+        </div>
+        <div class="card-body mb-2">
+          Deleting Tickets is permanent and cannot be undone.
+        </div>
+        <div class="card-footer">
+          <p>
+            <strong>Are you sure you want to delete this ticket?</strong>
+          </p>
+          <input class="btn btn-danger" type="submit" value="Confirm" />
+          <a href="{% url 'tracker:ticket-update' pk=object.pk %}" class="btn btn-secondary">Cancel</a>
+        </div>
+      </div>
     </div>
-    <div class="card-body mb-2">
-      <p>{{ ticket.study_name }}</p>
-      <p>{{ ticket.name }} ({{ ticket.email }})</p>
-    </div>
-    <div class="card-footer">
-      <p>
-        <strong>Are you sure you want to delete this ticket?</strong>
-      </p>
-      <input class="btn btn-danger" type="submit" value="Confirm" />
-      <a
-        href="{% url 'tracker:ticket-update' pk=object.pk %}"
-        class="btn btn-secondary"
-        >Cancel</a
-      >
+
+    <!-- Ticket Summary -->
+    <div class="col-md-7 col-lg-8 px-3 ticket-summary">
+      <h4 class="mb-3">Contact Information</h4>
+      <div class="row g-3">
+        <!-- Name and Email -->
+        <div class="col-sm-6 card text-center">
+          <div class="card-header">
+            <strong>Name</strong>
+          </div>
+          <p>{{ ticket.name }}</p>
+        </div>
+        <div class="col-sm-6 card text-center">
+          <div class="card-header">
+            <strong>Email</strong>
+          </div>
+          <p>{{ ticket.email }}</p>
+        </div>
+
+
+        <!-- Organization -->
+        <div class="col-12 card text-center">
+          <div class="card-header">
+            <strong>Organization</strong>
+          </div>
+          <p>{{ ticket.organization }}</p>
+        </div>
+        <hr class="my-4" />
+      </div>
+
+      <h4 class="mb-3 ticket-summary">Study Information</h4>
+      <div class="row g-3 ticket-summary">
+        <!-- Study Name -->
+        <div class="col-12 card text-center">
+          <div class="card-header">
+            <strong>Study Name</strong>
+          </div>
+          <p>{{ ticket.study_name }}</p>
+        </div>
+
+        <!-- Study ID and Consent Code -->
+        <div class="col-sm-6 card text-center">
+          <div class="card-header">
+            <strong>Study ID</strong>
+          </div>
+          <p>{{ ticket.study_id }}</p>
+        </div>
+        <div class="col-sm-6 card text-center">
+          <div class="card-header">
+            <strong>Consent Code</strong>
+          </div>
+          <p>{{ ticket.consent_code }}</p>
+        </div>
+        <hr class="my-4" />
+      </div>
+
+      <h4 class="mb-3 ticket-summary">Dataset Information</h4>
+      <div class="row g-3 ticket-summary">
+        <!-- Dataset Description -->
+        <div class="col-12 card text-center">
+          <div class="card-header">
+            <strong>Dataset Description</strong>
+          </div>
+          <p>{{ ticket.dataset_description }}</p>
+        </div>
+
+        <!-- GMail and AWS-->
+        <div class="col-sm-6 card text-center">
+          <div class="card-header">
+            <strong>Google Email</strong>
+          </div>
+          <p>{{ ticket.google_email }}</p>
+        </div>
+        <div class="col-sm-6 card text-center">
+          <div class="card-header">
+            <strong>AWS IAM</strong>
+          </div>
+          <p>{{ ticket.aws_iam }}</p>
+        </div>
+
+        <!-- Data Size -->
+        <div class="col-sm-12 card text-center">
+          <div class="card-header">
+            <strong>{{ ticket.data_size.label }}</strong>
+          </div>
+          <p>{{ ticket.data_size }}</p>
+        </div>
+
+        <!-- Test Data Checkbox -->
+        {% if ticket.is_test_data %}
+        <div class="col-12 text-center text-red">
+          <h2> THIS IS TEST DATA </h2>
+        </div>
+        {% endif %}
+        <hr class="my-4" />
+      </div>
     </div>
   </div>
 </form>
