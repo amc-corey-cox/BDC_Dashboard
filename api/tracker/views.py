@@ -1,5 +1,5 @@
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.views.generic import DetailView, TemplateView
+from django.views.generic import TemplateView
 from django.views.generic.list import ListView
 from django.urls import reverse_lazy
 
@@ -45,8 +45,8 @@ class TicketCreate(CreateView):
 class TicketUpdate(UpdateView):
     model = Ticket
     fields = [
-        "email",
         "name",
+        "email",
         "organization",
         "study_name",
         "dataset_description",

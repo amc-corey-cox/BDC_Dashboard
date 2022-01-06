@@ -8,6 +8,10 @@ django = "*"
 python-dotenv = "*"
 django-extensions = "*"
 django-widget-tweaks = "*"
+django-environ = "*"
+google-cloud-secret-manager = "*"
+psycopg2-binary = "*"
+whitenoise = "*"
 
 [dev-packages]
 pytest = "*"
