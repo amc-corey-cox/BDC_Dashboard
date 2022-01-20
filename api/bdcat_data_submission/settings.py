@@ -39,9 +39,6 @@ else:
     raise Exception("No local .env or GOOGLE_CLOUD_PROJECT detected. No secrets found.")
 
 SECRET_KEY = env("SECRET_KEY")
-
-# SECURITY WARNING: don't run with debug turned on in production!
-# Change this to "False" when you are ready for production
 DEBUG = env("DEBUG")
 
 # SECURITY WARNING: App Engine's security features ensure that it is safe to
@@ -147,6 +144,10 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 WHITENOISE_AUTOREFRESH = True
 WHITENOISE_MANIFEST_STRICT = False
 
+
+# SendGrid settings
+EMAIL_BACKEND = "sgbackend.SendGridBackend"
+SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field

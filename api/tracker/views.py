@@ -5,6 +5,7 @@ from django.urls import reverse_lazy
 
 from datetime import datetime, timezone
 from .models import Ticket, STATUS_TYPES
+from .mail import Mail
 
 
 class IndexView(TemplateView):
@@ -37,7 +38,7 @@ class TicketCreate(CreateView):
 
     def form_valid(self, form):
         ticket_obj = form.save(commit=True)
-        # FIXME - add checks here
+        Mail(ticket_obj, "Created").send()
         return super().form_valid(form)
 
 
@@ -96,12 +97,19 @@ class TicketUpdate(UpdateView):
         ticket.save()
         self.object = ticket
 
+        Mail(ticket, status_update).send()
         return super().form_valid(form)
 
 
 class TicketDelete(DeleteView):
     model = Ticket
     success_url = reverse_lazy("tracker:tickets-list")
+
+    def delete(self, request, *args, **kwargs):
+        ticket = self.get_object()
+
+        Mail(ticket, "Deleted").send()
+        return super().delete(request, *args, **kwargs)
 
 
 class TicketsList(ListView):
