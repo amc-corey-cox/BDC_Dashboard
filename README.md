@@ -6,6 +6,7 @@
 
 ### Prerequisites
 
+- **[Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html)**
 - **[Docker](https://www.docker.com/get-started)**
 - **[Cloud SDK CLI](https://cloud.google.com/sdk/gcloud)**
 
@@ -23,9 +24,21 @@ For local development, the `api` directory should have an `.env` file with the f
 | POSTGRES_HOST        |           | The external IP for the Compute Engine instance with Postgres |
 | POSTGRES_PORT        | `5432`    | The port for the Postgres Database                            |
 
+### The Postgres Database
+
+Due to the complexity of the setup, we have included some Ansible Playbooks to assist you.
+You can find a detailed writeup in the [`ansible`](/ansible) directory
+
+> NOTE: This is required even for local development
+
+### The Django Server
+
+Docker Compose should start a Django server on [`http://0.0.0.0:8000/`](http://0.0.0.0:8000/).
+The server uses the `env` file for configuration
+
 ### Docker Compose
 
-Docker is used to standardize the development enviornment
+Docker is used to standardize the development environment
 
 ```
 docker-compose up --build
@@ -42,14 +55,9 @@ Any subsequent runs do not require the `--build` flag
 docker-compose up
 ```
 
-### The Django Server
-
-Docker Compose should start a Django server on [`http://0.0.0.0:8000/`](http://0.0.0.0:8000/).
-The server uses the `env` file for configuration
-
 ## Deployment
 
-We will be using [this guide to deploy to GCP](https://cloud.google.com/python/django/appengine#macos-64-bit)
+We will be using [this guide to deploy to App Engine](https://cloud.google.com/python/django/appengine#macos-64-bit)
 
 ### [Permissions](https://cloud.google.com/iam/docs/understanding-roles#predefined)
 
@@ -80,13 +88,6 @@ python manage.py migrate
 
 In GCP Secret Manager, you must create a secret called `django_settings`.
 You can either upload the `.env` file or paste the secrets in there
-
-#### Compute Engine
-
-In the GCP Console, create a new Compute Engine instance with your desired configuration.
-
-- Make sure you are deploying with the container image `marketplace.gcr.io/google/postgresql11`.
-  - To ensure the database remains consistent between reboots, you must mount a volume to the instance and map it to `/var/lib/postgresql/data`.
 
 #### App Engine
 
