@@ -1,3 +1,2 @@
 db_dir: /opt/bdcat
-db_data_dir: /tickets
-db_backup_data_dir: /tickets_backup
+db_data_dir: /tickets/data

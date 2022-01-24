@@ -1,6 +1,8 @@
 #!/bin/sh
 set -e
 
+# THIS SCRIPT IS DEPRECATED. PLEASE USE GOOGLE'S SNAPSHOT BACKUP INSTEAD
+
 # pgdump the database
 docker exec bdcat_database_1 /usr/bin/pg_dump -U postgres > {{ db_data_dir }}/pg_db_dump
 

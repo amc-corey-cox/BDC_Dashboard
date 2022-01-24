@@ -21,7 +21,7 @@
           - pyyaml >= 3.11
           - docker-compose >= 1.7.0
 
-- name: Deploy services
+- name: Deploy Services
   hosts: all
   gather_facts: false
   become: yes
@@ -48,27 +48,10 @@
         - .env
         - docker-compose.yml
 
-    - name: start compose
+    - name: Start compose
       docker_compose:
         project_src: "{{ db_dir }}"
         pull: yes
         remove_orphans: yes
         debug: yes
       register: output
-# - name: Set backup on machines
-#   hosts: all
-#   gather_facts: false
-#   become: yes
-#   tags:
-#     - backup
-#   tasks:
-#     - name: Create backup folder if it does not exist
-#       file:
-#         path: "{{ db_backup_data_dir }}"
-#         state: directory
-#         mode: 0755
-#     - name: Setup cron job
-#       template:
-#         src: "templates/db_backup.sh"
-#         dest: "/etc/cron.daily/dbBackup"
-#         mode: 0751
