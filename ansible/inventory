@@ -1,8 +1,0 @@
-[bdcat:children]
-dev
-prod
-
-[dev]
-db  ansible_host=TODO ansible_user=ubuntu
-
-[prod]
