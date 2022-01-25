@@ -1,0 +1,57 @@
+---
+- name: Install Ansible Docker Prereqs
+  hosts: all
+  gather_facts: false
+  become: yes
+  tags:
+    - docker
+  tasks:
+    - name: Update repositories cache and install "pip" packages
+      apt:
+        name: "{{ item }}"
+        update_cache: yes
+      loop:
+        # you may add more here
+        - python3-pip
+
+    - name: Ensure ansible docker prereqs are installed
+      pip:
+        name:
+          - docker >= 1.20
+          - pyyaml >= 3.11
+          - docker-compose >= 1.7.0
+
+- name: Deploy Services
+  hosts: all
+  gather_facts: false
+  become: yes
+  tags:
+    - deploy
+  tasks:
+    - name: Create docker-compose directory
+      file:
+        path: "{{ db_dir }}"
+        state: directory
+        mode: 0755
+
+    - name: Create database data dir
+      file:
+        path: "{{ db_data_dir }}"
+        state: directory
+        mode: 0755
+
+    - name: Copy templates
+      template:
+        src: "templates/{{ item }}"
+        dest: "{{ db_dir }}"
+      loop:
+        - .env
+        - docker-compose.yml
+
+    - name: Start compose
+      docker_compose:
+        project_src: "{{ db_dir }}"
+        pull: yes
+        remove_orphans: yes
+        debug: yes
+      register: output
