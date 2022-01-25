@@ -137,3 +137,8 @@ dmypy.json
 # GCloud
 cloud_sql_proxy
 service_account.json
+
+# Ansible
+inventory
+ansible/group_vars/all/users.yml
+ansible/inventory

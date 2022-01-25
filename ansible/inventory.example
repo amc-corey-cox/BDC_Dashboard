@@ -1,0 +1,8 @@
+[bdcat:children]
+dev
+prod
+
+[dev]
+db  ansible_host=0.0.0.0 ansible_user=ubuntu
+
+[prod]
