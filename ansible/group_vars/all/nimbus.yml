@@ -1,0 +1,2 @@
+db_dir: /opt/bdcat
+db_data_dir: /tickets/data
