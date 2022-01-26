@@ -36,6 +36,7 @@ class TicketCreate(CreateView):
         "consent_code",
     ]
 
+    # send email if form is valid
     def form_valid(self, form):
         ticket_obj = form.save(commit=True)
         Mail(ticket_obj, "Created").send()
@@ -97,7 +98,8 @@ class TicketUpdate(UpdateView):
         ticket.save()
         self.object = ticket
 
-        Mail(ticket, status_update).send()
+        # send email with status update
+        Mail(ticket, ticket.get_ticket_status[1]).send()
         return super().form_valid(form)
 
 
@@ -108,6 +110,7 @@ class TicketDelete(DeleteView):
     def delete(self, request, *args, **kwargs):
         ticket = self.get_object()
 
+        # send email notification
         Mail(ticket, "Deleted").send()
         return super().delete(request, *args, **kwargs)
 
