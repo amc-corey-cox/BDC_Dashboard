@@ -146,8 +146,9 @@ WHITENOISE_MANIFEST_STRICT = False
 
 
 # SendGrid settings
-EMAIL_BACKEND = "sgbackend.SendGridBackend"
-SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY")
+EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
+SENDGRID_API_KEY = env("SENDGRID_API_KEY")
+SENDGRID_SANDBOX_MODE_IN_DEBUG = env("DEBUG")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field

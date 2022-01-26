@@ -12,7 +12,7 @@ django-environ = "*"
 google-cloud-secret-manager = "*"
 psycopg2-binary = "*"
 whitenoise = "*"
-sendgrid-django = "*"
+django-sendgrid-v5 = "*"
 
 [dev-packages]
 pytest = "*"
