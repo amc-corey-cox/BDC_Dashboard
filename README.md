@@ -25,7 +25,7 @@ For local development, the `api` directory should have an `.env` file with the f
 | POSTGRES_HOST        |            | The external IP for the Compute Engine instance with Postgres |
 | POSTGRES_PORT        | `5432`     | The port for the Postgres Database                            |
 
-> NOTE: If the Compute Engine instance restarts and the IP changes, you must update the `POSTGRES_HOST` variable
+> NOTE: [Unless a static IP is assigned](/ansible/README.md#Reserving-a-Static-IP), you must update the `POSTGRES_HOST` variable each time the VM is restarted
 
 ### The Postgres Database
 

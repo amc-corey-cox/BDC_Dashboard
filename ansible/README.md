@@ -127,7 +127,7 @@ python manage.py makemigrations
 python manage.py migrate
 ```
 
-### Persistent Disk Mount
+#### Persistent Disk Mount
 
 Docker containers are volitile and do not retain state between runs.
 This means that if the container restarts, the database will be lost.
@@ -154,6 +154,15 @@ Mount the newly formatted `sdb` block device to the `/tickets` directory:
 mount -o discard,defaults /dev/sdb /tickets
 chmod a+w /tickets
 ```
+
+#### Reserving a Static IP
+
+When the VM goes down, the IP address will be released.
+[To prevent this, you must reserve a static IP address for the VM](https://cloud.google.com/compute/docs/ip-addresses/reserve-static-external-ip-address#reserve_new_static)
+
+> NOTE: The cost of a static IP is [$0.004/hour](https://cloud.google.com/vpc/network-pricing)
+
+If you do not want a static IP, you must monitor the VM for its status and change the IP configuration if the IP changes
 
 ### Failsafe(s)
 
