@@ -96,7 +96,6 @@ WSGI_APPLICATION = "bdcat_data_submission.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
-
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
@@ -152,6 +151,7 @@ EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
 SENDGRID_API_KEY = env("SENDGRID_API_KEY")
 SENDGRID_ADMIN_EMAIL = env("SENDGRID_ADMIN_EMAIL")
 SENDGRID_SANDBOX_MODE_IN_DEBUG = env("DEBUG")
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
