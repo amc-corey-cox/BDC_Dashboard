@@ -43,7 +43,6 @@ class TicketCreate(CreateView):
         return super().form_valid(form)
 
 
-# FIXME - see https://docs.djangoproject.com/en/3.2/topics/class-based-views/generic-editing/ for adding auth
 class TicketUpdate(UpdateView):
     model = Ticket
     fields = [
@@ -75,21 +74,22 @@ class TicketUpdate(UpdateView):
 
         # check which status button was clicked
         if status_update == "Approve Ticket":
-            # add approval timestamp
+            # set status to "Awaiting NHLBI Cloud Bucket Creation"
             ticket.ticket_approved_dt = datetime.now(timezone.utc)
         if status_update == "Reject Ticket":
             # add rejected timestamp
             ticket.ticket_rejected_dt = datetime.now(timezone.utc)
         if status_update == "Mark as Bucket Created":
-            # add bucket created timestamp
+            # set status to "Awaiting Data Custodian Upload Start"
             ticket.bucket_created_dt = datetime.now(timezone.utc)
         if status_update == "Mark as Data Upload Started":
-            # set status to "Awaiting Gen3 Approval"
+            # set status to "Awaiting Data Custodian Upload Complete"
             ticket.data_uploaded_started_dt = datetime.now(timezone.utc)
         if status_update == "Mark as Data Upload Completed":
+            # set status to "Awaiting Gen3 Acceptance"
             ticket.data_uploaded_completed_dt = datetime.now(timezone.utc)
         if status_update == "Mark as Gen3 Approved":
-            # set status to "Awaiting Data Download"
+            # set status to "Gen3 Accepted"
             ticket.data_accepted_dt = datetime.now(timezone.utc)
         if status_update == "Revive Ticket":
             # remove rejected timestamp
@@ -197,29 +197,3 @@ class RejectedTicketsList(ListView):
                 context["rejected"].append(object)
 
         return context
-
-
-# class TicketDetail(DetailView):
-#     model = Ticket
-#     context_object_name = "ticket"
-
-#     success_url = reverse_lazy("tracker:tickets-list")
-
-#     def get_context_data(self, *args, **kwargs):
-#         context = super(DetailView, self).get_context_data(*args, **kwargs)
-
-#         return context
-
-#     def post(self, status_update, *args, **kwargs):
-#         self.object = self.get_object()
-#         form = self.get_form()
-#         ticket = form.save(commit=False)
-
-#         if status_update == "Approve Ticket":
-#             # set status to "Awaiting Bucket Creation"
-#             self.object.ticket_approved_dt = datetime.now(timezone.utc)
-
-#         ticket.save()
-#         self.object = ticket
-
-#         return super(TicketDetail, self).form_valid(form)
