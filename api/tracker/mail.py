@@ -1,7 +1,8 @@
 import os
+from django.conf import settings
 from django.core.mail import EmailMessage
 
-ADMIN_EMAIL = "luan@nimbusinformatics.com"
+ADMIN_EMAIL = settings.SENDGRID_ADMIN_EMAIL
 SENDGRID_TICKET_CREATED_TEMPLATE_ID = "d-d4c3414e680e415ba59c9fecc760ead4"
 SENDGRID_TICKET_UPDATED_TEMPLATE_ID = "d-c8b625239d834a3aac57d84e1b9ea340"
 SENDGRID_TICKET_DELETED_TEMPLATE_ID = "d-88ccfe3f976940e6ae8d5dd6c1d7ab65"

@@ -36,7 +36,9 @@ elif os.environ.get("GOOGLE_CLOUD_PROJECT", None):
 
     env.read_env(io.StringIO(payload))
 else:
-    raise Exception("No local .env or GOOGLE_CLOUD_PROJECT detected. No secrets found.")
+    raise EnvironmentError(
+        "No local .env or GOOGLE_CLOUD_PROJECT detected. No secrets found."
+    )
 
 SECRET_KEY = env("SECRET_KEY")
 DEBUG = env("DEBUG")
@@ -148,6 +150,7 @@ WHITENOISE_MANIFEST_STRICT = False
 # SendGrid settings
 EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
 SENDGRID_API_KEY = env("SENDGRID_API_KEY")
+SENDGRID_ADMIN_EMAIL = env("SENDGRID_ADMIN_EMAIL")
 SENDGRID_SANDBOX_MODE_IN_DEBUG = env("DEBUG")
 
 # Default primary key field type
