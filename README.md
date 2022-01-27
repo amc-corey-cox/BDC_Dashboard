@@ -24,6 +24,8 @@ For local development, the `api` directory should have an `.env` file with the f
 | POSTGRES_PASSWORD    |            | A (secure) password for the Postgres User                     |
 | POSTGRES_HOST        |            | The external IP for the Compute Engine instance with Postgres |
 | POSTGRES_PORT        | `5432`     | The port for the Postgres Database                            |
+| SENDGRID_API_KEY     |            | The API key for SendGrid                                      |
+| SENDGRID_ADMIN_EMAIL |            | The email address to use as the sender                        |
 
 > NOTE: [Unless a static IP is assigned](/ansible/README.md#Reserving-a-Static-IP), you must update the `POSTGRES_HOST` variable each time the VM is restarted
 
@@ -76,7 +78,7 @@ We will be using [this guide to deploy to App Engine](https://cloud.google.com/p
 
 **Ensure all prior setup is complete before continuing**
 
-To prepare the project for deployment, run the following commands:
+To prepare the project for deployment, run the following commands in the `api` directory:
 
 ```
 python manage.py collectstatic --noinput
@@ -108,6 +110,17 @@ Alternatively, can navigate to the `api` directory and run:
 ```
 gcloud app deploy
 ```
+
+#### SendGrid
+
+> NOTE: You will need to [verify the sender identity in SendGrid]("https://docs.sendgrid.com/for-developers/sending-email/sender-identity") for the `SENDGRID_ADMIN_EMAIL`
+
+You will also need to create your own dynamic templates and copy the `TEMPLATE_ID` and assign them into the correct variables in the [`mail.py`](/api/tracker/templates) file
+
+The dynamic templates use handlebars syntax.
+These must be included in the dynamic template you make on SendGrid.
+These variables are listed under the `self.dynamic_template_data` dictionary of the [`mail.py`](/api/tracker/templates) file.
+Some templates have been provided for you, but you must create your own if you want to make edits
 
 #### Limitations
 
