@@ -9,6 +9,7 @@
 - **[Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html)**
 - **[Docker](https://www.docker.com/get-started)**
 - **[Cloud SDK CLI](https://cloud.google.com/sdk/gcloud)**
+- **[SendGrid](https://docs.sendgrid.com/for-developers/sending-email/api-getting-started)**
 
 ### Environment variables
 
@@ -23,8 +24,10 @@ For local development, the `api` directory should have an `.env` file with the f
 | POSTGRES_PASSWORD    |            | A (secure) password for the Postgres User                     |
 | POSTGRES_HOST        |            | The external IP for the Compute Engine instance with Postgres |
 | POSTGRES_PORT        | `5432`     | The port for the Postgres Database                            |
+| SENDGRID_API_KEY     |            | The API key for SendGrid                                      |
+| SENDGRID_ADMIN_EMAIL |            | The email address to use as the sender                        |
 
-> NOTE: If the Compute Engine instance restarts and the IP changes, you must update the `POSTGRES_HOST` variable
+> NOTE: [Unless a static IP is assigned](/ansible/README.md#Reserving-a-Static-IP), you must update the `POSTGRES_HOST` variable each time the VM is restarted
 
 ### The Postgres Database
 
@@ -64,25 +67,26 @@ We will be using [this guide to deploy to App Engine](https://cloud.google.com/p
 - [`roles/appengine.appAdmin`](https://cloud.google.com/iam/docs/understanding-roles#app-engine-roles)
 - [`roles/cloudbuild.integrationsOwner`](https://cloud.google.com/iam/docs/understanding-roles#cloud-build-roles)
 - [`roles/cloudbuild.builds.editor`](https://cloud.google.com/build/docs/iam-roles-permissions#predefined_roles)
-- [`roles/cloudsql.admin`](https://cloud.google.com/iam/docs/understanding-roles#cloud-sql-roles)
 - [`roles/secretmanager.admin`](https://cloud.google.com/iam/docs/understanding-roles#secret-manager-roles)
 - [`roles/iam.serviceAccountAdmin`](https://cloud.google.com/iam/docs/understanding-roles#service-accounts-roles)
 - [`roles/serviceusage.serviceUsageAdmin`](https://cloud.google.com/iam/docs/understanding-roles#service-usage-roles)
 - [`roles/storage.admin`](https://cloud.google.com/iam/docs/understanding-roles#cloud-storage-roles)
 
-> NOTE: you will also need to grant yourself the [`roles/iam.serviceAccountUser`](https://cloud.google.com/iam/docs/understanding-roles#service-accounts-roles) on the `App Engine default service account`
+> NOTE: You will also need to grant yourself the [`roles/iam.serviceAccountUser`](https://cloud.google.com/iam/docs/understanding-roles#service-accounts-roles) on the `App Engine default service account`
 
 ### Instructions
 
 **Ensure all prior setup is complete before continuing**
 
-To prepare the project for deployment, run the following commands:
+To prepare the project for deployment, run the following commands in the `api` directory:
 
 ```
 python manage.py collectstatic --noinput
 python manage.py makemigrations
 python manage.py migrate
 ```
+
+#### GitHub Secrets
 
 #### [Secrets Manager](https://cloud.google.com/python/django/appengine#create-django-environment-file-as-a-secret)
 
@@ -106,6 +110,17 @@ Alternatively, can navigate to the `api` directory and run:
 ```
 gcloud app deploy
 ```
+
+#### SendGrid
+
+> NOTE: You will need to [verify the sender identity in SendGrid]("https://docs.sendgrid.com/for-developers/sending-email/sender-identity") for the `SENDGRID_ADMIN_EMAIL`
+
+You will also need to create your own dynamic templates and copy the `TEMPLATE_ID` and assign them into the correct variables in the [`mail.py`](/api/tracker/templates) file
+
+The dynamic templates use handlebars syntax.
+These must be included in the dynamic template you make on SendGrid.
+These variables are listed under the `self.dynamic_template_data` dictionary of the [`mail.py`](/api/tracker/templates) file.
+Some templates have been provided for you, but you must create your own if you want to make edits
 
 #### Limitations
 

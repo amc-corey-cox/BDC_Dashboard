@@ -36,12 +36,11 @@ elif os.environ.get("GOOGLE_CLOUD_PROJECT", None):
 
     env.read_env(io.StringIO(payload))
 else:
-    raise Exception("No local .env or GOOGLE_CLOUD_PROJECT detected. No secrets found.")
+    raise EnvironmentError(
+        "No local .env or GOOGLE_CLOUD_PROJECT detected. No secrets found."
+    )
 
 SECRET_KEY = env("SECRET_KEY")
-
-# SECURITY WARNING: don't run with debug turned on in production!
-# Change this to "False" when you are ready for production
 DEBUG = env("DEBUG")
 
 # SECURITY WARNING: App Engine's security features ensure that it is safe to
@@ -97,7 +96,6 @@ WSGI_APPLICATION = "bdcat_data_submission.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
-
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
@@ -146,6 +144,13 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 # Whitenoise
 WHITENOISE_AUTOREFRESH = True
 WHITENOISE_MANIFEST_STRICT = False
+
+
+# SendGrid settings
+EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
+SENDGRID_API_KEY = env("SENDGRID_API_KEY")
+SENDGRID_ADMIN_EMAIL = env("SENDGRID_ADMIN_EMAIL")
+SENDGRID_SANDBOX_MODE_IN_DEBUG = env("DEBUG")
 
 
 # Default primary key field type
