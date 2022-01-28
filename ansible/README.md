@@ -127,7 +127,7 @@ python manage.py makemigrations
 python manage.py migrate
 ```
 
-### Persistent Disk Mount
+#### Persistent Disk Mount
 
 Docker containers are volitile and do not retain state between runs.
 This means that if the container restarts, the database will be lost.
@@ -155,22 +155,41 @@ mount -o discard,defaults /dev/sdb /tickets
 chmod a+w /tickets
 ```
 
-### VM Reboot Configuration
+#### Reserving a Static IP
+
+When the VM goes down, the IP address will be released.
+[To prevent this, you must reserve a static IP address for the VM](https://cloud.google.com/compute/docs/ip-addresses/reserve-static-external-ip-address#reserve_new_static)
+
+> NOTE: The cost of a static IP is [$0.004/hour](https://cloud.google.com/vpc/network-pricing)
+
+If you do not want a static IP, you must monitor the VM for its status and change the IP configuration if the IP changes
+
+### Failsafe(s)
+
+#### Monitoring
+
+You can set up monitoring for the VM for errors and other events using [Google's Ops Agent](https://cloud.google.com/stackdriver/docs/solutions/agents/ops-agent/installation#gce-ui-install)
+
+You will need the [`roles/monitoring.admin`](https://cloud.google.com/iam/docs/understanding-roles#monitoring-roles) to create monitoring alerts
+
+#### VM Reboot Configuration
 
 If the VM goes down, you must remount the the block device.
 Alternatively, you can [configure automatic mounting on reboot](https://cloud.google.com/compute/docs/disks/add-persistent-disk#configuring_automatic_mounting_on_vm_restart)
 
-### Snapshots
+#### Snapshots
 
 The persistent disk mount will prevent the database from being wiped if the docker container is restarted.
 You must also [add a failsafe snapshot to the persistent disk](https://cloud.google.com/compute/docs/disks/scheduled-snapshots) to prevent data loss
 
-#### Restoring from Snapshot
+##### Restoring from Snapshot
 
 In the case that data is corrupted, [you can restore from a snapshot](https://cloud.google.com/compute/docs/disks/create-snapshots#restore-snapshots).
 If your container is working fine, you will only need to attach the restored persistent disk
 
 If the VM is corrupted, you will only need to rebuild the container and attach the same persistent disk
+
+> NOTE: These steps have not been formally tested
 
 ### Limitations
 

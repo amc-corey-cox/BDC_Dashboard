@@ -5,6 +5,7 @@ from django.urls import reverse_lazy
 
 from datetime import datetime, timezone
 from .models import Ticket, STATUS_TYPES
+from .mail import Mail
 
 
 class IndexView(TemplateView):
@@ -35,13 +36,13 @@ class TicketCreate(CreateView):
         "consent_code",
     ]
 
+    # send email if form is valid
     def form_valid(self, form):
         ticket_obj = form.save(commit=True)
-        # FIXME - add checks here
+        Mail(ticket_obj, "Created").send()
         return super().form_valid(form)
 
 
-# FIXME - see https://docs.djangoproject.com/en/3.2/topics/class-based-views/generic-editing/ for adding auth
 class TicketUpdate(UpdateView):
     model = Ticket
     fields = [
@@ -73,21 +74,22 @@ class TicketUpdate(UpdateView):
 
         # check which status button was clicked
         if status_update == "Approve Ticket":
-            # add approval timestamp
+            # set status to "Awaiting NHLBI Cloud Bucket Creation"
             ticket.ticket_approved_dt = datetime.now(timezone.utc)
         if status_update == "Reject Ticket":
             # add rejected timestamp
             ticket.ticket_rejected_dt = datetime.now(timezone.utc)
         if status_update == "Mark as Bucket Created":
-            # add bucket created timestamp
+            # set status to "Awaiting Data Custodian Upload Start"
             ticket.bucket_created_dt = datetime.now(timezone.utc)
         if status_update == "Mark as Data Upload Started":
-            # set status to "Awaiting Gen3 Approval"
+            # set status to "Awaiting Data Custodian Upload Complete"
             ticket.data_uploaded_started_dt = datetime.now(timezone.utc)
         if status_update == "Mark as Data Upload Completed":
+            # set status to "Awaiting Gen3 Acceptance"
             ticket.data_uploaded_completed_dt = datetime.now(timezone.utc)
         if status_update == "Mark as Gen3 Approved":
-            # set status to "Awaiting Data Download"
+            # set status to "Gen3 Accepted"
             ticket.data_accepted_dt = datetime.now(timezone.utc)
         if status_update == "Revive Ticket":
             # remove rejected timestamp
@@ -96,12 +98,21 @@ class TicketUpdate(UpdateView):
         ticket.save()
         self.object = ticket
 
+        # send email with status update
+        Mail(ticket, ticket.get_ticket_status[1]).send()
         return super().form_valid(form)
 
 
 class TicketDelete(DeleteView):
     model = Ticket
     success_url = reverse_lazy("tracker:tickets-list")
+
+    def delete(self, request, *args, **kwargs):
+        ticket = self.get_object()
+
+        # send email notification
+        Mail(ticket, "Deleted").send()
+        return super().delete(request, *args, **kwargs)
 
 
 class TicketsList(ListView):
@@ -186,29 +197,3 @@ class RejectedTicketsList(ListView):
                 context["rejected"].append(object)
 
         return context
-
-
-# class TicketDetail(DetailView):
-#     model = Ticket
-#     context_object_name = "ticket"
-
-#     success_url = reverse_lazy("tracker:tickets-list")
-
-#     def get_context_data(self, *args, **kwargs):
-#         context = super(DetailView, self).get_context_data(*args, **kwargs)
-
-#         return context
-
-#     def post(self, status_update, *args, **kwargs):
-#         self.object = self.get_object()
-#         form = self.get_form()
-#         ticket = form.save(commit=False)
-
-#         if status_update == "Approve Ticket":
-#             # set status to "Awaiting Bucket Creation"
-#             self.object.ticket_approved_dt = datetime.now(timezone.utc)
-
-#         ticket.save()
-#         self.object = ticket
-
-#         return super(TicketDetail, self).form_valid(form)
