@@ -1,0 +1,17 @@
+{% extends "base_generic.html" %} {% block content %}
+<h1 class="text-muted" style="text-align: center">Profile</h1>
+{% load socialaccount %}
+
+{% if user.is_authenticated %}
+<p>Welcome, You are logged in as <strong>{{ user.email }}</strong></p>
+{{ user }}
+<a href="/accounts/logout" class="btn btn-danger btn-md mb-2 form-element" role="button">
+  Logout
+</a>
+
+{% else %}
+<a href="{% provider_login_url 'google' process='login' %}" class="btn btn-success btn-md mb-2 form-element"
+  role="button">Google Login</a>
+{% endif %}
+
+{% endblock %}
