@@ -26,6 +26,8 @@ For local development, the `api` directory should have an `.env` file with the f
 | POSTGRES_PORT        | `5432`     | The port for the Postgres Database                            |
 | SENDGRID_API_KEY     |            | The API key for SendGrid                                      |
 | SENDGRID_ADMIN_EMAIL |            | The email address to use as the sender                        |
+| GOOGLE_CLIENT_ID     |            | The client ID for Google OAuth2                               |
+| GOOGLE_CLIENT_SECRET |            | The client secret for Google OAuth2                           |
 
 > NOTE: [Unless a static IP is assigned](/ansible/README.md#Reserving-a-Static-IP), you must update the `POSTGRES_HOST` variable each time the VM is restarted
 
@@ -40,6 +42,16 @@ You can find a detailed writeup in the [`ansible`](/ansible) directory
 
 Docker Compose should start a Django server on [`http://0.0.0.0:8000/`](http://0.0.0.0:8000/).
 The server uses the `env` file for configuration
+
+> NOTE: Due to Google's OAuth2 requirements, you must use [`http://localhost:8000/`](http://localhost:8000/) to login
+
+### Django Social Auth
+
+We currently use [Google OAuth2 for the authentication](https://django-allauth.readthedocs.io/en/latest/providers.html#google).
+You will need to [set up a OAuth consent screen](https://developers.google.com/workspace/guides/configure-oauth-consent).
+You must also [set up a OAuth client ID credential](https://developers.google.com/workspace/guides/create-credentials#oauth-client-id)
+
+> NOTE: The `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` variables should be set in the `.env` file
 
 ### Docker Compose
 

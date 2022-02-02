@@ -43,6 +43,13 @@ else:
 SECRET_KEY = env("SECRET_KEY")
 DEBUG = env("DEBUG")
 
+# debug toolbar
+if DEBUG:
+    import socket
+
+    hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+    INTERNAL_IPS = [ip[:-1] + "1" for ip in ips] + ["127.0.0.1", "10.0.2.2"]
+
 # SECURITY WARNING: App Engine's security features ensure that it is safe to
 # have ALLOWED_HOSTS = ['*'] when the app is deployed. If you deploy a Django
 # app not on App Engine, make sure to set an appropriate host here.
@@ -51,19 +58,27 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
-    "tracker.apps.TrackerConfig",
+    "tracker",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
+    "django.contrib.sites",
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_extensions",
     "widget_tweaks",
+    "debug_toolbar",
+    # all auth
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.google",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -72,8 +87,6 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
-
-ROOT_URLCONF = "bdcat_data_submission.urls"
 
 TEMPLATES = [
     {
@@ -91,8 +104,24 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "bdcat_data_submission.wsgi.application"
-
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {},
+    "handlers": {
+        "console": {
+            "level": os.getenv("DJANGO_LOG_LEVEL", "DEBUG"),
+            "class": "logging.StreamHandler",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "level": os.getenv("DJANGO_LOG_LEVEL", "DEBUG"),
+            "propagate": True,
+        },
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
@@ -125,6 +154,38 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# django-allauth
+# https://github.com/pennersr/django-allauth
+
+SOCIALACCOUNT_PROVIDERS = {
+    "google": {
+        "SCOPE": ["profile", "email", "openid"],
+        "AUTH_PARAMS": {
+            "access_type": "online",
+        },
+        "APP": {
+            "client_id": env("GOOGLE_CLIENT_ID"),
+            "secret": env("GOOGLE_CLIENT_SECRET"),
+            "key": "",
+        },
+    }
+}
+
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+]
+
+SITE_ID = 3
+AUTH_USER_MODEL = "tracker.User"
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+
+LOGIN_REDIRECT_URL = "/profile"
+LOGOUT_REDIRECT_URL = "/profile"
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
@@ -153,27 +214,7 @@ SENDGRID_ADMIN_EMAIL = env("SENDGRID_ADMIN_EMAIL")
 SENDGRID_SANDBOX_MODE_IN_DEBUG = env("DEBUG")
 
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
-DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-
-# Logging
-LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "formatters": {},
-    "handlers": {
-        "console": {
-            "level": os.getenv("DJANGO_LOG_LEVEL", "DEBUG"),
-            "class": "logging.StreamHandler",
-        },
-    },
-    "loggers": {
-        "django": {
-            "handlers": ["console"],
-            "level": os.getenv("DJANGO_LOG_LEVEL", "DEBUG"),
-            "propagate": True,
-        },
-    },
-}
+# Misc
+ROOT_URLCONF = "bdcat_data_submission.urls"
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"  # Default primary key field type
+WSGI_APPLICATION = "bdcat_data_submission.wsgi.application"

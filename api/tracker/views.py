@@ -1,10 +1,11 @@
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic.detail import DetailView
 from django.views.generic import TemplateView
 from django.views.generic.list import ListView
 from django.urls import reverse_lazy
 
 from datetime import datetime, timezone
-from .models import Ticket, STATUS_TYPES
+from .models import Ticket, User, STATUS_TYPES
 from .mail import Mail
 
 
@@ -197,3 +198,8 @@ class RejectedTicketsList(ListView):
                 context["rejected"].append(object)
 
         return context
+
+
+class UserProfile(TemplateView):
+    template_name = "tracker/profile.html"
+    model = User
