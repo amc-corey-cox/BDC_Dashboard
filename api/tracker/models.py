@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.conf import settings
 from django.utils import timezone
 from django.core.validators import RegexValidator
 from django.contrib.auth.models import (
@@ -176,10 +177,21 @@ class Ticket(models.Model):
         blank=True,
     )
 
-    # ideally this is used to track ticket updates
-    last_updated_dt = models.DateTimeField(
-        verbose_name="Last Updated Date", auto_now=True
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
+    ticket_approved_by = models.EmailField(
+        verbose_name="Ticket approved by", default=""
     )
+    ticket_rejected_by = models.EmailField(
+        verbose_name="Ticket rejected by", default=""
+    )
+    bucket_created_by = models.EmailField(verbose_name="Bucket created by", default="")
+    data_uploaded_started_by = models.EmailField(
+        verbose_name="Data upload started by", default=""
+    )
+    data_uploaded_completed_by = models.EmailField(
+        verbose_name="Data upload completed by", default=""
+    )
+    data_accepted_by = models.EmailField(verbose_name="Data accepted by", default="")
 
     def get_absolute_url(self):
         return reverse("tracker:ticket-update", kwargs={"pk": self.pk})

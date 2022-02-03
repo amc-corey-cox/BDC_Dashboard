@@ -41,15 +41,23 @@
       <!-- Logs -->
       <h6 class="text-muted">Last Update: {{ ticket.get_ticket_status.0 }}</h6>
       <ul class="list-group mb-3">
-        <li class="list-group-item d-flex justify-content-between lh-sm">
-          <h6 class="my-0">Created Date</h6>
-          <small class="text-muted">{{ ticket.created_dt }}</small>
+        <li class="list-group-item d-column justify-content-between lh-sm">
+          <div class="d-flex w-100 justify-content-between">
+            <h6 class="my-0">Created By</h6>
+            <small class="text-muted"><strong>{{ ticket.created_by }}</strong></small>
+          </div>
+          <div class="d-flex w-100 justify-content-end">
+            <small class="text-muted text-end">{{ ticket.created_dt }}</small>
+          </div>
         </li>
         {% if ticket.ticket_approved_dt %}
         <li class="list-group-item flex-column justify-content-between lh-sm">
           <div class="d-flex w-100 justify-content-between">
-            <h6 class="my-0">Data Intake Form Accepted Date</h6>
-            <small class="text-muted">{{ ticket.ticket_approved_dt }}</small>
+            <h6 class="my-0">Data Intake Form Accepted</h6>
+            <small class="text-muted"><strong>{{ ticket.ticket_approved_by }}</strong></small>
+          </div>
+          <div class="d-flex w-100 justify-content-end">
+            <small class="text-muted text-end">{{ ticket.ticket_approved_dt }}</small>
           </div>
           {% if ticket.ticket_review_comment %}
           <hr />
@@ -57,30 +65,53 @@
           {% endif %}
         </li>
         {% endif %} {% if ticket.bucket_created_dt %}
-        <li class="list-group-item d-flex justify-content-between lh-sm">
-          <h6 class="my-0">NHLBI Bucket Created Date</h6>
-          <small class="text-muted">{{ ticket.bucket_created_dt }}</small>
+        <li class="list-group-item d-column justify-content-between lh-sm">
+          <div class="d-flex w-100 justify-content-between">
+            <h6 class="my-0">NHLBI Bucket Created</h6>
+            <small class="text-muted"><strong>{{ ticket.bucket_created_by }}</strong></small>
+          </div>
+          <div class="d-flex w-100 justify-content-end">
+            <small class="text-muted text-end">{{ ticket.bucket_created_dt }}</small>
+          </div>
         </li>
         {% endif %} {% if ticket.data_uploaded_started_dt %}
-        <li class="list-group-item d-flex justify-content-between lh-sm">
-          <h6 class="my-0">Data Custodian Upload Started Date</h6>
-          <small class="text-muted">{{ ticket.data_uploaded_started_dt }}</small>
+        <li class="list-group-item d-column justify-content-between lh-sm">
+          <div class="d-flex w-100 justify-content-between">
+            <h6 class="my-0">Data Upload Started</h6>
+            <small class="text-muted"><strong>{{ ticket.data_uploaded_started_by }}</strong></small>
+          </div>
+          <div class="d-flex w-100 justify-content-end">
+            <small class="text-muted text-end">{{ ticket.data_uploaded_started_dt }}</small>
+          </div>
         </li>
         {% endif %} {% if ticket.data_uploaded_completed_dt %}
-        <li class="list-group-item d-flex justify-content-between lh-sm">
-          <h6 class="my-0">Data Upload Completed Date</h6>
-          <small class="text-muted">{{ ticket.data_uploaded_completed_dt }}</small>
+        <li class="list-group-item d-column justify-content-between lh-sm">
+          <div class="d-flex w-100 justify-content-between">
+            <h6 class="my-0">Data Upload Completed</h6>
+            <small class="text-muted"><strong>{{ ticket.data_uploaded_completed_by }}</strong></small>
+          </div>
+          <div class="d-flex w-100 justify-content-end">
+            <small class="text-muted text-end">{{ ticket.data_uploaded_completed_dt }}</small>
+          </div>
         </li>
         {% endif %} {% if ticket.data_accepted_dt %}
-        <li class="list-group-item d-flex justify-content-between lh-sm">
-          <h6 class="my-0">Gen3 Accepted Date</h6>
-          <small class="text-muted">{{ ticket.data_accepted_dt }}</small>
+        <li class="list-group-item d-column justify-content-between lh-sm">
+          <div class="d-flex w-100 justify-content-between">
+            <h6 class="my-0">Gen3 Accepted</h6>
+            <small class="text-muted"><strong>{{ ticket.data_accepted_by }}</strong></small>
+          </div>
+          <div class="d-flex w-100 justify-content-end">
+            <small class="text-muted text-end">{{ ticket.data_accepted_dt }}</small>
+          </div>
         </li>
         {% endif %} {% if ticket.ticket_rejected_dt %}
         <li class="list-group-item flex-column justify-content-between lh-sm">
           <div class="d-flex w-100 justify-content-between">
-            <h6 class="my-0">Data Intake Form Rejected Date</h6>
-            <small class="text-muted">{{ ticket.ticket_rejected_dt }}</small>
+            <h6 class="my-0">Data Intake Form Rejected</h6>
+            <small class="text-muted"><strong>{{ ticket.ticket_rejected_by }}</strong></small>
+          </div>
+          <div class="d-flex w-100 justify-content-end">
+            <small class="text-muted text-end">{{ ticket.ticket_rejected_dt }}</small>
           </div>
           {% if ticket.ticket_review_comment %}
           <hr />
