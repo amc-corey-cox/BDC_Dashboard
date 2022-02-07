@@ -1,10 +1,11 @@
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import TemplateView
 from django.views.generic.list import ListView
 from django.urls import reverse_lazy
 
 from datetime import datetime, timezone
-from .models import Ticket, STATUS_TYPES
+from .models import Ticket, User, STATUS_TYPES
 from .mail import Mail
 
 
@@ -20,7 +21,7 @@ class CustodianInfoView(TemplateView):
     template_name = "tracker/custodian_instructions.html"
 
 
-class TicketCreate(CreateView):
+class TicketCreate(LoginRequiredMixin, CreateView):
     model = Ticket
     fields = [
         "email",
@@ -38,12 +39,14 @@ class TicketCreate(CreateView):
 
     # send email if form is valid
     def form_valid(self, form):
-        ticket_obj = form.save(commit=True)
+        ticket_obj = form.save(commit=False)
+        ticket_obj.created_by = self.request.user
+        ticket_obj.save()
         Mail(ticket_obj, "Created").send()
         return super().form_valid(form)
 
 
-class TicketUpdate(UpdateView):
+class TicketUpdate(LoginRequiredMixin, UpdateView):
     model = Ticket
     fields = [
         "name",
@@ -71,29 +74,37 @@ class TicketUpdate(UpdateView):
     def form_valid(self, form):
         status_update = self.request.POST.get("status_update")
         ticket = form.save(commit=False)
+        user = self.request.user.email
 
         # check which status button was clicked
         if status_update == "Approve Ticket":
             # set status to "Awaiting NHLBI Cloud Bucket Creation"
             ticket.ticket_approved_dt = datetime.now(timezone.utc)
+            ticket.ticket_approved_by = user
         if status_update == "Reject Ticket":
             # add rejected timestamp
             ticket.ticket_rejected_dt = datetime.now(timezone.utc)
+            ticket.ticket_rejected_by = user
         if status_update == "Mark as Bucket Created":
             # set status to "Awaiting Data Custodian Upload Start"
             ticket.bucket_created_dt = datetime.now(timezone.utc)
+            ticket.bucket_created_by = user
         if status_update == "Mark as Data Upload Started":
             # set status to "Awaiting Data Custodian Upload Complete"
             ticket.data_uploaded_started_dt = datetime.now(timezone.utc)
+            ticket.data_uploaded_started_by = user
         if status_update == "Mark as Data Upload Completed":
             # set status to "Awaiting Gen3 Acceptance"
             ticket.data_uploaded_completed_dt = datetime.now(timezone.utc)
+            ticket.data_uploaded_completed_by = user
         if status_update == "Mark as Gen3 Approved":
             # set status to "Gen3 Accepted"
             ticket.data_accepted_dt = datetime.now(timezone.utc)
+            ticket.data_accepted_by = user
         if status_update == "Revive Ticket":
             # remove rejected timestamp
             ticket.ticket_rejected_dt = None
+            ticket.ticket_rejected_by = user
 
         ticket.save()
         self.object = ticket
@@ -103,7 +114,7 @@ class TicketUpdate(UpdateView):
         return super().form_valid(form)
 
 
-class TicketDelete(DeleteView):
+class TicketDelete(LoginRequiredMixin, DeleteView):
     model = Ticket
     success_url = reverse_lazy("tracker:tickets-list")
 
@@ -115,7 +126,7 @@ class TicketDelete(DeleteView):
         return super().delete(request, *args, **kwargs)
 
 
-class TicketsList(ListView):
+class TicketsList(LoginRequiredMixin, ListView):
     model = Ticket
     context_object_name = "tickets"
 
@@ -171,9 +182,11 @@ class TicketsList(ListView):
         return context
 
 
-class RejectedTicketsList(ListView):
-    model = Ticket
+class RejectedTicketsList(PermissionRequiredMixin, ListView):
+    permission_required = "is_staff"
     template_name = "tracker/ticket_rejected_list.html"
+    model = Ticket
+
     context_object_name = "tickets"
 
     def get_context_data(self, **kwargs):
@@ -197,3 +210,8 @@ class RejectedTicketsList(ListView):
                 context["rejected"].append(object)
 
         return context
+
+
+class UserProfile(TemplateView):
+    template_name = "tracker/profile.html"
+    model = User
