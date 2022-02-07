@@ -13,6 +13,8 @@ google-cloud-secret-manager = "*"
 psycopg2-binary = "*"
 whitenoise = "*"
 django-sendgrid-v5 = "*"
+django-allauth = "*"
+django-debug-toolbar = "*"
 
 [dev-packages]
 pytest = "*"
@@ -25,3 +27,4 @@ python_version = "3.9"
 [scripts]
 server = "python manage.py runserver"
 black = "black ."
+print-reqs = "pipfile2req"

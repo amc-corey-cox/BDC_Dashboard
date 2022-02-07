@@ -34,7 +34,7 @@
       </a>
       <hr />
       <div class="list-group">
-        <a class="list-group-item list-group-item-action" href="/"> Home </a>
+        <a class="list-group-item list-group-item-action" href="/">Home</a>
         <a class="list-group-item list-group-item-action" href="/list">
           Ticket Dashboard
         </a>
@@ -48,6 +48,19 @@
         <a class="list-group-item list-group-item-action" href="/user_docs">
           User Documentation
         </a>
+      </div>
+      <hr />
+      <div class="list-group-item list-group-item-success d-column text-center">
+        {% if user.is_authenticated %}
+        <strong>{{ user.email }}</strong>
+        <a href="/accounts/logout" class="btn btn-danger btn-md form-element" role="button">
+          Logout
+        </a>
+        {% else %}
+        {% load socialaccount %}
+        <a href="{% provider_login_url 'google' process='login' %}" class="btn btn-success btn-md form-element"
+          role="button">Google Login</a>
+        {% endif %}
       </div>
     </div>
     <div id="content">

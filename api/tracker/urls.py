@@ -5,7 +5,7 @@ from . import views
 app_name = "tracker"
 urlpatterns = [
     # path("/", views.IndexView.as_view(), name="index"),
-    path("", views.TicketsList.as_view(), name="tickets-list"),
+    path("", views.UserProfile.as_view(), name="profile"),
     path("create/", views.TicketCreate.as_view(), name="ticket-create"),
     path("<int:pk>/update/", views.TicketUpdate.as_view(), name="ticket-update"),
     path("<int:pk>/delete/", views.TicketDelete.as_view(), name="ticket-delete"),
