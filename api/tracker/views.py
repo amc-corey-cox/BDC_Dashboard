@@ -1,4 +1,8 @@
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import (
+    LoginRequiredMixin,
+    PermissionRequiredMixin,
+    UserPassesTestMixin,
+)
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import TemplateView
 from django.views.generic.list import ListView
@@ -74,37 +78,40 @@ class TicketUpdate(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         status_update = self.request.POST.get("status_update")
         ticket = form.save(commit=False)
-        user = self.request.user.email
+
+        # extract user data
+        user = self.request.user
+        email = user.email
 
         # check which status button was clicked
         if status_update == "Approve Ticket":
             # set status to "Awaiting NHLBI Cloud Bucket Creation"
             ticket.ticket_approved_dt = datetime.now(timezone.utc)
-            ticket.ticket_approved_by = user
+            ticket.ticket_approved_by = email
         if status_update == "Reject Ticket":
             # add rejected timestamp
             ticket.ticket_rejected_dt = datetime.now(timezone.utc)
-            ticket.ticket_rejected_by = user
+            ticket.ticket_rejected_by = email
         if status_update == "Mark as Bucket Created":
             # set status to "Awaiting Data Custodian Upload Start"
             ticket.bucket_created_dt = datetime.now(timezone.utc)
-            ticket.bucket_created_by = user
+            ticket.bucket_created_by = email
         if status_update == "Mark as Data Upload Started":
             # set status to "Awaiting Data Custodian Upload Complete"
             ticket.data_uploaded_started_dt = datetime.now(timezone.utc)
-            ticket.data_uploaded_started_by = user
+            ticket.data_uploaded_started_by = email
         if status_update == "Mark as Data Upload Completed":
             # set status to "Awaiting Gen3 Acceptance"
             ticket.data_uploaded_completed_dt = datetime.now(timezone.utc)
-            ticket.data_uploaded_completed_by = user
+            ticket.data_uploaded_completed_by = email
         if status_update == "Mark as Gen3 Approved":
             # set status to "Gen3 Accepted"
             ticket.data_accepted_dt = datetime.now(timezone.utc)
-            ticket.data_accepted_by = user
+            ticket.data_accepted_by = email
         if status_update == "Revive Ticket":
             # remove rejected timestamp
             ticket.ticket_rejected_dt = None
-            ticket.ticket_rejected_by = user
+            ticket.ticket_rejected_by = email
 
         ticket.save()
         self.object = ticket
@@ -114,7 +121,8 @@ class TicketUpdate(LoginRequiredMixin, UpdateView):
         return super().form_valid(form)
 
 
-class TicketDelete(LoginRequiredMixin, DeleteView):
+class TicketDelete(PermissionRequiredMixin, DeleteView):
+    permission_required = "is_staff"
     model = Ticket
     success_url = reverse_lazy("tracker:tickets-list")
 
@@ -133,6 +141,7 @@ class TicketsList(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super(ListView, self).get_context_data(**kwargs)
         queryset = self.object_list
+        user = self.request.user
 
         # generate a list of status types
         context["awaiting_review"] = []
@@ -145,6 +154,10 @@ class TicketsList(LoginRequiredMixin, ListView):
 
         # iterate through all tickets and sort accordingly
         for object in queryset:
+            # only add object to list if user has perms
+            if object.created_by.email != user.email and not user.is_staff:
+                continue
+
             # calculate last updated and set colors
             object.last_updated = (
                 datetime.now(timezone.utc) - object.get_ticket_status[0]
