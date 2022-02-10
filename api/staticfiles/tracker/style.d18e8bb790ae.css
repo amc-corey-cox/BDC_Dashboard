@@ -59,7 +59,6 @@ html {
 
 #footer {
   /* position: fixed; */
-  background-color: var(--color-background-grey);
 }
 .footer-row {
   padding: 1vw;

@@ -58,11 +58,10 @@ html {
 }
 
 #footer {
-  /* position: fixed; */
-  background-color: var(--color-background-grey);
+  position: fixed;
 }
 .footer-row {
-  padding: 1vw;
+  padding: 2vw;
 }
 .footer-item {
   display: inline-block;
