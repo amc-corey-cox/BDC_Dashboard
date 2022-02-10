@@ -1,11 +1,11 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from django.contrib.sites.models import Site
+from simple_history.admin import SimpleHistoryAdmin
 
-from .models import User
+from .models import User, Ticket
 
 
-class UserAdmin(BaseUserAdmin):
+class UserAdmin(BaseUserAdmin, SimpleHistoryAdmin):
     fieldsets = (
         (None, {"fields": ("email", "password", "name", "last_login")}),
         (
@@ -33,3 +33,4 @@ class UserAdmin(BaseUserAdmin):
 
 
 admin.site.register(User, UserAdmin)
+admin.site.register(Ticket, SimpleHistoryAdmin)

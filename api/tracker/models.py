@@ -146,6 +146,7 @@ class Ticket(models.Model):
         default="",
     )
 
+    # time date fields
     created_dt = models.DateTimeField(verbose_name="Created Date", auto_now_add=True)
     ticket_approved_dt = models.DateTimeField(
         verbose_name="Intake Form Approved Date",
@@ -178,6 +179,7 @@ class Ticket(models.Model):
         blank=True,
     )
 
+    # append name to log
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     ticket_approved_by = models.EmailField(
         verbose_name="Ticket approved by", default=""
@@ -194,6 +196,7 @@ class Ticket(models.Model):
     )
     data_accepted_by = models.EmailField(verbose_name="Data accepted by", default="")
 
+    # django-simple-history
     history = HistoricalRecords()
 
     def get_absolute_url(self):
