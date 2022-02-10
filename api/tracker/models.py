@@ -8,6 +8,7 @@ from django.contrib.auth.models import (
     BaseUserManager,
     PermissionsMixin,
 )
+from simple_history.models import HistoricalRecords
 
 # Ticket
 # ------
@@ -193,6 +194,8 @@ class Ticket(models.Model):
     )
     data_accepted_by = models.EmailField(verbose_name="Data accepted by", default="")
 
+    history = HistoricalRecords()
+
     def get_absolute_url(self):
         return reverse("tracker:ticket-update", kwargs={"pk": self.pk})
 
@@ -259,6 +262,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_superuser = models.BooleanField(default=False)
     last_login = models.DateTimeField(null=True, blank=True)
     date_joined = models.DateTimeField(auto_now_add=True)
+
+    history = HistoricalRecords()
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
