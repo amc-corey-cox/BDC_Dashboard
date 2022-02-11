@@ -11,7 +11,14 @@
     <!-- Right-side util -->
     <div class="col-md-5 col-lg-4 order-md-last">
       <!-- Handle Errors -->
-      {% if form.errors %}
+      {% if form.non_field_errors %}
+      <h4 class="d-flex justify-content-between align-items-center mb-3">
+        <span class="badge bg-danger rounded-pill">Insufficient Permissions</span>
+        {% for error in form.non_field_errors %}
+        <h4 class="text-center"><strong>{{ error }}</strong></h4>
+        {% endfor %}
+      </h4>
+      {% elif form.errors %}
       <h4 class="d-flex justify-content-between align-items-center mb-3">
         <span class="badge bg-danger rounded-pill">{{ form.errors|length }} Error(s)</span>
         <h6 class="text-muted">Please fix the following errors</h6>
@@ -123,27 +130,30 @@
 
       <!-- Button Logic -->
       <div class="row my-2 px-5">
-        {% if "Awaiting NHLBI Review" in status %}
+        {% if "Awaiting NHLBI Review" in status and staff %}
         <textarea class="form-control mb-2" id="{{ form.ticket_review_comment.auto_id }}"
           name="{{ form.ticket_review_comment.name }}" placeholder="{{ form.ticket_review_comment.help_text }}"
           rows="9">{{ form.ticket_review_comment.value }}</textarea>
         <input class="btn btn-success btn-md mb-2" type="submit" name="status_update" value="Approve Ticket" />
         <input class="btn btn-danger btn-md" type="submit" name="status_update" value="Reject Ticket" />
-        {% endif %} {% if "Awaiting NHLBI Cloud Bucket Creation" in status %}
+        {% endif %} {% if "Awaiting NHLBI Cloud Bucket Creation" in status and staff %}
+        <textarea class="form-control mb-2" id="{{ form.ticket_bucket_name.auto_id }}"
+          name="{{ form.ticket_bucket_name.name }}" placeholder="{{ form.ticket_bucket_name.help_text }}"
+          rows="3">{{ form.ticket_bucket_name.value }}</textarea>
         <input class="btn btn-success btn-md mb-2" type="submit" name="status_update" value="Mark as Bucket Created" />
-        {% endif %} {% if "Awaiting Data Custodian Upload Start" in status %}
+        {% endif %} {% if "Awaiting Data Custodian Upload Start" in status and not staff %}
         <input class="btn btn-success btn-md mb-2" type="submit" name="status_update"
           value="Mark as Data Upload Started" />
-        {% endif %} {% if "Awaiting Data Custodian Upload Complete" in status %}
+        {% endif %} {% if "Awaiting Data Custodian Upload Complete" in status and not staff %}
         <input class="btn btn-success btn-md mb-2" type="submit" name="status_update"
           value="Mark as Data Upload Completed" />
-        {% endif %} {% if "Awaiting Gen3 Acceptance" in status %}
+        {% endif %} {% if "Awaiting Gen3 Acceptance" in status and staff %}
         <input class="btn btn-success btn-md mb-2" type="submit" name="status_update" value="Mark as Gen3 Approved" />
-        {% endif %} {% if "Data Intake Form Rejected" in status %}
+        {% endif %} {% if "Data Intake Form Rejected" in status and staff %}
         <input class="btn btn-success btn-md mb-2" type="submit" name="status_update" value="Revive Ticket" />
         {% endif %}
       </div>
-      {% if object %}
+      {% if object and staff or "Awaiting NHLBI Review" in status %}
       <hr />
       <div class="row px-5">
         <button class="btn btn-warning btn-md mb-2 ticket-summary" type="button" onclick="show_form()">
@@ -184,7 +194,6 @@
             id="{{ form.organization.auto_id }}" name="{{ form.organization.name }}"
             placeholder="{{ form.organization.help_text }}" value="{{ form.organization.value }}" />
         </div>
-
         <hr class="my-4" />
       </div>
 
@@ -308,7 +317,6 @@
           <p>{{ form.email.value }}</p>
         </div>
 
-
         <!-- Organization -->
         <div class="col-12 card text-center">
           <div class="card-header">
@@ -419,7 +427,4 @@
 </script>
 {% endif %}
 
-
-<!-- DEBUG -->
-<!-- {{ form.as_table }} -->
 {% endblock %}
