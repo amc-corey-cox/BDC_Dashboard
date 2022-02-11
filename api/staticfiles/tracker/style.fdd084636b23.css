@@ -62,12 +62,12 @@ html {
   background-color: var(--color-background-grey);
   padding: 1vw;
 }
-#footer a:link {
+/* #footer a:link {
   color: var(--color-catalyst-blue);
 }
 #footer a:visited {
   color: var(--color-catalyst-blue);
-}
+} */
 .footer-item {
   display: inline-block;
   color: var(--color-black);
@@ -111,8 +111,7 @@ html {
 }
 
 .btn-cancel {
-  color: var(--color-catalyst-blue);
-  background-color: var(--color-background-grey);
+  color: var(--color-primary);
   text-decoration: underline;
 }
 .required {

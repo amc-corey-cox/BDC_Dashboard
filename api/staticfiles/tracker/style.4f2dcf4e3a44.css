@@ -112,7 +112,6 @@ html {
 
 .btn-cancel {
   color: var(--color-catalyst-blue);
-  background-color: var(--color-background-grey);
   text-decoration: underline;
 }
 .required {

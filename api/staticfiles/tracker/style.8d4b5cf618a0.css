@@ -60,17 +60,12 @@ html {
 #footer {
   /* position: fixed; */
   background-color: var(--color-background-grey);
+}
+.footer-row {
   padding: 1vw;
-}
-#footer a:link {
-  color: var(--color-catalyst-blue);
-}
-#footer a:visited {
-  color: var(--color-catalyst-blue);
 }
 .footer-item {
   display: inline-block;
-  color: var(--color-black);
   /* padding-left: 5px;
   padding-right: 5px; */
 }
@@ -111,8 +106,7 @@ html {
 }
 
 .btn-cancel {
-  color: var(--color-catalyst-blue);
-  background-color: var(--color-background-grey);
+  color: var(--color-primary);
   text-decoration: underline;
 }
 .required {

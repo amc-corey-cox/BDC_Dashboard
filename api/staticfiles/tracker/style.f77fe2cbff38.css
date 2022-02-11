@@ -111,8 +111,7 @@ html {
 }
 
 .btn-cancel {
-  color: var(--color-catalyst-blue);
-  background-color: var(--color-background-grey);
+  color: var(--color-primary);
   text-decoration: underline;
 }
 .required {

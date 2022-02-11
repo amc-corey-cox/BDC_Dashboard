@@ -16,17 +16,20 @@ label {
 }
 
 :root {
-  --color-white: #eee;
+  --color-nhlbi-red: #c0143c;
+  --color-nhlbi-grey: #616265;
+
+  --color-white: #fff;
   --color-black: #000;
-  --color-light-gray: #a0a2a4;
-  --color-primary: #0066cc;
-  --color-secondary: #00ccff;
-  --color-tertiary: #00ffcc;
-  --color-quaternary: #ccffcc;
+  --color-background-grey: #f4f4f6;
+  --color-catalyst-blue: #1a568c;
+  --color-catalyst-dark-blue: #12385a;
+  --color-catalyst-dark-grey: #393939;
+  --color-catalyst-bright-blue: #41abf5;
+
   --color-crimson: #b33243;
   --color-crimson-dark: #5a2a38;
-  --color-pale-yellow: #ffbf00;
-  --color-pale-red: #ff4000;
+  --color-light-gray: #a0a2a4;
 }
 html {
   font-family: "Montserrat, sans-serif";
@@ -44,7 +47,6 @@ html {
   z-index: 999;
   position: fixed;
   top: 0;
-  bottom: 0;
 }
 .side-nav img {
   width: 18vw;
@@ -53,6 +55,24 @@ html {
   margin-right: auto;
   top: 0;
   padding: 1;
+}
+
+#footer {
+  /* position: fixed; */
+  background-color: var(--color-background-grey);
+  padding: 1vw;
+}
+#footer a:link {
+  color: var(--color-catalyst-blue);
+}
+#footer a:visited {
+  color: var(--color-catalyst-blue);
+}
+.footer-item {
+  display: inline-block;
+  color: var(--color-black);
+  /* padding-left: 5px;
+  padding-right: 5px; */
 }
 
 #content {
@@ -91,7 +111,8 @@ html {
 }
 
 .btn-cancel {
-  color: var(--color-primary);
+  color: var(--color-catalyst-blue);
+  background-color: var(--color-background-grey);
   text-decoration: underline;
 }
 .required {
