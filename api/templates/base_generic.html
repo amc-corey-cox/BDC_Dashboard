@@ -28,47 +28,51 @@
 
 <body class="d-flex flex-column min-vh-100">
   <div class="wrapper">
-    <div class="side-nav p-2">
-      <a href="/">
-        <img class="logo" src="{% static 'tracker/bio.svg' %}" alt="bdcat icon" />
-      </a>
-      <hr />
-      <div class="list-group">
-        <a class="list-group-item list-group-item-action" href="/">Home</a>
-        <a class="list-group-item list-group-item-action" href="/list">
-          Ticket Dashboard
-        </a>
-        <a class="list-group-item list-group-item-action" href="/create">
-          Create Ticket
+    <nav>
+      <div class="side-nav p-2">
+        <a href="/">
+          <img class="logo" src="{% static 'tracker/bio.svg' %}" alt="bdcat icon" />
         </a>
         <hr />
-        <a class="list-group-item list-group-item-action" href="/custodian_instructions">
-          Data Custodian Instructions
-        </a>
-        <a class="list-group-item list-group-item-action" href="/user_docs">
-          User Documentation
-        </a>
+        <div class="list-group">
+          <a class="list-group-item list-group-item-action" href="/">Home</a>
+          <a class="list-group-item list-group-item-action" href="/list">
+            Ticket Dashboard
+          </a>
+          <a class="list-group-item list-group-item-action" href="/create">
+            Create Ticket
+          </a>
+          <hr />
+          <a class="list-group-item list-group-item-action" href="/custodian_instructions">
+            Data Custodian Instructions
+          </a>
+          <a class="list-group-item list-group-item-action" href="/user_docs">
+            User Documentation
+          </a>
+        </div>
+        <hr />
+        <div class="list-group-item list-group-item-success d-column text-center">
+          {% if user.is_authenticated %}
+          <strong>{{ user.email }}</strong>
+          <br>
+          <a href="/accounts/logout" class="btn btn-danger btn-md form-element" role="button">
+            Logout
+          </a>
+          {% else %}
+          {% load socialaccount %}
+          <a href="{% provider_login_url 'google' process='login' %}" class="btn btn-success btn-md form-element"
+            role="button">Google Login</a>
+          {% endif %}
+        </div>
       </div>
-      <hr />
-      <div class="list-group-item list-group-item-success d-column text-center">
-        {% if user.is_authenticated %}
-        <strong>{{ user.email }}</strong>
-        <br>
-        <a href="/accounts/logout" class="btn btn-danger btn-md form-element" role="button">
-          Logout
-        </a>
-        {% else %}
-        {% load socialaccount %}
-        <a href="{% provider_login_url 'google' process='login' %}" class="btn btn-success btn-md form-element"
-          role="button">Google Login</a>
-        {% endif %}
-      </div>
-    </div>
+    </nav>
 
-    <div id="content">
-      <h1 id="titleHeader" class="display-4">Data Submission Tracker</h1>
-      {% block content %}{% endblock %}
-    </div>
+    <main>
+      <div id="content">
+        <h1 id="titleHeader" class="display-4">Data Submission Tracker</h1>
+        {% block content %}{% endblock %}
+      </div>
+    </main>
 
     <footer id="footer">
       <span class="footer-item">
