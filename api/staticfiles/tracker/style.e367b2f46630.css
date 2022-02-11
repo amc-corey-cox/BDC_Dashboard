@@ -59,18 +59,14 @@ html {
 
 #footer {
   /* position: fixed; */
+  color: var(--color-black);
   background-color: var(--color-background-grey);
   padding: 1vw;
 }
-#footer a:link {
-  color: var(--color-catalyst-blue);
-}
-#footer a:visited {
-  color: var(--color-catalyst-blue);
+.footer-row {
 }
 .footer-item {
   display: inline-block;
-  color: var(--color-black);
   /* padding-left: 5px;
   padding-right: 5px; */
 }

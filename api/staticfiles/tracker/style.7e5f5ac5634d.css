@@ -62,10 +62,10 @@ html {
   background-color: var(--color-background-grey);
   padding: 1vw;
 }
-#footer a:link {
+footer.a:link {
   color: var(--color-catalyst-blue);
 }
-#footer a:visited {
+footer.a:visited {
   color: var(--color-catalyst-blue);
 }
 .footer-item {
