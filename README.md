@@ -53,6 +53,18 @@ You must also [set up a OAuth client ID credential](https://developers.google.co
 
 > NOTE: The `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` variables should be set in the `.env` file
 
+### Admin Panel
+
+NHLBI Admins are able to view all tickets, but Data Custodians are only able to view their own tickets.
+In the code, Admins are `staff`.
+To access the Admin panel visit [`http://localhost:8000/admin`](http://localhost:8000/admin) as a `superuser` member
+
+Go to the "Tracker/User" panel and select the user you want to grant admin permissions.
+You should only need to check the `Is staff` permission for HNLBI Admins.
+If you would like to allow that user to access the Admin panel, check the `Is superuser` permission as well
+
+> NOTE: Make sure you save your changes at the bottom
+
 ### Docker Compose
 
 Docker is used to standardize the development environment

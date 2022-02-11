@@ -1,11 +1,12 @@
 from django.contrib.auth.mixins import (
     LoginRequiredMixin,
     PermissionRequiredMixin,
-    UserPassesTestMixin,
 )
+from django import forms
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import TemplateView
 from django.views.generic.list import ListView
+from django.forms.utils import ErrorList
 from django.urls import reverse_lazy
 
 from datetime import datetime, timezone
@@ -71,6 +72,7 @@ class TicketUpdate(LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super(UpdateView, self).get_context_data(**kwargs)
         context["status"] = self.object.get_ticket_status
+        context["staff"] = self.request.user.is_staff
 
         return context
 
@@ -82,36 +84,54 @@ class TicketUpdate(LoginRequiredMixin, UpdateView):
         # extract user data
         user = self.request.user
         email = user.email
+        staff = user.is_staff
 
-        # check which status button was clicked
-        if status_update == "Approve Ticket":
-            # set status to "Awaiting NHLBI Cloud Bucket Creation"
-            ticket.ticket_approved_dt = datetime.now(timezone.utc)
-            ticket.ticket_approved_by = email
-        if status_update == "Reject Ticket":
-            # add rejected timestamp
-            ticket.ticket_rejected_dt = datetime.now(timezone.utc)
-            ticket.ticket_rejected_by = email
-        if status_update == "Mark as Bucket Created":
-            # set status to "Awaiting Data Custodian Upload Start"
-            ticket.bucket_created_dt = datetime.now(timezone.utc)
-            ticket.bucket_created_by = email
-        if status_update == "Mark as Data Upload Started":
-            # set status to "Awaiting Data Custodian Upload Complete"
-            ticket.data_uploaded_started_dt = datetime.now(timezone.utc)
-            ticket.data_uploaded_started_by = email
-        if status_update == "Mark as Data Upload Completed":
-            # set status to "Awaiting Gen3 Acceptance"
-            ticket.data_uploaded_completed_dt = datetime.now(timezone.utc)
-            ticket.data_uploaded_completed_by = email
-        if status_update == "Mark as Gen3 Approved":
-            # set status to "Gen3 Accepted"
-            ticket.data_accepted_dt = datetime.now(timezone.utc)
-            ticket.data_accepted_by = email
-        if status_update == "Revive Ticket":
-            # remove rejected timestamp
-            ticket.ticket_rejected_dt = None
-            ticket.ticket_rejected_by = email
+        if staff:
+            if status_update == "Approve Ticket":
+                # set status to "Awaiting NHLBI Cloud Bucket Creation"
+                ticket.ticket_approved_dt = datetime.now(timezone.utc)
+                ticket.ticket_approved_by = email
+            elif status_update == "Reject Ticket":
+                # add rejected timestamp
+                ticket.ticket_rejected_dt = datetime.now(timezone.utc)
+                ticket.ticket_rejected_by = email
+            elif status_update == "Mark as Bucket Created":
+                # set status to "Awaiting Data Custodian Upload Start"
+                ticket.bucket_created_dt = datetime.now(timezone.utc)
+                ticket.bucket_created_by = email
+            elif status_update == "Mark as Gen3 Approved":
+                # set status to "Gen3 Accepted"
+                ticket.data_accepted_dt = datetime.now(timezone.utc)
+                ticket.data_accepted_by = email
+            elif status_update == "Revive Ticket":
+                # remove rejected timestamp
+                ticket.ticket_rejected_dt = None
+                ticket.ticket_rejected_by = email
+            elif status_update == None:
+                # if staff edits ticket
+                print("Ticket Updated!")
+            else:
+                form.errors[forms.forms.NON_FIELD_ERRORS] = ErrorList(
+                    ["Only Staff are allowed to perform this action"]
+                )
+        else:
+            if status_update == "Mark as Data Upload Started":
+                # set status to "Awaiting Data Custodian Upload Complete"
+                ticket.data_uploaded_started_dt = datetime.now(timezone.utc)
+                ticket.data_uploaded_started_by = email
+            elif status_update == "Mark as Data Upload Completed":
+                # set status to "Awaiting Gen3 Acceptance"
+                ticket.data_uploaded_completed_dt = datetime.now(timezone.utc)
+                ticket.data_uploaded_completed_by = email
+            elif (
+                status_update == None and ticket.get_ticket_status[1] == STATUS_TYPES[1]
+            ):
+                # if user edits ticket
+                print("Ticket Updated!")
+            else:
+                form.errors[forms.forms.NON_FIELD_ERRORS] = ErrorList(
+                    ["Only Data Custodians are allowed to perform this action"]
+                )
 
         ticket.save()
         self.object = ticket
