@@ -177,7 +177,7 @@
           <input type="text" class="form-control {% if form.name.errors %}is-invalid{% endif %}"
             id="{{ form.name.auto_id }}" name="{{ form.name.name }}" placeholder="{{ form.name.help_text }}"
             value="{{ form.name.value }}" required {% if form.name.errors %} aria-invalid aria-describedby="name_group"
-            {% endif %} aria-required />
+            {% endif %} aria-required="true" />
         </div>
         <div class="col-sm-6">
           <label for="{{ form.email.id_for_label }}" class="form-label"><span
@@ -185,7 +185,7 @@
           <input type="text" class="form-control {% if form.email.errors %}is-invalid aria-invalid{% endif %}"
             id="{{ form.email.auto_id }}" name="{{ form.email.name }}" placeholder="{{ form.email.label }}"
             value="{{ form.email.value }}" required {% if form.email.errors %} aria-invalid
-            aria-describedby="email_group" {% endif %} aria-required />
+            aria-describedby="email_group" {% endif %} aria-required="true" />
         </div>
 
         <!-- Organization -->
@@ -196,7 +196,7 @@
             id="{{ form.organization.auto_id }}" name="{{ form.organization.name }}"
             placeholder="{{ form.organization.help_text }}" value="{{ form.organization.value }}" required
             {% if form.organization.errors %} aria-invalid aria-describedby="organization_group" {% endif %}
-            aria-required />
+            aria-required="true" />
         </div>
         <hr class="my-4" />
       </div>
@@ -211,7 +211,7 @@
             id="{{ form.study_name.auto_id }}" name="{{ form.study_name.name }}"
             placeholder="{{ form.study_name.help_text }}" value="{{ form.study_name.value }}" required
             {% if form.study_name.errors %} aria-invalid aria-describedby="study_name_group" {% endif %}
-            aria-required />
+            aria-required="true" />
         </div>
 
         <!-- Study ID and Consent Code -->
@@ -221,7 +221,7 @@
           <input type="text" class="form-control {% if form.study_id.errors %}is-invalid aria-invalid{% endif %}"
             id="{{ form.study_id.auto_id }}" name="{{ form.study_id.name }}" placeholder="{{ form.study_id.label }}"
             value="{{ form.study_id.value }}" required {% if form.study_id.errors %} aria-invalid
-            aria-describedby="study_id_group" {% endif %} aria-required />
+            aria-describedby="study_id_group" {% endif %} aria-required="true" />
           <div class="form-text">{{ form.study_id.help_text }}</div>
         </div>
         <div class="col-sm-6">
@@ -231,7 +231,7 @@
               {% if form.consent_code.errors %}is-invalid aria-invalid{% endif %}" id="{{ form.consent_code.auto_id }}"
             name="{{ form.consent_code.name }}" placeholder="{{ form.consent_code.label }}"
             value="{{ form.consent_code.value }}" required {% if form.consent_code.errors %} aria-invalid
-            aria-describedby="consent_code_group" {% endif %} aria-required />
+            aria-describedby="consent_code_group" {% endif %} aria-required="true" />
           <div class="form-text">{{ form.consent_code.help_text }}</div>
         </div>
         <hr class="my-4" />
@@ -247,8 +247,8 @@
             class="form-control {% if form.dataset_description.errors %}is-invalid aria-invalid{% endif %}"
             id="{{ form.dataset_description.auto_id }}" name="{{ form.dataset_description.name }}"
             placeholder="{{ form.dataset_description.help_text }}" rows="12" {% if form.dataset_description.errors %}
-            aria-invalid aria-describedby="dataset_description_group"
-            {% endif %}>{{ form.dataset_description.value }}</textarea>
+            aria-invalid aria-describedby="dataset_description_group" {% endif %}
+            aria-required="false">{{ form.dataset_description.value }}</textarea>
         </div>
 
         <!-- GMail and AWS-->
@@ -257,7 +257,8 @@
           <input type="text" class="form-control {% if form.google_email.errors %}is-invalid aria-invalid{% endif %}"
             id="{{ form.google_email.auto_id }}" name="{{ form.google_email.name }}"
             placeholder="{{ form.google_email.label }}" value="{{ form.google_email.value }}"
-            {% if form.google_email.errors %} aria-invalid aria-describedby="google_email_group" {% endif %} />
+            {% if form.google_email.errors %} aria-invalid aria-describedby="google_email_group" {% endif %}
+            aria-required="false" />
           <div class="form-text">{{ form.google_email.help_text }}</div>
         </div>
         <div class="col-sm-6">
@@ -265,7 +266,8 @@
           <input type="text" class="form-control {% if form.aws_iam.errors %}is-invalid aria-invalid{% endif %}"
             id="{{ form.aws_iam.auto_id }}" name="{{ form.aws_iam.name }}"
             placeholder="arn:aws:iam::123456789012:user/username" value="{{ form.aws_iam.value }}"
-            {% if form.aws_iam.errors %} aria-invalid aria-describedby="aws_iam_group" {% endif %} />
+            {% if form.aws_iam.errors %} aria-invalid aria-describedby="aws_iam_group" {% endif %}
+            aria-required="false" />
           <div class="form-text">{{ form.aws_iam.help_text }}</div>
         </div>
 
@@ -277,7 +279,7 @@
             <input type="text" class="form-control {% if form.data_size.errors %}is-invalid aria-invalid{% endif %}"
               id="{{ form.data_size.auto_id }}" name="{{ form.data_size.name }}" placeholder="100 GB"
               value="{{ form.data_size.value }}" required {% if form.data_size.errors %} aria-invalid
-              aria-describedby="data_size_group" {% endif %} aria-required />
+              aria-describedby="data_size_group" {% endif %} aria-required="true" />
           </div>
           <div class="form-text">{{ form.data_size.help_text }}</div>
         </div>
