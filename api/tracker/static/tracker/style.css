@@ -115,6 +115,11 @@ html {
   background-color: var(--color-background-grey);
   text-decoration: underline;
 }
+.btn-google-logo {
+  width: 20px;
+  margin-bottom: 3px;
+  margin-right: 5px;
+}
 .required {
   font-weight: bold;
   color: red;
