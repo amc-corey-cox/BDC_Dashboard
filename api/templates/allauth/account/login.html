@@ -1,0 +1,21 @@
+{% extends "base_generic.html" %} {% load i18n %} {% load socialaccount %} {% load account socialaccount %}
+{% block content %}
+<h1 class="text-muted" style="text-align: center">Login</h1>
+
+<div class="card text-center m-2">
+  <div class="alert alert-danger text-center" role="alert">
+    <h2 class="display-4">
+      Warning!
+    </h2>
+  </div>
+  <div class="card-body mb-2">
+    You have accidentally accessed this page directly. Please use the Login button below
+  </div>
+  <div class="card-footer">
+    <a href="{% provider_login_url 'google' process='login' %}" class="btn btn-success btn-md form-element"
+      role="button">Google Login</a>
+  </div>
+</div>
+
+
+{% endblock %}
