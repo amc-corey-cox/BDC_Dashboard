@@ -1,16 +1,45 @@
-{% extends "base_generic.html" %} {% block content %}
+{% extends "base_generic.html" %} {% load socialaccount %} {% block content %}
 <h1 class="text-muted" style="text-align: center">Profile</h1>
-{% load socialaccount %}
 
 {% if user.is_authenticated %}
-<p>Welcome, You are logged in as <strong>{{ user.email }}</strong></p>
-<a href="/accounts/logout" class="btn btn-danger btn-md mb-2 form-element" role="button">
-  Logout
-</a>
-
+<div class="card text-center m-2">
+  <div class="alert alert-success text-center" role="alert">
+    <h2 class="display-4">
+      <strong>{{ user.email }}</strong>
+    </h2>
+  </div>
+  <div class="card-body">
+    <p>Role privileges:
+      {% if user.is_staff%} <strong>DATA ADMIN</strong> {% else %} <strong>DATA CUSTODIAN</strong> {% endif %}</p>
+    <p>Date Joined: <strong>{{ user.date_joined }}</strong></p>
+  </div>
+  <div class="card-footer">
+    <p>Last Login: <em>{{ user.last_login }}</em></p>
+    <a href="/accounts/logout" class="btn btn-danger btn-md mb-2 form-element" role="button">
+      Logout
+    </a>
+  </div>
+</div>
 {% else %}
-<a href="{% provider_login_url 'google' process='login' %}" class="btn btn-success btn-md mb-2 form-element"
-  role="button">Google Login</a>
+<div class="card text-center m-2">
+  <div class="alert alert-dark text-center" role="alert">
+    <h2 class="display-4">
+      Login
+    </h2>
+  </div>
+  <div class="card-body">
+    <p>Select third party login provider to continue</p>
+  </div>
+  <div class="card-footer">
+    <a href="{% provider_login_url 'google' process='login' %}" class="btn btn-success btn-md form-element"
+      role="button">Google</a>
+    <button class="btn btn-danger btn-md form-element" disabled>eRA Commons</button>
+  </div>
+</div>
 {% endif %}
+
+{% for user in users %}
+{{ user }}
+{% endfor %}
 
 {% endblock %}
