@@ -12,23 +12,23 @@
     <div class="col-md-5 col-lg-4 order-md-last" role="alert">
       <!-- Handle Errors -->
       {% if form.non_field_errors %}
-      <h4 class="d-flex justify-content-between align-items-center mb-3" aria-live="assertive">
-        <span class="badge bg-danger rounded-pill">Insufficient Permissions</span>
-        {% for error in form.non_field_errors %}
-        <h4 class="text-center"><strong>{{ error }}</strong></h4>
-        {% endfor %}
-      </h4>
+      <h2 class="text-center" aria-live="polite">
+        <div class="badge bg-danger rounded-pill">Insufficient Permissions</div>
+      </h2>
+      {% for error in form.non_field_errors %}
+      <h3 class="text-center"><strong>{{ error }}</strong></h3>
+      {% endfor %}
       {% elif form.errors %}
-      <h4 class="d-flex justify-content-between align-items-center mb-3" aria-live="polite">
-        <span class="badge bg-danger rounded-pill">{{ form.errors|length }} Error(s)</span>
-        <h5 class="text-muted">Please fix the following errors</h5>
-      </h4>
+      <h2 class="text-center" aria-live="polite">
+        <div class="badge bg-danger rounded-pill">{{ form.errors|length }} Error{% if form.errors %}s{% endif %}</div>
+      </h2>
+      <h3 class="text-muted text-center">Please fix the following</h3>
       <ul class="list-group mb-3">
         {% for field in form %} {% if field.errors %}
-        <li id="{{ field.label }}_group" class="list-group-item d-flex justify-content-between lh-sm">
-          <h5 class="my-0">{{ field.label }}</h5>
+        <li class="list-group-item d-flex justify-content-between lh-sm">
+          <p class="h5 my-0">{{ field.label }}</p>
           {% for error in field.errors %}
-          <small class="text-muted">{{ error }}</small>
+          <small id="{{ field.auto_id }}_error_{{ forloop.counter }}" class="text-muted">{{ error }}</small>
           {% endfor %}
         </li>
         {% endif %} {% endfor %}
@@ -38,19 +38,19 @@
       <!-- Badge Logic -->
       {% if object is None %}
       <div class="d-flex justify-content-center mb-3">
-        <h3><span class="badge bg-info text-dark rounded-pill">Creating Ticket</span></h3>
+        <h2><span class="badge bg-info text-dark rounded-pill">Creating Ticket</span></h2>
       </div>
       {% else %}
       <div class="d-flex justify-content-center mb-3">
-        <h3><span class="badge bg-{{ status.2 }} rounded-pill">{{ status.1 }}</span></h3>
+        <h2><span class="badge bg-{{ status.2 }} rounded-pill">{{ status.1 }}</span></h2>
       </div>
 
       <!-- Logs -->
-      <h6 class="text-muted">Last Update: {{ ticket.get_ticket_status.0 }}</h6>
+      <p class="h5 text-muted">Last Update: {{ ticket.get_ticket_status.0 }}</p>
       <ul class="list-group mb-3">
         <li class="list-group-item d-column justify-content-between lh-sm">
           <div class="d-flex w-100 justify-content-between">
-            <h6 class="my-0">Created By</h6>
+            <p class="h6 my-0">Created By</p>
             <small class="text-muted"><strong>{{ ticket.created_by }}</strong></small>
           </div>
           <div class="d-flex w-100 justify-content-end">
@@ -60,7 +60,7 @@
         {% if ticket.ticket_approved_dt %}
         <li class="list-group-item flex-column justify-content-between lh-sm">
           <div class="d-flex w-100 justify-content-between">
-            <h6 class="my-0">Data Intake Form Accepted</h6>
+            <p class="h6 my-0">Data Intake Form Accepted</p>
             <small class="text-muted"><strong>{{ ticket.ticket_approved_by }}</strong></small>
           </div>
           <div class="d-flex w-100 justify-content-end">
@@ -74,7 +74,7 @@
         {% endif %} {% if ticket.bucket_created_dt %}
         <li class="list-group-item d-column justify-content-between lh-sm">
           <div class="d-flex w-100 justify-content-between">
-            <h6 class="my-0">NHLBI Bucket Created</h6>
+            <p class="h6 my-0">NHLBI Bucket Created</p>
             <small class="text-muted"><strong>{{ ticket.bucket_created_by }}</strong></small>
           </div>
           <div class="d-flex w-100 justify-content-end">
@@ -84,7 +84,7 @@
         {% endif %} {% if ticket.data_uploaded_started_dt %}
         <li class="list-group-item d-column justify-content-between lh-sm">
           <div class="d-flex w-100 justify-content-between">
-            <h6 class="my-0">Data Upload Started</h6>
+            <p class="h6 my-0">Data Upload Started</p>
             <small class="text-muted"><strong>{{ ticket.data_uploaded_started_by }}</strong></small>
           </div>
           <div class="d-flex w-100 justify-content-end">
@@ -94,7 +94,7 @@
         {% endif %} {% if ticket.data_uploaded_completed_dt %}
         <li class="list-group-item d-column justify-content-between lh-sm">
           <div class="d-flex w-100 justify-content-between">
-            <h6 class="my-0">Data Upload Completed</h6>
+            <p class="h6 my-0">Data Upload Completed</p>
             <small class="text-muted"><strong>{{ ticket.data_uploaded_completed_by }}</strong></small>
           </div>
           <div class="d-flex w-100 justify-content-end">
@@ -104,7 +104,7 @@
         {% endif %} {% if ticket.data_accepted_dt %}
         <li class="list-group-item d-column justify-content-between lh-sm">
           <div class="d-flex w-100 justify-content-between">
-            <h6 class="my-0">Gen3 Accepted</h6>
+            <p class="h6 my-0">Gen3 Accepted</p>
             <small class="text-muted"><strong>{{ ticket.data_accepted_by }}</strong></small>
           </div>
           <div class="d-flex w-100 justify-content-end">
@@ -114,7 +114,7 @@
         {% endif %} {% if ticket.ticket_rejected_dt %}
         <li class="list-group-item flex-column justify-content-between lh-sm">
           <div class="d-flex w-100 justify-content-between">
-            <h6 class="my-0">Data Intake Form Rejected</h6>
+            <p class="h6 my-0">Data Intake Form Rejected</p>
             <small class="text-muted"><strong>{{ ticket.ticket_rejected_by }}</strong></small>
           </div>
           <div class="d-flex w-100 justify-content-end">
@@ -168,7 +168,7 @@
 
     <!-- Display Form -->
     <div class="col-md-7 col-lg-8 px-3">
-      <h4 class="mb-3 form-element">Contact Information</h4>
+      <h3 class="mb-3 form-element">Contact Information</h3>
       <div class="row g-3 form-element">
         <!-- Name and Email -->
         <div class="col-sm-6">
@@ -176,7 +176,8 @@
               class="required">*</span>{{ form.name.label }}</label>
           <input type="text" class="form-control {% if form.name.errors %}is-invalid{% endif %}"
             id="{{ form.name.auto_id }}" name="{{ form.name.name }}" placeholder="{{ form.name.help_text }}"
-            value="{{ form.name.value }}" required {% if form.name.errors %} aria-invalid aria-describedby="name_group"
+            value="{{ form.name.value }}" required {% if form.name.errors %} aria-invalid
+            aria-describedby="{% for error in form.name.errors %}id_name_error_{{ forloop.counter }}{% endfor %}"
             {% endif %} aria-required="true" />
         </div>
         <div class="col-sm-6">
@@ -185,7 +186,8 @@
           <input type="text" class="form-control {% if form.email.errors %}is-invalid aria-invalid{% endif %}"
             id="{{ form.email.auto_id }}" name="{{ form.email.name }}" placeholder="{{ form.email.label }}"
             value="{{ form.email.value }}" required {% if form.email.errors %} aria-invalid
-            aria-describedby="email_group" {% endif %} aria-required="true" />
+            aria-describedby="{% for error in form.email.errors %}id_email_error_{{ forloop.counter }}{% endfor %}"
+            {% endif %} aria-required="true" />
         </div>
 
         <!-- Organization -->
@@ -195,13 +197,14 @@
           <input type="text" class="form-control {% if form.organization.errors %}is-invalid aria-invalid{% endif %}"
             id="{{ form.organization.auto_id }}" name="{{ form.organization.name }}"
             placeholder="{{ form.organization.help_text }}" value="{{ form.organization.value }}" required
-            {% if form.organization.errors %} aria-invalid aria-describedby="organization_group" {% endif %}
-            aria-required="true" />
+            {% if form.organization.errors %} aria-invalid
+            aria-describedby="{% for error in form.organization.errors %}id_organization_error_{{ forloop.counter }}{% endfor %}"
+            {% endif %} aria-required="true" />
         </div>
         <hr class="my-4" />
       </div>
 
-      <h4 class="mb-3 form-element">Study Information</h4>
+      <h3 class="mb-3 form-element">Study Information</h3>
       <div class="row g-3 form-element">
         <!-- Study Name -->
         <div class="col-12">
@@ -210,8 +213,9 @@
           <input type="text" class="form-control {% if form.study_name.errors %}is-invalid aria-invalid{% endif %}"
             id="{{ form.study_name.auto_id }}" name="{{ form.study_name.name }}"
             placeholder="{{ form.study_name.help_text }}" value="{{ form.study_name.value }}" required
-            {% if form.study_name.errors %} aria-invalid aria-describedby="study_name_group" {% endif %}
-            aria-required="true" />
+            {% if form.study_name.errors %} aria-invalid
+            aria-describedby="{% for error in form.name.errors %}id_study_name_error_{{ forloop.counter }}{% endfor %}"
+            {% endif %} aria-required="true" />
         </div>
 
         <!-- Study ID and Consent Code -->
@@ -221,7 +225,8 @@
           <input type="text" class="form-control {% if form.study_id.errors %}is-invalid aria-invalid{% endif %}"
             id="{{ form.study_id.auto_id }}" name="{{ form.study_id.name }}" placeholder="{{ form.study_id.label }}"
             value="{{ form.study_id.value }}" required {% if form.study_id.errors %} aria-invalid
-            aria-describedby="study_id_group" {% endif %} aria-required="true" />
+            aria-describedby="{% for error in form.name.errors %}id_study_id_error_{{ forloop.counter }}{% endfor %}"
+            {% endif %} aria-required="true" />
           <div class="form-text">{{ form.study_id.help_text }}</div>
         </div>
         <div class="col-sm-6">
@@ -231,13 +236,14 @@
               {% if form.consent_code.errors %}is-invalid aria-invalid{% endif %}" id="{{ form.consent_code.auto_id }}"
             name="{{ form.consent_code.name }}" placeholder="{{ form.consent_code.label }}"
             value="{{ form.consent_code.value }}" required {% if form.consent_code.errors %} aria-invalid
-            aria-describedby="consent_code_group" {% endif %} aria-required="true" />
+            aria-describedby="{% for error in form.name.errors %}id_consent_code_error_{{ forloop.counter }}{% endfor %}"
+            {% endif %} aria-required="true" />
           <div class="form-text">{{ form.consent_code.help_text }}</div>
         </div>
         <hr class="my-4" />
       </div>
 
-      <h4 class="mb-3 form-element">Dataset Information</h4>
+      <h3 class="mb-3 form-element">Dataset Information</h3>
       <div class="row g-3 form-element">
         <!-- Dataset Description -->
         <div class="col-12">
@@ -247,8 +253,9 @@
             class="form-control {% if form.dataset_description.errors %}is-invalid aria-invalid{% endif %}"
             id="{{ form.dataset_description.auto_id }}" name="{{ form.dataset_description.name }}"
             placeholder="{{ form.dataset_description.help_text }}" rows="12" {% if form.dataset_description.errors %}
-            aria-invalid aria-describedby="dataset_description_group" {% endif %}
-            aria-required="false">{{ form.dataset_description.value }}</textarea>
+            aria-invalid
+            aria-describedby="{% for error in form.dataset_description.errors %}id_dataset_description_error_{{ forloop.counter }}{% endfor %}"
+            {% endif %} aria-required="false">{{ form.dataset_description.value }}</textarea>
         </div>
 
         <!-- GMail and AWS-->
@@ -257,8 +264,9 @@
           <input type="text" class="form-control {% if form.google_email.errors %}is-invalid aria-invalid{% endif %}"
             id="{{ form.google_email.auto_id }}" name="{{ form.google_email.name }}"
             placeholder="{{ form.google_email.label }}" value="{{ form.google_email.value }}"
-            {% if form.google_email.errors %} aria-invalid aria-describedby="google_email_group" {% endif %}
-            aria-required="false" />
+            {% if form.google_email.errors %} aria-invalid
+            aria-describedby="{% for error in form.google_email.errors %}id_google_email_error_{{ forloop.counter }}{% endfor %}"
+            {% endif %} aria-required="false" />
           <div class="form-text">{{ form.google_email.help_text }}</div>
         </div>
         <div class="col-sm-6">
@@ -266,8 +274,9 @@
           <input type="text" class="form-control {% if form.aws_iam.errors %}is-invalid aria-invalid{% endif %}"
             id="{{ form.aws_iam.auto_id }}" name="{{ form.aws_iam.name }}"
             placeholder="arn:aws:iam::123456789012:user/username" value="{{ form.aws_iam.value }}"
-            {% if form.aws_iam.errors %} aria-invalid aria-describedby="aws_iam_group" {% endif %}
-            aria-required="false" />
+            {% if form.aws_iam.errors %} aria-invalid
+            aria-describedby="{% for error in form.aws_iam.errors %}id_aws_iam_error_{{ forloop.counter }}{% endfor %}"
+            {% endif %} aria-required="false" />
           <div class="form-text">{{ form.aws_iam.help_text }}</div>
         </div>
 
@@ -279,7 +288,8 @@
             <input type="text" class="form-control {% if form.data_size.errors %}is-invalid aria-invalid{% endif %}"
               id="{{ form.data_size.auto_id }}" name="{{ form.data_size.name }}" placeholder="100 GB"
               value="{{ form.data_size.value }}" required {% if form.data_size.errors %} aria-invalid
-              aria-describedby="data_size_group" {% endif %} aria-required="true" />
+              aria-describedby="{% for error in form.data_size.errors %}id_data_size_error_{{ forloop.counter }}{% endfor %}"
+              {% endif %} aria-required="true" />
           </div>
           <div class="form-text">{{ form.data_size.help_text }}</div>
         </div>
@@ -287,7 +297,7 @@
         <!-- Test Data Checkbox -->
         <div class="col-12">
           <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="{{form.is_test_data.auto_id }}"
+            <input type="checkbox" class="form-check-input" id="{{ form.is_test_data.auto_id }}"
               name="{{ form.is_test_data.name }}" {% if form.is_test_data.value %} checked {% endif %} />
             <label class="form-check-label"
               for="{{ form.is_test_data.id_for_label }}">{{ form.is_test_data.help_text }}</label>
@@ -316,7 +326,7 @@
 
     <!-- Ticket Summary -->
     <div class="col-md-7 col-lg-8 px-3 ticket-summary">
-      <h4 class="mb-3">Contact Information</h4>
+      <h3 class="mb-3">Contact Information</h3>
       <div class="row g-3">
         <!-- Name and Email -->
         <div class="col-sm-6 card text-center">
@@ -342,7 +352,7 @@
         <hr class="my-4" />
       </div>
 
-      <h4 class="mb-3 ticket-summary">Study Information</h4>
+      <h3 class="mb-3 ticket-summary">Study Information</h3>
       <div class="row g-3 ticket-summary">
         <!-- Study Name -->
         <div class="col-12 card text-center">
@@ -368,7 +378,7 @@
         <hr class="my-4" />
       </div>
 
-      <h4 class="mb-3 ticket-summary">Dataset Information</h4>
+      <h3 class="mb-3 ticket-summary">Dataset Information</h3>
       <div class="row g-3 ticket-summary">
         <!-- Dataset Description -->
         <div class="col-12 card text-center">
