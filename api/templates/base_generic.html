@@ -22,7 +22,7 @@
   <link rel="icon" href="{% static 'tracker/favicon.png' %}" />
 
   <title>
-    {% block title %}BioData Catalyst Data Submission Tracker{% endblock %}
+    {% block title %}NHLBI BioData Catalyst | Data Submission Tracker{% endblock %}
   </title>
 </head>
 
@@ -55,13 +55,19 @@
           {% if user.is_authenticated %}
           <strong>{{ user.email }}</strong>
           <br>
+          {% if request.path != "/accounts/logout/" %}
           <a href="/accounts/logout" class="btn btn-danger btn-md form-element" role="button">
             Logout
           </a>
+          {% endif %}
           {% else %}
           {% load socialaccount %}
+          {% if request.path != "/accounts/google/login/" %}
           <a href="{% provider_login_url 'google' process='login' %}" class="btn btn-success btn-md form-element"
-            role="button">Google Login</a>
+            role="button">Login via Google</a>
+          {% else %}
+          Login using button on the right
+          {% endif %}
           {% endif %}
         </div>
       </div>
