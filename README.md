@@ -111,6 +111,8 @@ python manage.py makemigrations
 python manage.py migrate
 ```
 
+> NOTE: The `collectstatic` command is not required if you are using the GitHub Actions workflow
+
 #### GitHub Secrets
 
 #### [Secrets Manager](https://cloud.google.com/python/django/appengine#create-django-environment-file-as-a-secret)
