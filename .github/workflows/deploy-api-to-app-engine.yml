@@ -16,12 +16,42 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.9.10"
+
       - name: Setup Cloud SDK
         uses: google-github-actions/setup-gcloud@v0
         with:
           project_id: "${{ secrets.PROJECT_ID }}"
           service_account_key: "${{ secrets.GCP_SA_KEY }}"
           export_default_credentials: true
+
+      - name: Create env
+        run: |
+          cat << EOF > .env
+          GOOGLE_CLOUD_PROJECT={{ secrets.GOOGLE_CLOUD_PROJECT }}
+          SECRET_KEY={{ secrets.SECRET_KEY }}
+          APP_ENGINE_URL={{ secrets.APP_ENGINE_URL }}
+          POSTGRES_DB={{ secrets.POSTGRES_DB }}
+          POSTGRES_USER={{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD={{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_HOST={{ secrets.POSTGRES_HOST }}
+          POSTGRES_PORT={{ secrets.POSTGRES_PORT }}
+          GOOGLE_CLIENT_ID={{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET={{ secrets.GOOGLE_CLIENT_SECRET }}
+          SENDGRID_API_KEY={{ secrets.SENDGRID_API_KEY }}
+          SENDGRID_ADMIN_EMAIL={{ secrets.SENDGRID_ADMIN_EMAIL }}
+          EOF
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: collectstatic
+        run: python manage.py collectstatic --noinput
 
       - name: Deploy to App Engine
         run: gcloud app deploy -q
