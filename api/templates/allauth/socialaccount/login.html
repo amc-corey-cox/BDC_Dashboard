@@ -1,0 +1,21 @@
+{% extends "base_generic.html" %} {% load i18n %} {% load static %} {% block content %}
+<h1 class="text-muted" style="text-align: center">{{ provider.name }} Sign In</h1>
+
+<form method="post">
+  {% csrf_token %}
+  <div class="row">
+    <p>You are about to login using a third-party account</p>
+
+    <div class="col text-center">
+      <button class="btn btn-outline-dark" style="text-transform:none" type="submit">
+        {% if provider.name == "Google" %}
+        <img class="btn-google-logo" alt="Google sign-in"
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" />
+        {% endif %}
+        Login with {{ provider.name }}
+      </button>
+    </div>
+  </div>
+</form>
+
+{% endblock %}
