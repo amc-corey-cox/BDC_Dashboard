@@ -19,14 +19,16 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # Handle environment variables
-# env = environ.Env(DEBUG=(bool, True))
+# SECURITY WARNING: This defaults to False, but set to True in your env file for local dev
 env = environ.Env(DEBUG=(bool, False))
-env_file = os.path.join(BASE_DIR, ".env")
 
-# if local env file
+# load .env
+env_file = os.path.join(BASE_DIR, ".env")
 if os.path.isfile(env_file):
+    # if local env file
     env.read_env(env_file)
 elif os.environ.get("GOOGLE_CLOUD_PROJECT", None):
+    # if running on GCP, use Secret Manager to get env variables
     project_id = os.environ.get("GOOGLE_CLOUD_PROJECT")
 
     client = secretmanager.SecretManagerServiceClient()
@@ -41,9 +43,9 @@ else:
     )
 
 SECRET_KEY = env("SECRET_KEY")
-DEBUG = env("DEBUG")
 
 # debug toolbar
+DEBUG = env("DEBUG")
 if DEBUG:
     import socket
 
@@ -52,7 +54,7 @@ if DEBUG:
 
 # SECURITY WARNING: App Engine's security features ensure that it is safe to
 # have ALLOWED_HOSTS = ['*'] when the app is deployed. If you deploy a Django
-# app not on App Engine, make sure to set an appropriate host here.
+# app not on App Engine, make sure to set an appropriate host here
 ALLOWED_HOSTS = ["*"]
 
 # Application definition
@@ -74,7 +76,7 @@ INSTALLED_APPS = [
     "allauth.account",
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
-    # history
+    # audit log
     "simple_history",
 ]
 
@@ -129,6 +131,7 @@ LOGGING = {
     },
 }
 
+
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 DATABASES = {
@@ -160,9 +163,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
 # django-allauth
 # https://github.com/pennersr/django-allauth
-
 SOCIALACCOUNT_PROVIDERS = {
     "google": {
         "SCOPE": ["profile", "email", "openid"],
