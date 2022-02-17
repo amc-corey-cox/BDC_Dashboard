@@ -43,6 +43,7 @@ jobs:
           GOOGLE_CLIENT_SECRET={{ secrets.GOOGLE_CLIENT_SECRET }}
           SENDGRID_API_KEY={{ secrets.SENDGRID_API_KEY }}
           SENDGRID_ADMIN_EMAIL={{ secrets.SENDGRID_ADMIN_EMAIL }}
+          SENDGRID_NO_REPLY_EMAIL={{ secrets.SENDGRID_NO_REPLY_EMAIL }}
           EOF
 
       - name: Install dependencies
