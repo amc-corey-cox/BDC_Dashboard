@@ -3,7 +3,7 @@ name: API - Publish to Quay
 on:
   push:
     branches:
-      - master
+      - main
 
 env:
   GITHUB_SHA: ${{ github.sha }}
