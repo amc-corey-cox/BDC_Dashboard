@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM --platform=linux/amd64 python:3.10.2-slim-buster
+FROM --platform=linux/amd64 python:3.10-slim-bullseye
 
 ENV APP_HOME=/app \
   PYTHONUNBUFFERED=1 \
@@ -11,6 +11,7 @@ COPY . ./
 
 RUN set -eux; \
   apt-get update; \
+  apt-get upgrade -y; \
   apt-get install -y \
     wget \
   ; \

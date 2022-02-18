@@ -23,6 +23,8 @@ jobs:
       - name: Create env file
         run: |
           cat << EOF > .env
+          DEBUG=False
+          DJANGO_LOG_LEVEL=INFO
           GOOGLE_CLOUD_PROJECT=${{ secrets.GOOGLE_CLOUD_PROJECT }}
           SECRET_KEY=${{ secrets.SECRET_KEY }}
           APP_ENGINE_URL=${{ secrets.APP_ENGINE_URL }}

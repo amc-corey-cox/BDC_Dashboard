@@ -19,8 +19,8 @@
         <a href="{% url 'tracker:ticket-update' pk=object.pk %}" class="btn btn-{{ object.status_color }}"
           role="button">View Ticket</a>
       </div>
-      <div class="card-footer {{ object.last_updated_color }}" data-bs-toggle="tooltip" data-bs-placement="bottom"
-        title="{{ object.get_ticket_status.0 }}">
+      <div class="card-footer {% if object.last_updated_color %}{{ object.last_updated_color }}{% endif %}"
+        data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ object.get_ticket_status.0 }}">
         {{ object.last_updated }} Days Ago
       </div>
     </div>
@@ -44,8 +44,8 @@
         <a href="{% url 'tracker:ticket-update' pk=object.pk %}" class="btn btn-{{ object.status_color }}"
           role="button">View Ticket</a>
       </div>
-      <div class="card-footer {{ object.last_updated_color }}" data-bs-toggle="tooltip" data-bs-placement="bottom"
-        title="{{ object.get_ticket_status.0 }}">
+      <div class="card-footer {% if object.last_updated_color %}{{ object.last_updated_color }}{% endif %}"
+        data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ object.get_ticket_status.0 }}">
         {{ object.last_updated }} Days Ago
       </div>
     </div>
@@ -69,8 +69,8 @@
         <a href="{% url 'tracker:ticket-update' pk=object.pk %}" class="btn btn-{{ object.status_color }}"
           role="button">View Ticket</a>
       </div>
-      <div class="card-footer {{ object.last_updated_color }}" data-bs-toggle="tooltip" data-bs-placement="bottom"
-        title="{{ object.get_ticket_status.0 }}">
+      <div class="card-footer {% if object.last_updated_color %}{{ object.last_updated_color }}{% endif %}"
+        data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ object.get_ticket_status.0 }}">
         {{ object.last_updated }} Days Ago
       </div>
     </div>
@@ -94,8 +94,8 @@
         <a href="{% url 'tracker:ticket-update' pk=object.pk %}" class="btn btn-{{ object.status_color }}"
           role="button">View Ticket</a>
       </div>
-      <div class="card-footer {{ object.last_updated_color }}" data-bs-toggle="tooltip" data-bs-placement="bottom"
-        title="{{ object.get_ticket_status.0 }}">
+      <div class="card-footer {% if object.last_updated_color %}{{ object.last_updated_color }}{% endif %}"
+        data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ object.get_ticket_status.0 }}">
         {{ object.last_updated }} Days Ago
       </div>
     </div>
@@ -119,8 +119,8 @@
         <a href="{% url 'tracker:ticket-update' pk=object.pk %}" class="btn btn-{{ object.status_color }}"
           role="button">View Ticket</a>
       </div>
-      <div class="card-footer {{ object.last_updated_color }}" data-bs-toggle="tooltip" data-bs-placement="bottom"
-        title="{{ object.get_ticket_status.0 }}">
+      <div class="card-footer {% if object.last_updated_color %}{{ object.last_updated_color }}{% endif %}"
+        data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ object.get_ticket_status.0 }}">
         {{ object.last_updated }} Days Ago
       </div>
     </div>
@@ -144,8 +144,8 @@
         <a href="{% url 'tracker:ticket-update' pk=object.pk %}" class="btn btn-{{ object.status_color }}"
           role="button">View Ticket</a>
       </div>
-      <div class="card-footer {{ object.last_updated_color }}" data-bs-toggle="tooltip" data-bs-placement="bottom"
-        title="{{ object.get_ticket_status.0 }}">
+      <div class="card-footer {% if object.last_updated_color %}{{ object.last_updated_color }}{% endif %}"
+        data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ object.get_ticket_status.0 }}">
         {{ object.last_updated }} Days Ago
       </div>
     </div>
