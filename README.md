@@ -135,6 +135,8 @@ Include the following in your GitHub Secrets:
 | QUAY_NIMBUS_USERNAME | A username with access to the Quay repo |
 | QUAY_NIMBUS_PASSWORD | The password of the Quay user           |
 
+Information on how to pull and run the image can be found on the [repo itself](https://quay.io/repository/nimbusinformatics/bdcat-data-tracker?tab=info)
+
 > NOTE: Robot accounts are the preferred method of pushing images to Quay.
 > These accounts are usually in the format: `<repo-name+<robot-name>`
 
