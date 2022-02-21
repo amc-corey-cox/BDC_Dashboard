@@ -20,6 +20,7 @@ RUN set -eux; \
   chmod +x /sbin/tini \
   ; \
   # install py modules
+  pip3 install --upgrade pip; \
   pip3 install -r requirements.txt; \
   # clean up cache
   apt-get clean && rm -rf /var/lib/apt/lists/*; \
