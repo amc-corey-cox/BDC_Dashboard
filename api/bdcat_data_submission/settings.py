@@ -121,10 +121,14 @@ LOGGING = {
             "level": os.getenv("DJANGO_LOG_LEVEL", "DEBUG"),
             "class": "logging.StreamHandler",
         },
+        "logfile": {
+            "class": "logging.handlers.WatchedFileHandler",
+            "filename": "D:\home\site\wwwroot\myapp.log",
+        },
     },
     "loggers": {
         "django": {
-            "handlers": ["console"],
+            "handlers": ["console", "logfile"],
             "level": os.getenv("DJANGO_LOG_LEVEL", "DEBUG"),
             "propagate": True,
         },
