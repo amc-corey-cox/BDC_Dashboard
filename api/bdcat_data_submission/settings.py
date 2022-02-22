@@ -27,6 +27,10 @@ env_file = os.path.join(BASE_DIR, ".env")
 if os.path.isfile(env_file):
     # if local env file
     env.read_env(env_file)
+elif os.environ.get("DOCKER_REGISTRY_SERVER_URL"):
+    # if running on Azure, intake env variables from Azure
+    env.read_env(env_file)
+    print("Azure detected")
 elif os.environ.get("GOOGLE_CLOUD_PROJECT", None):
     # if running on GCP, use Secret Manager to get env variables
     project_id = os.environ.get("GOOGLE_CLOUD_PROJECT")
@@ -46,6 +50,9 @@ SECRET_KEY = env("SECRET_KEY")
 
 # debug toolbar
 DEBUG = env("DEBUG")
+if os.getenv("APPSETTING_DEBUG"):
+    print("APPSETTING_DEBUG detected")
+    print(os.getenv("APPSETTING_DEBUG"))
 if DEBUG:
     import socket
 
