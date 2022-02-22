@@ -78,6 +78,12 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.google",
     # audit log
     "simple_history",
+    # health check
+    "health_check",
+    "health_check.db",
+    "health_check.cache",
+    "health_check.storage",
+    "health_check.contrib.migrations",
 ]
 
 MIDDLEWARE = [
