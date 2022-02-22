@@ -16,6 +16,7 @@ django-sendgrid-v5 = "*"
 django-allauth = "*"
 django-debug-toolbar = "*"
 django-simple-history = "*"
+django-health-check = "*"
 
 [dev-packages]
 pytest = "*"
