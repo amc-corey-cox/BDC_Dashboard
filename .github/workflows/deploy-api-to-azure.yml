@@ -1,9 +1,6 @@
-name: API - Publish to Quay
+name: API - Deploy to Azure
 
-on:
-  push:
-    branches:
-      - main
+on: push
 
 env:
   GITHUB_SHA: ${{ github.sha }}
@@ -73,3 +70,20 @@ jobs:
           context: api
           push: true
           tags: ${{ steps.meta.outputs.tags }}
+
+  deploy-to-azure:
+    needs: build
+    name: Deploy Quay Image to Azure
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: api
+
+    steps:
+      - name: Setup Azure
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: bdcat-data-tracker
+          publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
+          images: quay.io/nimbusinformatics/bdcat-data-tracker:latest
