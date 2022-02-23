@@ -206,6 +206,8 @@ SESSION_COOKIE_AGE = 2 * 24 * 60 * 60  # 2 days in seconds
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
 
+CSRF_TRUSTED_ORIGINS = [env("AZURE_SITES_URL")]  # this is required for Django 4+
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
