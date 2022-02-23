@@ -25,6 +25,7 @@ jobs:
           GOOGLE_CLOUD_PROJECT=${{ secrets.GOOGLE_CLOUD_PROJECT }}
           SECRET_KEY=${{ secrets.SECRET_KEY }}
           APP_ENGINE_URL=${{ secrets.APP_ENGINE_URL }}
+          AZURE_SITES_URL=${{ secrets.AZURE_SITES_URL }}
           POSTGRES_DB=${{ secrets.POSTGRES_DB }}
           POSTGRES_USER=${{ secrets.POSTGRES_USER }}
           POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
