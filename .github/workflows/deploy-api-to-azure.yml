@@ -4,6 +4,7 @@ on: push
 
 env:
   GITHUB_SHA: ${{ github.sha }}
+  SECRET_KEY: ${{ secrets.SECRET_KEY }}
 
 jobs:
   build:
@@ -16,27 +17,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
-      - name: Create env file
-        run: |
-          cat << EOF > .env
-          DEBUG=False
-          DJANGO_LOG_LEVEL=INFO
-          GOOGLE_CLOUD_PROJECT=${{ secrets.GOOGLE_CLOUD_PROJECT }}
-          SECRET_KEY=${{ secrets.SECRET_KEY }}
-          APP_ENGINE_URL=${{ secrets.APP_ENGINE_URL }}
-          AZURE_SITES_URL=${{ secrets.AZURE_SITES_URL }}
-          POSTGRES_DB=${{ secrets.POSTGRES_DB }}
-          POSTGRES_USER=${{ secrets.POSTGRES_USER }}
-          POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
-          POSTGRES_HOST=${{ secrets.POSTGRES_HOST }}
-          POSTGRES_PORT=${{ secrets.POSTGRES_PORT }}
-          GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}
-          GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}
-          SENDGRID_API_KEY=${{ secrets.SENDGRID_API_KEY }}
-          SENDGRID_ADMIN_EMAIL=${{ secrets.SENDGRID_ADMIN_EMAIL }}
-          SENDGRID_NO_REPLY_EMAIL=${{ secrets.SENDGRID_NO_REPLY_EMAIL }}
-          EOF
 
       - name: Create short-sha
         run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-7`" >> $GITHUB_ENV
