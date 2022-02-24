@@ -145,4 +145,4 @@ ansible/group_vars/all/users.yml
 ansible/inventory
 
 # Azure
-profile.publishsettings
+*.PublishSettings
