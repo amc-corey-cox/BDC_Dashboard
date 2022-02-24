@@ -144,16 +144,17 @@ LOGGING = {
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": env("POSTGRES_DB"),
-        "USER": env("POSTGRES_USER"),
-        "PASSWORD": env("POSTGRES_PASSWORD"),
-        "HOST": env("POSTGRES_HOST"),
-        "PORT": env("POSTGRES_PORT"),
+if os.environ.get("POSTGRES_HOST", None):
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql_psycopg2",
+            "NAME": env("POSTGRES_DB"),
+            "USER": env("POSTGRES_USER"),
+            "PASSWORD": env("POSTGRES_PASSWORD"),
+            "HOST": env("POSTGRES_HOST"),
+            "PORT": env("POSTGRES_PORT"),
+        }
     }
-}
 
 
 # Password validation
@@ -176,19 +177,20 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # django-allauth
 # https://github.com/pennersr/django-allauth
-SOCIALACCOUNT_PROVIDERS = {
-    "google": {
-        "SCOPE": ["profile", "email", "openid"],
-        "AUTH_PARAMS": {
-            "access_type": "online",
-        },
-        "APP": {
-            "client_id": env("GOOGLE_CLIENT_ID"),
-            "secret": env("GOOGLE_CLIENT_SECRET"),
-            "key": "",
-        },
+if os.environ.get("GOOGLE_CLIENT_ID", None):
+    SOCIALACCOUNT_PROVIDERS = {
+        "google": {
+            "SCOPE": ["profile", "email", "openid"],
+            "AUTH_PARAMS": {
+                "access_type": "online",
+            },
+            "APP": {
+                "client_id": env("GOOGLE_CLIENT_ID"),
+                "secret": env("GOOGLE_CLIENT_SECRET"),
+                "key": "",
+            },
+        }
     }
-}
 
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
@@ -206,7 +208,8 @@ SESSION_COOKIE_AGE = 2 * 24 * 60 * 60  # 2 days in seconds
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
 
-CSRF_TRUSTED_ORIGINS = [env("AZURE_SITES_URL")]  # this is required for Django 4+
+if os.environ.get("AZURE_SITES_URL", None):
+    CSRF_TRUSTED_ORIGINS = [env("AZURE_SITES_URL")]  # this is required for Django 4+
 
 
 # Internationalization
@@ -230,11 +233,12 @@ WHITENOISE_MANIFEST_STRICT = False
 
 
 # SendGrid settings
-EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
-SENDGRID_API_KEY = env("SENDGRID_API_KEY")
-SENDGRID_ADMIN_EMAIL = env("SENDGRID_ADMIN_EMAIL")
-SENDGRID_NO_REPLY_EMAIL = env("SENDGRID_NO_REPLY_EMAIL")
-SENDGRID_SANDBOX_MODE_IN_DEBUG = env("DEBUG")
+if os.environ.get("SENDGRID_API_KEY", None):
+    EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
+    SENDGRID_API_KEY = env("SENDGRID_API_KEY")
+    SENDGRID_ADMIN_EMAIL = env("SENDGRID_ADMIN_EMAIL")
+    SENDGRID_NO_REPLY_EMAIL = env("SENDGRID_NO_REPLY_EMAIL")
+    SENDGRID_SANDBOX_MODE_IN_DEBUG = env("DEBUG")
 
 
 # Misc
