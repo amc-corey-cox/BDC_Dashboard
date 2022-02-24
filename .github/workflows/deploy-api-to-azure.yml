@@ -84,6 +84,6 @@ jobs:
       - name: Setup Azure
         uses: azure/webapps-deploy@v2
         with:
-          app-name: bdcat-data-tracker
+          app-name: nhlbi-bdcat-data-tracker
           publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
           images: quay.io/nimbusinformatics/bdcat-data-tracker:latest
