@@ -38,8 +38,8 @@ elif os.environ.get("GOOGLE_CLOUD_PROJECT", None):
 
     env.read_env(io.StringIO(payload))
 else:
-    raise EnvironmentError(
-        "No local .env or GOOGLE_CLOUD_PROJECT detected. No secrets found."
+    print(
+        "No local .env or GOOGLE_CLOUD_PROJECT detected. Using container environment variables."
     )
 
 SECRET_KEY = env("SECRET_KEY")
