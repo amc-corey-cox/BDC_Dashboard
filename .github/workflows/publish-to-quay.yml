@@ -1,9 +1,6 @@
 name: API - Publish to Quay
 
-on:
-  push:
-    branches:
-      - main
+on: workflow_dispatch
 
 env:
   GITHUB_SHA: ${{ github.sha }}
