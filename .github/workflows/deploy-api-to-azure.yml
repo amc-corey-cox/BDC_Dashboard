@@ -4,7 +4,6 @@ on: push
 
 env:
   GITHUB_SHA: ${{ github.sha }}
-  SECRET_KEY: ${{ secrets.SECRET_KEY }}
 
 jobs:
   build:
@@ -17,6 +16,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
+      - name: Create env file
+        run: |
+          cat << EOF > .env
+          SECRET_KEY=${{ secrets.SECRET_KEY }}
+          EOF
 
       - name: Create short-sha
         run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-7`" >> $GITHUB_ENV
