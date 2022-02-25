@@ -1,6 +1,9 @@
 name: API - Deploy to Azure
 
-on: push
+on:
+  push:
+    branches:
+      - main
 
 env:
   GITHUB_SHA: ${{ github.sha }}
