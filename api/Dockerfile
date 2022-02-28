@@ -20,6 +20,7 @@ RUN set -eux; \
   chmod +x /sbin/tini \
   ; \
   # install py modules
+  pip3 install --upgrade pip; \
   pip3 install -r requirements.txt; \
   # clean up cache
   apt-get clean && rm -rf /var/lib/apt/lists/*; \
@@ -27,5 +28,5 @@ RUN set -eux; \
   python /app/manage.py collectstatic --noinput
 
 ENTRYPOINT ["/sbin/tini", "--"]
-EXPOSE 8000
+EXPOSE 8000 2222
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

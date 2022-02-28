@@ -143,3 +143,6 @@ client-secret.json
 inventory
 ansible/group_vars/all/users.yml
 ansible/inventory
+
+# Azure
+*.PublishSettings
