@@ -1,9 +1,6 @@
 name: API - Deploy to GCP App Engine
 
-on:
-  push:
-    branches:
-      - main
+on: workflow_dispatch
 
 env:
   GOOGLE_CLOUD_PROJECT: ${{ secrets.GOOGLE_CLOUD_PROJECT }}
