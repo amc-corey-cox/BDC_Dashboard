@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM --platform=linux/amd64 python:3.10-slim-bullseye
+FROM registry.fedoraproject.org/f33/python3
 
 ENV APP_HOME=/app \
   PYTHONUNBUFFERED=1 \
@@ -9,24 +9,25 @@ WORKDIR ${APP_HOME}
 
 COPY . ./
 
+USER 0
 RUN set -eux; \
-  apt-get update; \
-  apt-get upgrade -y; \
-  apt-get install -y \
+  yum update -y; \
+  yum install -y \
     wget \
   ; \
+  # add perms
+  chown -R 1001:0 ${APP_HOME}; \
   # install tini
   wget https://github.com/krallin/tini/releases/download/$TINI_VERSION/tini -O /sbin/tini; \
   chmod +x /sbin/tini \
   ; \
   # install py modules
-  pip3 install --upgrade pip; \
-  pip3 install -r requirements.txt; \
-  # clean up cache
-  apt-get clean && rm -rf /var/lib/apt/lists/*; \
+  pip install --upgrade pip; \
+  pip install -r requirements.txt; \
   # collect static
-  python /app/manage.py collectstatic --noinput
+  python /app/manage.py collectstatic --noinput;
 
+USER 1001
 ENTRYPOINT ["/sbin/tini", "--"]
 EXPOSE 8000 2222
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
