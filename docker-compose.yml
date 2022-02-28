@@ -2,6 +2,8 @@ version: "3.8"
 
 services:
   api:
+    environment:
+      - DEBUG=True
     build:
       context: api
       dockerfile: Dockerfile
