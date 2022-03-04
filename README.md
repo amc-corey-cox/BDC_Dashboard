@@ -129,10 +129,10 @@ The image will be pushed to the [`nimbusinformatics/bdcat-data-tracker`](https:/
 The image will be named `quay.io/nimbusinformatics/bdcat-data-tracker` and two tags: `latest` and a shortened commit hash.
 Be sure to include the following in your GitHub Secrets:
 
-| name                 | description                               |
-| -------------------- | ----------------------------------------- |
-| QUAY_NIMBUS_USERNAME | A username with access to Rethe Quay repo |
-| QUAY_NIMBUS_PASSWORD | The password of the Quay user             |
+| name                 | description                             |
+| -------------------- | --------------------------------------- |
+| QUAY_NIMBUS_USERNAME | A username with access to the Quay repo |
+| QUAY_NIMBUS_PASSWORD | The password of the Quay user           |
 
 > NOTE: Robot accounts are the preferred method of pushing images to Quay.
 > These accounts are usually in the format: `<repo-name+<robot-name>`
