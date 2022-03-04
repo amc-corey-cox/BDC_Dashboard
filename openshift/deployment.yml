@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app
+  labels:
+    app: django-app
+  namespace: test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: django-app
+  template:
+    metadata:
+      labels:
+        app: django-app
+    spec:
+      containers:
+        - name: app
+          image: quay.io/nimbusinformatics/bdcat-data-tracker:latest
+          ports:
+            - containerPort: 8000
+              protocol: TCP
+      imagePullSecrets:
+        - name: quay-pull-secret
+parameters:
+  - name: ENV
+    description: application environment
+    required: true
+    value: dev
+  - name: APPNAME
+    description: app name for openshift
+    required: true
+    value: bdcat-data-tracker
+  - name: NAMESPACE
+    description: namespace for openshift
+    required: true
+    value: test
+  - name: REPLICA_COUNT
+    description: count of replicas
+    required: true
+    value: "1"
+  - name: CONTAINER_PORT
+    description: port exposed in container
+    required: true
+    value: "8000"
+  - name: IMAGE_REGISTRY_URL
+    description: registry url for latest image
+    required: true
+    value: quay.io/nimbusinformatics/bdcat-data-tracker:latest
+  - name: PULL_SECRET
+    description: pull secret variable name
+    required: true
+    value: nimbusinformatics-bdcat-data-tracker-pull-secret

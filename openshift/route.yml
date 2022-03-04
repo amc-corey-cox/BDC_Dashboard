@@ -1,0 +1,53 @@
+apiVersion: route.openshift.io/v1
+metadata:
+  name: app-route
+  namespace: test
+kind: Route
+spec:
+  host: app-biocat.apps-crc.testing
+  to:
+    kind: Service
+    name: app-service
+  port:
+    targetPort: web-http
+  wildcardPolicy: None
+parameters:
+  - name: ENV
+    description: application environment
+    required: true
+    value: dev
+  - name: APPNAME
+    description: app name for openshift
+    required: true
+    value: bdcat-data-tracker
+  - name: NAMESPACE
+    description: namespace for openshift
+    required: true
+    value: test
+---
+apiVersion: route.openshift.io/v1
+metadata:
+  name: app-route-dev
+  namespace: test
+kind: Route
+spec:
+  host: localhost
+  to:
+    kind: Service
+    name: app-service
+  port:
+    targetPort: web-http
+  wildcardPolicy: None
+parameters:
+  - name: ENV
+    description: application environment
+    required: true
+    value: dev
+  - name: APPNAME
+    description: app name for openshift
+    required: true
+    value: bdcat-data-tracker
+  - name: NAMESPACE
+    description: namespace for openshift
+    required: true
+    value: test

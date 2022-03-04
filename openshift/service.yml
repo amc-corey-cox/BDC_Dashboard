@@ -1,0 +1,33 @@
+apiVersion: v1
+metadata:
+  name: app-service
+  namespace: test
+kind: Service
+spec:
+  ports:
+    - name: web-http
+      port: 8000
+      targetPort: 8000
+  selector:
+    app: django-app
+parameters:
+  - name: ENV
+    description: application environment
+    required: true
+    value: dev
+  - name: APPNAME
+    description: app name for openshift
+    required: true
+    value: bdcat-data-tracker
+  - name: NAMESPACE
+    description: namespace for openshift
+    required: true
+    value: test
+  - name: CONTAINER_PORT
+    description: port exposed in container
+    required: true
+    value: "8000"
+  - name: EXPOSED_PORT
+    description: port exposed to public
+    required: true
+    value: "8000"
