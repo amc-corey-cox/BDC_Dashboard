@@ -129,10 +129,10 @@ The image will be pushed to the [`nimbusinformatics/bdcat-data-tracker`](https:/
 The image will be named `quay.io/nimbusinformatics/bdcat-data-tracker` and two tags: `latest` and a shortened commit hash.
 Be sure to include the following in your GitHub Secrets:
 
-| name                 | description                             |
-| -------------------- | --------------------------------------- |
-| QUAY_NIMBUS_USERNAME | A username with access to the Quay repo |
-| QUAY_NIMBUS_PASSWORD | The password of the Quay user           |
+| name                 | description                               |
+| -------------------- | ----------------------------------------- |
+| QUAY_NIMBUS_USERNAME | A username with access to Rethe Quay repo |
+| QUAY_NIMBUS_PASSWORD | The password of the Quay user             |
 
 > NOTE: Robot accounts are the preferred method of pushing images to Quay.
 > These accounts are usually in the format: `<repo-name+<robot-name>`
@@ -154,6 +154,11 @@ docker run -p 8000:8000 quay.io/nimbusinformatics/bdcat-data-tracker:latest
 ```
 
 A more detailed writeup can be found on the [Quay repository](https://quay.io/repository/nimbusinformatics/bdcat-data-tracker?tab=info)
+
+#### Red Hat OpenShift
+
+Red Hat OpenShift can be developed locally, with [Red Hat CodeReady Containers](https://developers.redhat.com/products/codeready-containers/overview).
+You can find a detailed writeup in the [`openshift`](/openshift) directory
 
 #### Microsoft Azure
 

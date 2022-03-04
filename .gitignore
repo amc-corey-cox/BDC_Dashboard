@@ -153,3 +153,7 @@ ansible/inventory
 
 # Vim swap files
 *.swp
+
+# OpenShift
+pull-secret.txt
+*secret.yml
