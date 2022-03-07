@@ -1,0 +1,61 @@
+# ==============================================================================
+# Application: [Application name, such as Clinical Dashboard]
+# Module (Optional): [module name, such as web frontend]
+# Based on NHLBI BuildConfig Template V1.1
+#
+# Last Update by: [Luan Tran] Last Update date: [03/03/2022]
+# ============================================================================
+#
+apiVersion: template.openshift.io/v1
+kind: Template
+labels:
+  template: ${APPNAME}-build-config-template
+metadata:
+  annotations:
+    description: ITAC gerneric template for docker strategy based image build
+    tags: python,django,tracker,pipeline
+  name: ${APPNAME}-${VERSION_NUM}
+objects:
+  - apiVersion: v1
+    kind: BuildConfig
+    metadata:
+      name: ${APPNAME}-${VERSION_NUM}
+      namespace: ${NAMESPACE}
+      labels:
+        build: ${APPNAME}-${VERSION_NUM}
+    spec:
+      output:
+        to:
+          kind: DockerImage
+          name: ${IMAGE_REGISTRY_URL}/${REGISTRY_NAMESPACE}/${APPNAME}:${VERSION_NUM}
+      resource: {}
+      strategy:
+        type: Docker
+        dockerStrategy:
+          pullSecret:
+            name: ${REGISTRY_SECRET}
+      postCommit: {}
+      source:
+        type: Binary
+        binary: {}
+parameters:
+  - name: APPNAME
+    description: application name or bitbucket repo name
+    required: true
+    value: bdcat-data-tracker
+  - name: VERSION_NUM
+    description: application version number, use number and '-'
+    required: true
+    value: "0-0-1"
+  - name: NAMESPACE
+    description: openshift project name or namespace
+    value: "test"
+  - name: IMAGE_REGISTRY_URL
+    description: registry url for publishing the image
+    value: "quay.io"
+  - name: REGISTRY_SECRET
+    description: secret for registry authentication
+    value: "nonprodacr-secret"
+  - name: REGISTRY_NAMESPACE
+    description: image registry namespace.
+    value: "nimbusinformatics"

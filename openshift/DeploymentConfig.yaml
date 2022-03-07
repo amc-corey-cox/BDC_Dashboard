@@ -1,0 +1,158 @@
+# ==============================================================================
+# Application: NHLBI BioData Catalyst Data Tracker
+# Module (Optional): django web app
+# Based on NHLBI DeploymentConfig Template V1.1
+#
+# Last Update by: [Luan Tran] Last Update date: [03/03/2022]
+# ============================================================================
+#
+apiVersion: template.openshift.io/v1
+kind: Template
+labels:
+  template: ${APPNAME}-${VERSION_NUM}-${ENV}
+metadata:
+  annotations:
+    description: This teamplate is for application deployment
+    tags: python,django,tracker,pipeline
+  name: ${APPNAME}-${VERSION_NUM}-${ENV}
+objects:
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      labels:
+        app: ${APPNAME}
+        version: ${VERSION_NUM}
+        environment: ${ENV}
+      name: ${APPNAME}-${VERSION_NUM}-${ENV}
+      namespace: ${NAMESPACE}
+    spec:
+      replicas: "${{ REPLICA_COUNT }}"
+      selector:
+        name: ${APPNAME}-${VERSION_NUM}-${ENV}
+      template:
+        metadata:
+          labels:
+            name: ${APPNAME}-${VERSION_NUM}-${ENV}
+            app: ${APPNAME}
+            version: ${VERSION_NUM}
+            environment: ${ENV}
+        spec:
+          containers:
+            - name: ${APPNAME}-${VERSION_NUM}-${ENV}
+              # env: add optional env vars here
+              ports:
+                - containerPort: "${{ CONTAINER_PORT }}"
+                  protocol: TCP
+              image: ${IMAGE_REGISTRY_URL}/${REGISTRY_NAMESPACE}/${APPNAME}:${VERSION_NUM}
+              imagePullPolicy: Always
+              dnsPolicy: ClusterFirst
+              restartPolicy: Always
+              securityContext:
+                capabilities:
+                  drop:
+                    - KILL
+                    - MKNOD
+                    - SETGID
+                    - SETUID
+                  privileged: false
+                  runAsUser: "${{ RUN_AS_USER_ID }}"
+              terminationGracePeriodSeconds: 30
+              volumnMounts:
+                - name: nih-ca-certs
+                  readOnly: true
+                  mountPath: /nihchaincerts
+          volumns:
+            - name: nih-ca-certs
+              secret:
+                secretName: nih-ca-certs
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      labels:
+        app: ${APPNAME}
+        version: ${VERSION_NUM}
+        environment: ${ENV}
+      name: ${APPNAME}-${VERSION_NUM}-${ENV}
+      namespace: ${NAMESPACE}
+    spec:
+      ports:
+        - name: web-http
+          port: "${{APP_EXPOSED_PORT}}"
+          protocol: TCP
+          targetPort: "${{CONTAINER_PORT}}"
+      selector:
+        name: ${APPNAME}-${VERSION_NUM}-${ENV}
+        app: ${APPNAME}
+        version: ${VERSION_NUM}
+      sessionAffinity: None
+      type: ClusterIP
+    status:
+      loadBalancer: {}
+  - apiVersion: v1
+    kind: Route
+    metadata:
+      annotations:
+        haproxy.router.openshift.io/hsts_header: max-age=31536000; includeSubDomains; preload
+      labels:
+        app: ${APPNAME}
+        version: ${VERSION_NUM}
+        environment: ${ENV}
+      name: ${APPNAME}-${VERSION_NUM}-${ENV}
+      namespace: ${NAMESPACE}
+    spec:
+      host: ${APPNAME}-${VERSION_NUM}-${ENV}.${ROUTE_SUFFIX}
+      path: /${APP_CONTEXT}
+      to:
+        kind: Service
+        name: ${APPNAME}-${VERSION_NUM}-${ENV}
+      tls:
+        termination: edge
+        insecureEdgeTerminationPolicy: Redirect
+      wildcardPolicy: None
+parameters:
+  - name: ENV
+    description: application environment
+    required: true
+    value: dev
+  - name: APPNAME
+    description: application name and module name in OpenShift
+    required: true
+    value: bdcat-data-tracker
+  - name: VERSION_NUM
+    description: application version number, use number and '-'
+    required: true
+    value: "0-0-1"
+  - name: REPLICA_COUNT
+    description: count of replicas
+    required: true
+    value: "2"
+  - name: ROUTE_SUFFIX
+    description: suffix for the default router
+    required: true
+    value: "apps-crc.testing" # default to 'apps.nonprodaro.nhlbi.nih.gov'
+  - name: CONTAINER_PORT
+    description: container Port exposed for internal routing
+    required: true
+    value: "8000"
+  - name: APP_EXPOSED_PORT
+    description: Application Port exposed to the external access
+    required: true
+    value: "8000"
+  - name: IMAGE_REGISTRY_URL
+    description: registry url for pulling the image from image registry
+    required: true
+    value: quay.io
+  - name: NAMESPACE
+    description: application target namespace/openshift project name
+    required: true
+    value: "test"
+  - name: REGISTRY_NAMESPACE
+    description: image registry namespace.
+    value: "nimbusinformatics"
+  - name: APP_CONTEXT
+    description: Application context path.
+    value: ""
+  - name: RUN_AS_USER_ID
+    description: Container userid and external file volumn mount uid. the value should get from ARO namespace UUID range
+    displayName: Container userid and external file volumn mount uid
+    value: "1000700000"
