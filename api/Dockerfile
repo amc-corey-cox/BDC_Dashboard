@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM registry.fedoraproject.org/f33/python3
+FROM registry.access.redhat.com/ubi8/python-39@sha256:cb3faf3d1c87f177f56f6bbcca50945a28648a2bb7496204724ae13fc42fb35d
 
 ENV APP_HOME=/app \
   PYTHONUNBUFFERED=1 \
