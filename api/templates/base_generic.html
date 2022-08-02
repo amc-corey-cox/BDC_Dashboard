@@ -51,25 +51,17 @@
           </a>
         </div>
         <hr />
-        <div class="list-group-item list-group-item-success d-column text-center">
           {% if user.is_authenticated %}
+        <div class="list-group-item list-group-item-success d-column text-center">
           <strong>{{ user.email }}</strong>
           <br>
           {% if request.path != "/accounts/logout/" %}
           <a href="/accounts/logout" class="btn btn-danger btn-md form-element" role="button">
             Logout
           </a>
-          {% endif %}
-          {% else %}
-          {% load socialaccount %}
-          {% if request.path != "/accounts/google/login/" %}
-          <a href="{% provider_login_url 'google' process='login' %}" class="btn btn-success btn-md form-element"
-            role="button">Login via Google</a>
-          {% else %}
-          Login using button on the right
+        </div>          
           {% endif %}
           {% endif %}
-        </div>
       </div>
     </nav>
 
