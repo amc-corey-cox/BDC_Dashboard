@@ -31,9 +31,12 @@
     <p>Select third party login provider to continue</p>
   </div>
   <div class="card-footer">
-    <a href="{% provider_login_url 'google' process='login' %}" class="btn btn-success btn-md form-element"
-      role="button">Google</a>
-    <button class="btn btn-danger btn-md form-element" disabled>eRA Commons</button>
+  {% get_providers as socialaccount_providers %}
+	{% for provider in socialaccount_providers %}
+    <a href="{% provider_login_url provider.id process='login' %}" class="btn btn-success btn-md form-element"
+      role="button">{{ provider.name }}</a>	
+	{% endfor %}
+    <button class="btn btn-danger btn-md form-element" disabled>NIH SSO</button>
   </div>
 </div>
 {% endif %}
