@@ -175,29 +175,41 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # django-allauth
 # https://github.com/pennersr/django-allauth
+SOCIALACCOUNT_PROVIDERS = {}
+
 if os.environ.get("GOOGLE_CLIENT_ID", None):
-    SOCIALACCOUNT_PROVIDERS = {
-        "google": {
-            "SCOPE": ["profile", "email", "openid"],
-            "AUTH_PARAMS": {
-                "access_type": "online",
-            },
-            "APP": {
-                "client_id": env("GOOGLE_CLIENT_ID"),
-                "secret": env("GOOGLE_CLIENT_SECRET"),
-                "key": "",
-            },
-        }
-    }
+	google_settings = {
+		"SCOPE": ["profile", "email", "openid"],
+		"AUTH_PARAMS": {
+			"access_type": "online",
+		},
+		"APP": {
+			"client_id": env("GOOGLE_CLIENT_ID"),
+			"secret": env("GOOGLE_CLIENT_SECRET"),
+			"key": "",
+		},
+	}
+	SOCIALACCOUNT_PROVIDERS['google'] = google_settings
+
+if os.environ.get("NIH_CLIENT_ID", None):
+	nih_settings = {
+		"SCOPE": ["openid", "profile", "email", "member"],
+		"APP": {
+			"client_id": env("NIH_CLIENT_ID"),
+			"secret": env("NIH_CLIENT_SECRET"),
+			"key": "",
+		},
+	}
+	SOCIALACCOUNT_PROVIDERS['nihsso'] = nih_settings
+	NIH_OAUTH_SERVER_TOKEN_URL = os.environ.get("NIH_OAUTH_SERVER_TOKEN_URL")
+	NIH_OAUTH_SERVER_INFO_URL = os.environ.get("NIH_OAUTH_SERVER_INFO_URL")
+	NIH_OAUTH_SERVER_AUTH_URL= os.environ.get("NIH_OAUTH_SERVER_AUTH_URL")
+
 
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
-
-NIH_OAUTH_SERVER_TOKEN_URL = os.environ.get("NIH_OAUTH_SERVER_TOKEN_URL")
-NIH_OAUTH_SERVER_INFO_URL = os.environ.get("NIH_OAUTH_SERVER_INFO_URL")
-NIH_OAUTH_SERVER_AUTH_URL= os.environ.get("NIH_OAUTH_SERVER_AUTH_URL")
 
 SITE_ID = int(os.environ.get("ALLAUTH_SITE_ID", 3))
 AUTH_USER_MODEL = "tracker.User"
