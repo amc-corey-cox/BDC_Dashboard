@@ -1,5 +1,5 @@
 {% extends "base_generic.html" %} {% load i18n %} {% load static %} {% block content %}
-<h1 class="text-muted" style="text-align: center">{{ provider.name }} Sign In</h1>
+<h3 class="text-muted" style="text-align: center">{% if provider.name == "NIH SSO" %}NIH Login{% else %}{{ provider.name }}{% endif %} Sign In</h3>
 
 <form method="post">
   {% csrf_token %}

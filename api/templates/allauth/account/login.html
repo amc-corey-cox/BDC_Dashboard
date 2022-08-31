@@ -1,16 +1,20 @@
 {% extends "base_generic.html" %} {% load i18n %} {% load socialaccount %} {% load account socialaccount %}
 {% block content %}
-<h1 class="text-muted" style="text-align: center">Login</h1>
+<h3 class="text-muted" style="text-align: center">Login</h3>
 
 <div class="card text-center m-2">
-  <div class="card-body mb-2">
-    Please use the Login button below
+  <div class="alert alert-success ">
+    <h4 class="text-center">
+    	Please Login Below
+    </h4>
   </div>
   <div class="card-footer">
   {% get_providers as socialaccount_providers %}
 	{% for provider in socialaccount_providers %}
-    <a href="{% provider_login_url provider.id process='login' %}" class="btn btn-success btn-md form-element"
-      role="button">{{ provider.name }}</a>	
+	<form action="{% provider_login_url provider.id process='login' %}" method="post">
+	  {% csrf_token %}
+	  <button class="btn btn-success btn-md form-element" type="submit">{{ provider.name }}</button>
+	</form>
 	{% endfor %}
   </div>
 </div>

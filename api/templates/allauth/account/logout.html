@@ -1,16 +1,16 @@
 {% extends "base_generic.html" %} {% load i18n %} {% block content %}
-<h1 class="text-muted" style="text-align: center">Sign Out</h1>
+<h2 class="text-muted" style="text-align: center">Sign Out</h2>
 
 <form method="post" action="{% url 'account_logout' %}">
   {% csrf_token %}
   <div class="card text-center m-2">
-    <div class="alert alert-danger text-center" role="alert">
-      <h2 class="display-4">
-        Warning!
-      </h2>
+    <div class="alert alert-danger text-center">
+      <h4 class="text-center">
+        Warning
+      </h4>
     </div>
     <div class="card-body">
-      <p>You are about to sign out</p>
+      <p>You are about to sign out.</p>
     </div>
     <div class="card-footer">
       <button class="btn btn-danger btn-md form-element" type="submit">Continue</button>

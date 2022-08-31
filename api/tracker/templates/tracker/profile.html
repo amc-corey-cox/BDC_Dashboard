@@ -1,12 +1,15 @@
 {% extends "base_generic.html" %} {% load socialaccount %} {% block content %}
-<h1 class="text-muted" style="text-align: center">Profile</h1>
+<h2 class="text-muted" style="text-align: center">Profile</h2>
 
 {% if user.is_authenticated %}
 <div class="card text-center m-2">
-  <div class="alert alert-success text-center" role="alert">
-    <h2 class="display-4">
-      <strong>{{ user.email }}</strong>
-    </h2>
+  <div class="alert alert-success ">
+    <h4 class="text-center">
+      <p>You are logged in as:</p>
+      <p>Name: {{ user.name }}</p> 
+      <p>Email: {{ user.email }}</p>
+   
+    </h4>
   </div>
   <div class="card-body">
     <p>Role privileges:
@@ -22,19 +25,18 @@
 </div>
 {% else %}
 <div class="card text-center m-2">
-  <div class="alert alert-dark text-center" role="alert">
-    <h2 class="display-4">
-      Login
-    </h2>
-  </div>
-  <div class="card-body">
-    <p>Select third party login provider to continue</p>
+  <div class="alert alert-success ">
+    <h4 class="text-center">
+      Please Login Below
+    </h4>
   </div>
   <div class="card-footer">
   {% get_providers as socialaccount_providers %}
 	{% for provider in socialaccount_providers %}
-    <a href="{% provider_login_url provider.id process='login' %}" class="btn btn-success btn-md form-element"
-      role="button">{{ provider.name }}</a>	
+	<form action="{% provider_login_url provider.id process='login' %}" method="post">
+	  {% csrf_token %}
+	  <button class="btn btn-success btn-md form-element" type="submit">{{ provider.name }}</button>
+	</form>
 	{% endfor %}
   </div>
 </div>

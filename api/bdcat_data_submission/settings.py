@@ -8,8 +8,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
+import datetime
 import os, io
 import environ
+import logging
 from google.cloud import secretmanager
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -25,6 +27,9 @@ env = environ.Env(DEBUG=(bool, False))
 # load .env
 env_file = os.path.join(BASE_DIR, ".env")
 if os.path.isfile(env_file):
+    print(
+        "Using local .env file"
+    )
     # if local env file
     env.read_env(env_file)
 elif os.environ.get("GOOGLE_CLOUD_PROJECT", None):
@@ -35,8 +40,10 @@ elif os.environ.get("GOOGLE_CLOUD_PROJECT", None):
     settings_name = os.environ.get("SETTINGS_NAME", "django_settings")
     name = f"projects/{project_id}/secrets/{settings_name}/versions/latest"
     payload = client.access_secret_version(name=name).payload.data.decode("UTF-8")
-
     env.read_env(io.StringIO(payload))
+    print(
+        "Using Google Cloud secrets"
+    )
 else:
     print(
         "No local .env or GOOGLE_CLOUD_PROJECT detected. Using container environment variables."
@@ -75,7 +82,7 @@ INSTALLED_APPS = [
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
-    "allauth.socialaccount.providers.google",
+#    "allauth.socialaccount.providers.google",
     # custom nih sso provider
     "nihsso",
     # audit log
@@ -125,6 +132,11 @@ LOGGING = {
     "disable_existing_loggers": False,
     "formatters": {},
     "handlers": {
+        'file': {
+            'level': os.getenv("DJANGO_LOG_LEVEL", "DEBUG"),
+            'class': 'logging.FileHandler',
+            'filename': 'data-submission-tracker-'+datetime.datetime.now().strftime('%Y-%m-%d--%H-%M-%S')+'.log',
+        },    
         "console": {
             "level": os.getenv("DJANGO_LOG_LEVEL", "DEBUG"),
             "class": "logging.StreamHandler",
@@ -175,6 +187,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # django-allauth
 # https://github.com/pennersr/django-allauth
+SOCIALACCOUNT_AUTO_SIGNUP = True
 SOCIALACCOUNT_PROVIDERS = {}
 
 if os.environ.get("GOOGLE_CLIENT_ID", None):
@@ -190,6 +203,7 @@ if os.environ.get("GOOGLE_CLIENT_ID", None):
 		},
 	}
 	SOCIALACCOUNT_PROVIDERS['google'] = google_settings
+	print("Adding Google as an Account Provider")
 
 if os.environ.get("NIH_CLIENT_ID", None):
 	nih_settings = {
@@ -204,7 +218,7 @@ if os.environ.get("NIH_CLIENT_ID", None):
 	NIH_OAUTH_SERVER_TOKEN_URL = os.environ.get("NIH_OAUTH_SERVER_TOKEN_URL")
 	NIH_OAUTH_SERVER_INFO_URL = os.environ.get("NIH_OAUTH_SERVER_INFO_URL")
 	NIH_OAUTH_SERVER_AUTH_URL= os.environ.get("NIH_OAUTH_SERVER_AUTH_URL")
-
+	print("Adding NIH SSO as an Account Provider")
 
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
@@ -217,7 +231,9 @@ ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = "email"
-SESSION_COOKIE_AGE = 2 * 24 * 60 * 60  # 2 days in seconds
+SESSION_COOKIE_AGE = 30 * 60  # 30 minutes in seconds
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
 
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
