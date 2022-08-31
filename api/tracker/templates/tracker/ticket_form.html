@@ -1,5 +1,5 @@
 {% extends "base_generic.html" %} {% load widget_tweaks %} {% block content %}
-<h1 class="text-muted" style="text-align: center">Ticket Item</h1>
+<h2 class="text-muted" style="text-align: center">Data Submission Ticket</h2>
 
 <form id="ticket-form" class="needs-validation pb-5 pe-2" method="post">
   <div class="row g-2">
@@ -12,16 +12,16 @@
     <div class="col-md-5 col-lg-4 order-md-last" role="alert">
       <!-- Handle Errors -->
       {% if form.non_field_errors %}
-      <h2 class="text-center" aria-live="polite">
+      <h3 class="text-center" aria-live="polite">
         <div class="badge bg-danger rounded-pill">Insufficient Permissions</div>
-      </h2>
+      </h3>
       {% for error in form.non_field_errors %}
       <h3 class="text-center"><strong>{{ error }}</strong></h3>
       {% endfor %}
       {% elif form.errors %}
-      <h2 class="text-center" aria-live="polite">
+      <h3 class="text-center" aria-live="polite">
         <div class="badge bg-danger rounded-pill">{{ form.errors|length }} Error{% if form.errors %}s{% endif %}</div>
-      </h2>
+      </h3>
       <h3 class="text-muted text-center">Please fix the following</h3>
       <ul class="list-group mb-3">
         {% for field in form %} {% if field.errors %}
@@ -38,11 +38,11 @@
       <!-- Badge Logic -->
       {% if object is None %}
       <div class="d-flex justify-content-center mb-3">
-        <h2><span class="badge bg-info text-dark rounded-pill">Creating Ticket</span></h2>
+        <h3><span class="badge bg-info text-dark rounded-pill">Creating Ticket</span></h3>
       </div>
       {% else %}
       <div class="d-flex justify-content-center mb-3">
-        <h2><span class="badge bg-{{ status.2 }} rounded-pill">{{ status.1 }}</span></h2>
+        <h3><span class="badge bg-{{ status.2 }} rounded-pill">{{ status.1 }}</span></h3>
       </div>
 
       <!-- Logs -->
@@ -176,16 +176,16 @@
               class="required">*</span>{{ form.name.label }}</label>
           <input type="text" class="form-control {% if form.name.errors %}is-invalid{% endif %}"
             id="{{ form.name.auto_id }}" name="{{ form.name.name }}" placeholder="{{ form.name.help_text }}"
-            value="{{ form.name.value }}" required {% if form.name.errors %} aria-invalid
+            value="{% if object %}{{ form.name.value }}{% else %}{{ user.name }}{% endif %}" required {% if form.name.errors %} aria-invalid
             aria-describedby="{% for error in form.name.errors %}id_name_error_{{ forloop.counter }}{% endfor %}"
-            {% endif %} aria-required="true" />
+            {% endif %} aria-required="true" value=""></input>
         </div>
         <div class="col-sm-6">
           <label for="{{ form.email.id_for_label }}" class="form-label"><span
               class="required">*</span>{{ form.email.label }}</label>
           <input type="text" class="form-control {% if form.email.errors %}is-invalid aria-invalid{% endif %}"
             id="{{ form.email.auto_id }}" name="{{ form.email.name }}" placeholder="{{ form.email.label }}"
-            value="{{ form.email.value }}" required {% if form.email.errors %} aria-invalid
+            value="{% if object %}{{ form.email.value }}{% else %}{{ user.email }}{% endif %}" required {% if form.email.errors %} aria-invalid
             aria-describedby="{% for error in form.email.errors %}id_email_error_{{ forloop.counter }}{% endfor %}"
             {% endif %} aria-required="true" />
         </div>
@@ -413,7 +413,7 @@
         <!-- Test Data Checkbox -->
         {% if form.is_test_data.value %}
         <div class="col-12 text-center text-red">
-          <h2> THIS IS TEST DATA </h2>
+          <h3> THIS IS TEST DATA </h3>
         </div>
         {% endif %}
         <hr class="my-4" />

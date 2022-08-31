@@ -31,7 +31,7 @@
     <nav>
       <div class="side-nav p-2">
         <a href="/">
-          <img class="logo" src="{% static 'tracker/bio.svg' %}" alt="bdcat icon" />
+          <img class="logo" src="{% static 'tracker/bio.svg' %}" alt="BioData Catalyst Logo" />
         </a>
         <hr />
         <div class="list-group">
@@ -53,6 +53,7 @@
         <hr />
           {% if user.is_authenticated %}
         <div class="list-group-item list-group-item-success d-column text-center">
+          <strong>{{ user.name }}</strong>
           <strong>{{ user.email }}</strong>
           <br>
           {% if request.path != "/accounts/logout/" %}

@@ -13,7 +13,7 @@ class CustomAccount(ProviderAccount):
 class CustomProvider(OAuth2Provider):
 
     id = 'nihsso'
-    name = 'NIH SSO'
+    name = 'NIH Login'
     account_class = CustomAccount
 
     def extract_uid(self, data):
