@@ -131,12 +131,7 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "formatters": {},
-    "handlers": {
-        'file': {
-            'level': os.getenv("DJANGO_LOG_LEVEL", "DEBUG"),
-            'class': 'logging.FileHandler',
-            'filename': 'data-submission-tracker-'+datetime.datetime.now().strftime('%Y-%m-%d--%H-%M-%S')+'.log',
-        },    
+    "handlers": { 
         "console": {
             "level": os.getenv("DJANGO_LOG_LEVEL", "DEBUG"),
             "class": "logging.StreamHandler",
