@@ -13,7 +13,6 @@ from datetime import datetime, timezone
 from .models import Ticket, User, STATUS_TYPES
 from .mail import Mail
 
-
 class IndexView(TemplateView):
     template_name = "tracker/index.html"
 
