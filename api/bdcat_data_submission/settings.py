@@ -142,18 +142,11 @@ LOGGING = {
             "level": os.getenv("DJANGO_LOG_LEVEL", "DEBUG"),
             "class": "logging.StreamHandler",
             "formatter": "verbose",
-        },
-        'file': {
-            'level': os.getenv("DJANGO_LOG_LEVEL", "DEBUG"),
-            'class': 'logging.FileHandler',
-            'filename': 'data_submission_tracker.log',
-            "formatter": "verbose",            
-        },
-        
+        },        
     },
     "loggers": {
         "django": {
-            "handlers": ["console", "file"],
+            "handlers": ["console"],
             "level": os.getenv("DJANGO_LOG_LEVEL", "DEBUG"),
             "propagate": True,
         },
