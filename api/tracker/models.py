@@ -11,6 +11,8 @@ from django.contrib.auth.models import (
     PermissionsMixin,
 )
 from simple_history.models import HistoricalRecords
+from allauth.account.signals import user_logged_in, user_logged_out
+from django.dispatch import receiver
 
 # Ticket
 # ------
@@ -279,3 +281,13 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def get_absolute_url(self):
         return "users/%i" % self.pk
+        
+logger = logging.getLogger("django")
+@receiver(user_logged_in)
+def login_logger(request, user, **kwargs):
+    logger.info("User {} logged in with {}".format(user.email, request))
+@receiver(user_logged_out)
+def login_logger(request, user, **kwargs):
+    logger.info("User {} logged out.".format(user.email))
+
+

@@ -13,6 +13,7 @@ import os, io
 import environ
 import logging
 from google.cloud import secretmanager
+from django.utils.timezone import get_current_timezone_name
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -130,22 +131,34 @@ TEMPLATES = [
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
-    "formatters": {},
+    'formatters': {
+        'verbose': {
+            'format': '{asctime} {levelname} [{module}] {message}',
+            'style': '{',
+        },
+    },
     "handlers": { 
         "console": {
             "level": os.getenv("DJANGO_LOG_LEVEL", "DEBUG"),
             "class": "logging.StreamHandler",
+            "formatter": "verbose",
         },
+        'file': {
+            'level': os.getenv("DJANGO_LOG_LEVEL", "DEBUG"),
+            'class': 'logging.FileHandler',
+            'filename': 'data_submission_tracker.log',
+            "formatter": "verbose",            
+        },
+        
     },
     "loggers": {
         "django": {
-            "handlers": ["console"],
+            "handlers": ["console", "file"],
             "level": os.getenv("DJANGO_LOG_LEVEL", "DEBUG"),
             "propagate": True,
         },
     },
 }
-
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
@@ -226,6 +239,8 @@ ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_DEFAULT_HTTP_PROTOCOL=os.environ.get("ACCOUNT_DEFAULT_HTTP_PROTOCOL", "https")
+
 SESSION_COOKIE_AGE = 30 * 60  # 30 minutes in seconds
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
@@ -240,11 +255,13 @@ if os.environ.get("AZURE_SITES_URL", None):
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 LANGUAGE_CODE = "en-us"
-TIME_ZONE = "UTC"
+TIME_ZONE = "America/New_York"
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
+DATE_FORMAT = 'N j, Y, P T'
+DATETIME_FORMAT = 'N j, Y, P T'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
