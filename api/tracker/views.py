@@ -12,7 +12,9 @@ from django.urls import reverse_lazy
 from datetime import datetime, timezone
 from .models import Ticket, User, STATUS_TYPES
 from .mail import Mail
+import logging
 
+logger = logging.getLogger("django")
 class IndexView(TemplateView):
     template_name = "tracker/index.html"
 
@@ -108,7 +110,7 @@ class TicketUpdate(LoginRequiredMixin, UpdateView):
                 ticket.ticket_rejected_by = email
             elif status_update == None:
                 # if staff edits ticket
-                print("Ticket Updated!")
+                logger.info("Ticket Updated by " + email)
             else:
                 form.errors[forms.forms.NON_FIELD_ERRORS] = ErrorList(
                     ["Only Staff are allowed to perform this action"]
@@ -126,7 +128,7 @@ class TicketUpdate(LoginRequiredMixin, UpdateView):
                 status_update == None and ticket.get_ticket_status[1] == STATUS_TYPES[1]
             ):
                 # if user edits ticket
-                print("Ticket Updated!")
+                logger.info("Ticket Updated by " + email)
             else:
                 form.errors[forms.forms.NON_FIELD_ERRORS] = ErrorList(
                     ["Only Data Custodians are allowed to perform this action"]

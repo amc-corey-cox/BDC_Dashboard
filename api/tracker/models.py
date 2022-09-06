@@ -249,8 +249,6 @@ class UserManager(BaseUserManager):
         )
         user.set_password(password)
         user.save(using=self._db)
-        print("User created: " + email)
-        logging.info("User created: " + email)
         return user
 
     def create_user(self, email, password, **extra_data):
