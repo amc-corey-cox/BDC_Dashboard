@@ -109,7 +109,9 @@ html {
 .text-yellow {
   color: var(--bs-orange);
 }
-
+.text-green {
+  color: var(--bs-green);
+}
 .btn-cancel {
   color: var(--color-catalyst-blue);
   background-color: var(--color-background-grey);
