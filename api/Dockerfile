@@ -17,6 +17,8 @@ RUN set -eux; \
   ; \
   # add perms
   chown -R 1001:0 ${APP_HOME}; \
+  chmod a+w ${APP_HOME}/tracker/migrations; \
+  chmod a+x ${APP_HOME}/docker_entrypoint.sh; \
 
   # install tini
   wget https://github.com/krallin/tini/releases/download/$TINI_VERSION/tini -O /sbin/tini; \
@@ -42,9 +44,9 @@ RUN set -eux; \
   /usr/local/bin/python3 -m pip install wheel ; \
   /usr/local/bin/python3 -m pip install -r requirements.txt ; \
   # collect static
-  /usr/local/bin/python3 /app/manage.py collectstatic --noinput;
+  /usr/local/bin/python3 /app/manage.py collectstatic --noinput; 
 
 USER 1001
 ENTRYPOINT ["/sbin/tini", "--"]
 EXPOSE 8000 2222
-CMD ["/usr/local/bin/python3", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["./docker_entrypoint.sh"]
