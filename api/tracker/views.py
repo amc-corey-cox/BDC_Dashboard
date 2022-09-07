@@ -188,6 +188,8 @@ class TicketsList(LoginRequiredMixin, ListView):
                 object.last_updated_color = "text-red"
             elif object.last_updated > 7:
                 object.last_updated_color = "text-yellow"
+            else:
+                object.last_updated_color = "text-green"
 
             # filter tickets by status
             status = object.get_ticket_status[1]
