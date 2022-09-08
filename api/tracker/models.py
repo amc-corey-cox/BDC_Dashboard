@@ -71,6 +71,7 @@ DATA_SIZE_VALIDATOR = RegexValidator(
     "Data Size format invalid. Please add a unit of measurement (MB, GB, TB, PB)",
 )
 
+logger = logging.getLogger("django")
 
 class Ticket(models.Model):
     name = models.CharField(
@@ -249,6 +250,7 @@ class UserManager(BaseUserManager):
         )
         user.set_password(password)
         user.save(using=self._db)
+        logger.info("Created user " + email)
         return user
 
     def create_user(self, email, password, **extra_data):
@@ -280,7 +282,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     def get_absolute_url(self):
         return "users/%i" % self.pk
         
-logger = logging.getLogger("django")
+    def get_short_name(self):
+        return self.name
+        
+
 @receiver(user_logged_in)
 def login_logger(request, user, **kwargs):
     logger.info("User {} logged in with {}".format(user.email, request))

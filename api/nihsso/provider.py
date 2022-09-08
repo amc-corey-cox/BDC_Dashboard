@@ -1,6 +1,7 @@
 from allauth.socialaccount import providers
 from allauth.socialaccount.providers.base import ProviderAccount
 from allauth.socialaccount.providers.oauth2.provider import OAuth2Provider
+import logging
 
 # The following sites were relied on heavily for instructions on adding a custom provider:
 # https://petersimpson.dev/blog/django-allauth-custom-provider/
@@ -21,8 +22,10 @@ class CustomProvider(OAuth2Provider):
     	return str(data['email'])
 
     def extract_common_fields(self, data):
-        return dict(
-                    email=data['email'])
+    	logger = logging.getLogger("django")
+    	logger.info("In extract_common_fields, email=" + data['email'] + ", name=" + data.get('name', ""))
+    	return dict(
+                    email=data['email'], name=data.get('name', ""))
 
     # def get_default_scope(self):
     #     pass

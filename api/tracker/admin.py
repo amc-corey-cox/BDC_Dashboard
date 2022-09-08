@@ -6,6 +6,21 @@ from .models import User, Ticket
 
 
 class UserAdmin(BaseUserAdmin, SimpleHistoryAdmin):
+    add_fieldsets = (
+        (None, {"fields": ("email", "password", "name", "last_login")}),
+        (
+            "Permissions",
+            {
+                "fields": (
+                    "is_active",
+                    "is_staff",
+                    "is_superuser",
+                    "groups",
+                    "user_permissions",
+                )
+            },
+        ),
+    )
     fieldsets = (
         (None, {"fields": ("email", "password", "name", "last_login")}),
         (
