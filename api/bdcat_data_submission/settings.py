@@ -29,7 +29,7 @@ env = environ.Env(DEBUG=(bool, False))
 env_file = os.path.join(BASE_DIR, ".env")
 if os.path.isfile(env_file):
     print(
-        "Using local .env file"
+        "Using local .env file: " + env_file
     )
     # if local env file
     env.read_env(env_file)
