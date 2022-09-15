@@ -92,19 +92,13 @@ html {
 }
 
 #board {
-  display: flex;
   overflow-x: auto;
 }
 .board-panel {
-  /* display: inline-block; */
-  width: 12rem;
-  /* padding: 0 1rem 1rem 1rem; */
   margin: 0.25rem;
+  padding: 0;
   border: 0.1rem solid var(--color-light-gray);
   border-radius: 0.25rem;
-}
-.board-card h5 {
-  font-weight: bold;
 }
 .text-red {
   color: var(--bs-red);
