@@ -141,10 +141,10 @@
           name="{{ form.ticket_bucket_name.name }}" placeholder="{{ form.ticket_bucket_name.help_text }}"
           rows="3">{{ form.ticket_bucket_name.value }}</textarea>
         <input class="btn btn-success btn-md mb-2" type="submit" name="status_update" value="Mark as Bucket Created" />
-        {% endif %} {% if "Awaiting Data Custodian Upload Start" in status and not staff %}
+        {% endif %} {% if "Awaiting Data Custodian Upload Start" in status %}
         <input class="btn btn-success btn-md mb-2" type="submit" name="status_update"
           value="Mark as Data Upload Started" />
-        {% endif %} {% if "Awaiting Data Custodian Upload Complete" in status and not staff %}
+        {% endif %} {% if "Awaiting Data Custodian Upload Complete" in status %}
         <input class="btn btn-success btn-md mb-2" type="submit" name="status_update"
           value="Mark as Data Upload Completed" />
         {% endif %} {% if "Awaiting Gen3 Acceptance" in status and staff %}

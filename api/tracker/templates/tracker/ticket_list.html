@@ -10,7 +10,7 @@
     {% for object in awaiting_review %}
     <div class="card text-center m-2">
       <div class="card-header" style="background-color: lightgrey">
-        <strong> {{ object.study_id }}..{{ object.consent_code }} </strong>
+        <strong> {{ object.study_id }}.{{ object.consent_code }} </strong>
       </div>
       <div class="card-body">
         {% if object.study_name %}
@@ -35,7 +35,7 @@
     {% for object in awaiting_bucket_creation %}
     <div class="card text-center m-2">
       <div class="card-header" style="background-color: lightgrey">
-        <strong> {{ object.study_id }}..{{ object.consent_code }} </strong>
+        <strong> {{ object.study_id }}.{{ object.consent_code }} </strong>
       </div>
       <div class="card-body">
         {% if object.study_name %}
@@ -60,7 +60,7 @@
     {% for object in awaiting_data_upload_start %}
     <div class="card text-center m-2">
       <div class="card-header" style="background-color: lightgrey">
-        <strong> {{ object.study_id }}..{{ object.consent_code }} </strong>
+        <strong> {{ object.study_id }}.{{ object.consent_code }} </strong>
       </div>
       <div class="card-body">
         {% if object.study_name %}
@@ -85,7 +85,7 @@
     {% for object in awaiting_data_upload_complete %}
     <div class="card text-center m-2">
       <div class="card-header" style="background-color: lightgrey">
-        <strong> {{ object.study_id }}..{{ object.consent_code }} </strong>
+        <strong> {{ object.study_id }}.{{ object.consent_code }} </strong>
       </div>
       <div class="card-body">
         {% if object.study_name %}
@@ -110,7 +110,7 @@
     {% for object in awaiting_gen3_approval %}
     <div class="card text-center m-2">
       <div class="card-header" style="background-color: lightgrey">
-        <strong> {{ object.study_id }}..{{ object.consent_code }} </strong>
+        <strong> {{ object.study_id }}.{{ object.consent_code }} </strong>
       </div>
       <div class="card-body">
         {% if object.study_name %}
@@ -135,7 +135,7 @@
     {% for object in gen3_accepted %}
     <div class="card text-center m-2">
       <div class="card-header" style="background-color: lightgrey">
-        <strong> {{ object.study_id }}..{{ object.consent_code }} </strong>
+        <strong> {{ object.study_id }}.{{ object.consent_code }} </strong>
       </div>
       <div class="card-body">
         {% if object.study_name %}
