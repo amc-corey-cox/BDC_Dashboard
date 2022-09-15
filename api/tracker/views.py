@@ -100,6 +100,14 @@ class TicketUpdate(LoginRequiredMixin, UpdateView):
                 # set status to "Awaiting Data Custodian Upload Start"
                 ticket.bucket_created_dt = datetime.now(timezone.utc)
                 ticket.bucket_created_by = email
+            elif status_update == "Mark as Data Upload Started":
+                # set status to "Awaiting Data Custodian Upload Complete"
+                ticket.data_uploaded_started_dt = datetime.now(timezone.utc)
+                ticket.data_uploaded_started_by = email
+            elif status_update == "Mark as Data Upload Completed":
+                # set status to "Awaiting Gen3 Acceptance"
+                ticket.data_uploaded_completed_dt = datetime.now(timezone.utc)
+                ticket.data_uploaded_completed_by = email                
             elif status_update == "Mark as Gen3 Approved":
                 # set status to "Gen3 Accepted"
                 ticket.data_accepted_dt = datetime.now(timezone.utc)
