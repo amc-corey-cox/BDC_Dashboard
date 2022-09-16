@@ -35,29 +35,29 @@
         </a>
         <hr />
         <div class="list-group">
-          <a class="list-group-item list-group-item-action" href="/">Home</a>
-          <a class="list-group-item list-group-item-action" href="/list">
+          <a class="list-group-item list-group-item-action banner-action" href="/">Home</a>
+          <a class="list-group-item list-group-item-action banner-action" href="/list">
             Ticket Dashboard
           </a>
-          <a class="list-group-item list-group-item-action" href="/create">
+          <a class="list-group-item list-group-item-action banner-action" href="/create">
             Create Ticket
           </a>
           <hr />
-          <a class="list-group-item list-group-item-action" href="/custodian_instructions">
+          <a class="list-group-item list-group-item-action banner-action" href="/custodian_instructions">
             Data Custodian Instructions
           </a>
-          <a class="list-group-item list-group-item-action" href="/user_docs">
+          <a class="list-group-item list-group-item-action banner-action" href="/user_docs">
             User Documentation
           </a>
         </div>
         <hr />
           {% if user.is_authenticated %}
-        <div class="list-group-item list-group-item-success d-column text-center">
+        <div class="list-group-item list-group-item-success d-column text-center banner-action">
           <strong>{{ user.name }}</strong>
           <strong>{{ user.email }}</strong>
           <br>
           {% if request.path != "/accounts/logout/" %}
-          <a href="/accounts/logout" class="btn btn-danger btn-md" role="button">
+          <a href="/accounts/logout" class="btn btn-danger btn-md banner-action w-50" role="button">
             Logout
           </a>
         </div>          
