@@ -1,157 +1,155 @@
 {% extends "base_generic.html" %} {% block content %}
 <h2 class="text-muted" style="text-align: center">Ticket Dashboard</h2>
 
-<div id="board" class="container w-100">
-  <div class="row">
-      <div class="board-panel col">
-        <div class="alert alert-primary text-center" role="alert" data-bs-toggle="tooltip" data-bs-placement="bottom"
-          title="Awaiting NHLBI Review">
-          <p class="h5">Awaiting NHLBI Review</p>
-        </div>
-        {% for object in awaiting_review %}
-        <div class="card text-center m-2">
-          <div class="card-header" style="background-color: lightgrey">
-            <strong> {{ object.study_id }}.{{ object.consent_code }} </strong>
-          </div>
-          <div class="card-body">
-            {% if object.study_name %}
-            <p class="card-text">{{ object.study_name }}</p>
-            {% endif %}
-            <a href="{% url 'tracker:ticket-update' pk=object.pk %}" class="btn btn-warning"
-              role="button">View Ticket</a>
-          </div>
-          <div class="card-footer {% if object.last_updated_color %}{{ object.last_updated_color }}{% endif %}"
-            data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ object.get_ticket_status.0 }}" style="background-color: lightgrey">
-            {{ object.last_updated }} Days Ago
-          </div>
-        </div>
-        {% endfor %}
+<div id="board">
+  <div class="board-panel">
+    <div class="alert alert-primary text-center" role="alert" data-bs-toggle="tooltip" data-bs-placement="bottom"
+      title="Awaiting NHLBI Review">
+      <p class="h5">Awaiting NHLBI Review</p>
+    </div>
+    {% for object in awaiting_review %}
+    <div class="card text-center m-2">
+      <div class="card-header" style="background-color: lightgrey">
+        <strong> {{ object.study_id }}.{{ object.consent_code }} </strong>
       </div>
+      <div class="card-body">
+        {% if object.study_name %}
+        <p class="card-text">{{ object.study_name }}</p>
+        {% endif %}
+        <a href="{% url 'tracker:ticket-update' pk=object.pk %}" class="btn btn-warning"
+          role="button">View Ticket</a>
+      </div>
+      <div class="card-footer {% if object.last_updated_color %}{{ object.last_updated_color }}{% endif %}"
+        data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ object.get_ticket_status.0 }}" style="background-color: lightgrey">
+        {{ object.last_updated }} Days Ago
+      </div>
+    </div>
+    {% endfor %}
+  </div>
 
-      <div class="board-panel col">
-        <div class="alert alert-primary text-center" role="alert" data-bs-toggle="tooltip" data-bs-placement="bottom"
-          title="Awaiting NHLBI Cloud Bucket Creation">
-          <p class="h5">Awaiting NHLBI Cloud Bucket Creation</p>
-        </div>
-        {% for object in awaiting_bucket_creation %}
-        <div class="card text-center m-2">
-          <div class="card-header" style="background-color: lightgrey">
-            <strong> {{ object.study_id }}.{{ object.consent_code }} </strong>
-          </div>
-          <div class="card-body">
-            {% if object.study_name %}
-            <p class="card-text">{{ object.study_name }}</p>
-            {% endif %}
-            <a href="{% url 'tracker:ticket-update' pk=object.pk %}" class="btn btn-warning"
-              role="button">View Ticket</a>
-          </div>
-          <div class="card-footer {% if object.last_updated_color %}{{ object.last_updated_color }}{% endif %}"
-            data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ object.get_ticket_status.0 }}" style="background-color: lightgrey">
-            {{ object.last_updated }} Days Ago
-          </div>
-        </div>
-        {% endfor %}
+  <div class="board-panel">
+    <div class="alert alert-primary text-center" role="alert" data-bs-toggle="tooltip" data-bs-placement="bottom"
+      title="Awaiting NHLBI Cloud Bucket Creation">
+      <p class="h5">Awaiting NHLBI Cloud Bucket Creation</p>
+    </div>
+    {% for object in awaiting_bucket_creation %}
+    <div class="card text-center m-2">
+      <div class="card-header" style="background-color: lightgrey">
+        <strong> {{ object.study_id }}.{{ object.consent_code }} </strong>
       </div>
+      <div class="card-body">
+        {% if object.study_name %}
+        <p class="card-text">{{ object.study_name }}</p>
+        {% endif %}
+        <a href="{% url 'tracker:ticket-update' pk=object.pk %}" class="btn btn-warning"
+          role="button">View Ticket</a>
+      </div>
+      <div class="card-footer {% if object.last_updated_color %}{{ object.last_updated_color }}{% endif %}"
+        data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ object.get_ticket_status.0 }}" style="background-color: lightgrey">
+        {{ object.last_updated }} Days Ago
+      </div>
+    </div>
+    {% endfor %}
+  </div>
 
-      <div class="board-panel col">
-        <div class="alert alert-primary text-center" role="alert" data-bs-toggle="tooltip" data-bs-placement="bottom"
-          title="Awaiting Custodian Upload Start">
-          <p class="h5">Awaiting Data Custodian Upload Start</p>
-        </div>
-        {% for object in awaiting_data_upload_start %}
-        <div class="card text-center m-2">
-          <div class="card-header" style="background-color: lightgrey">
-            <strong> {{ object.study_id }}.{{ object.consent_code }} </strong>
-          </div>
-          <div class="card-body">
-            {% if object.study_name %}
-            <p class="card-text">{{ object.study_name }}</p>
-            {% endif %}
-            <a href="{% url 'tracker:ticket-update' pk=object.pk %}" class="btn btn-warning"
-              role="button">View Ticket</a>
-          </div>
-          <div class="card-footer {% if object.last_updated_color %}{{ object.last_updated_color }}{% endif %}"
-            data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ object.get_ticket_status.0 }}" style="background-color: lightgrey">
-            {{ object.last_updated }} Days Ago
-          </div>
-        </div>
-        {% endfor %}
+  <div class="board-panel">
+    <div class="alert alert-primary text-center" role="alert" data-bs-toggle="tooltip" data-bs-placement="bottom"
+      title="Awaiting Custodian Upload Start">
+      <p class="h5">Awaiting Data Custodian Upload Start</p>
+    </div>
+    {% for object in awaiting_data_upload_start %}
+    <div class="card text-center m-2">
+      <div class="card-header" style="background-color: lightgrey">
+        <strong> {{ object.study_id }}.{{ object.consent_code }} </strong>
       </div>
+      <div class="card-body">
+        {% if object.study_name %}
+        <p class="card-text">{{ object.study_name }}</p>
+        {% endif %}
+        <a href="{% url 'tracker:ticket-update' pk=object.pk %}" class="btn btn-warning"
+          role="button">View Ticket</a>
+      </div>
+      <div class="card-footer {% if object.last_updated_color %}{{ object.last_updated_color }}{% endif %}"
+        data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ object.get_ticket_status.0 }}" style="background-color: lightgrey">
+        {{ object.last_updated }} Days Ago
+      </div>
+    </div>
+    {% endfor %}
+  </div>
 
-      <div class="board-panel col">
-        <div class="alert alert-primary text-center" role="alert" data-bs-toggle="tooltip" data-bs-placement="bottom"
-          title="Awaiting Custodian Upload Complete">
-          <p class="h5">Awaiting Data Custodian Upload Complete</p>
-        </div>
-        {% for object in awaiting_data_upload_complete %}
-        <div class="card text-center m-2">
-          <div class="card-header" style="background-color: lightgrey">
-            <strong> {{ object.study_id }}.{{ object.consent_code }} </strong>
-          </div>
-          <div class="card-body">
-            {% if object.study_name %}
-            <p class="card-text">{{ object.study_name }}</p>
-            {% endif %}
-            <a href="{% url 'tracker:ticket-update' pk=object.pk %}" class="btn btn-warning"
-              role="button">View Ticket</a>
-          </div>
-          <div class="card-footer {% if object.last_updated_color %}{{ object.last_updated_color }}{% endif %}"
-            data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ object.get_ticket_status.0 }}" style="background-color: lightgrey">
-            {{ object.last_updated }} Days Ago
-          </div>
-        </div>
-        {% endfor %}
+  <div class="board-panel">
+    <div class="alert alert-primary text-center" role="alert" data-bs-toggle="tooltip" data-bs-placement="bottom"
+      title="Awaiting Custodian Upload Complete">
+      <p class="h5">Awaiting Data Custodian Upload Complete</p>
+    </div>
+    {% for object in awaiting_data_upload_complete %}
+    <div class="card text-center m-2">
+      <div class="card-header" style="background-color: lightgrey">
+        <strong> {{ object.study_id }}.{{ object.consent_code }} </strong>
       </div>
+      <div class="card-body">
+        {% if object.study_name %}
+        <p class="card-text">{{ object.study_name }}</p>
+        {% endif %}
+        <a href="{% url 'tracker:ticket-update' pk=object.pk %}" class="btn btn-warning"
+          role="button">View Ticket</a>
+      </div>
+      <div class="card-footer {% if object.last_updated_color %}{{ object.last_updated_color }}{% endif %}"
+        data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ object.get_ticket_status.0 }}" style="background-color: lightgrey">
+        {{ object.last_updated }} Days Ago
+      </div>
+    </div>
+    {% endfor %}
+  </div>
 
-      <div class="board-panel col">
-        <div class="alert alert-primary text-center" role="alert" data-bs-toggle="tooltip" data-bs-placement="bottom"
-          title="Awaiting Gen3 Acceptance">
-          <p class="h5">Awaiting Gen3 Acceptance</p>
-        </div>
-        {% for object in awaiting_gen3_approval %}
-        <div class="card text-center m-2">
-          <div class="card-header" style="background-color: lightgrey">
-            <strong> {{ object.study_id }}.{{ object.consent_code }} </strong>
-          </div>
-          <div class="card-body">
-            {% if object.study_name %}
-            <p class="card-text">{{ object.study_name }}</p>
-            {% endif %}
-            <a href="{% url 'tracker:ticket-update' pk=object.pk %}" class="btn btn-warning"
-              role="button">View Ticket</a>
-          </div>
-          <div class="card-footer {% if object.last_updated_color %}{{ object.last_updated_color }}{% endif %}"
-            data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ object.get_ticket_status.0 }}" style="background-color: lightgrey">
-            {{ object.last_updated }} Days Ago
-          </div>
-        </div>
-        {% endfor %}
+  <div class="board-panel">
+    <div class="alert alert-primary text-center" role="alert" data-bs-toggle="tooltip" data-bs-placement="bottom"
+      title="Awaiting Gen3 Acceptance">
+      <p class="h5">Awaiting Gen3 Acceptance</p>
+    </div>
+    {% for object in awaiting_gen3_approval %}
+    <div class="card text-center m-2">
+      <div class="card-header" style="background-color: lightgrey">
+        <strong> {{ object.study_id }}.{{ object.consent_code }} </strong>
       </div>
+      <div class="card-body">
+        {% if object.study_name %}
+        <p class="card-text">{{ object.study_name }}</p>
+        {% endif %}
+        <a href="{% url 'tracker:ticket-update' pk=object.pk %}" class="btn btn-warning"
+          role="button">View Ticket</a>
+      </div>
+      <div class="card-footer {% if object.last_updated_color %}{{ object.last_updated_color }}{% endif %}"
+        data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ object.get_ticket_status.0 }}" style="background-color: lightgrey">
+        {{ object.last_updated }} Days Ago
+      </div>
+    </div>
+    {% endfor %}
+  </div>
 
-      <div class="board-panel col">
-        <div class="alert alert-primary text-center" role="alert" data-bs-toggle="tooltip" data-bs-placement="bottom"
-          title="Gen3 Accepted">
-          <p class="h5">Gen3 Accepted</p>
-        </div>
-        {% for object in gen3_accepted %}
-        <div class="card text-center m-2">
-          <div class="card-header" style="background-color: lightgrey">
-            <strong> {{ object.study_id }}.{{ object.consent_code }} </strong>
-          </div>
-          <div class="card-body">
-            {% if object.study_name %}
-            <p class="card-text">{{ object.study_name }}</p>
-            {% endif %}
-            <a href="{% url 'tracker:ticket-update' pk=object.pk %}" class="btn btn-warning"
-              role="button">View Ticket</a>
-          </div>
-          <div class="card-footer {% if object.last_updated_color %}{{ object.last_updated_color }}{% endif %}"
-            data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ object.get_ticket_status.0 }}" style="background-color: lightgrey">
-            {{ object.last_updated }} Days Ago
-          </div>
-        </div>
-        {% endfor %}
+  <div class="board-panel">
+    <div class="alert alert-primary text-center" role="alert" data-bs-toggle="tooltip" data-bs-placement="bottom"
+      title="Gen3 Accepted">
+      <p class="h5">Gen3 Accepted</p>
+    </div>
+    {% for object in gen3_accepted %}
+    <div class="card text-center m-2">
+      <div class="card-header" style="background-color: lightgrey">
+        <strong> {{ object.study_id }}.{{ object.consent_code }} </strong>
       </div>
+      <div class="card-body">
+        {% if object.study_name %}
+        <p class="card-text">{{ object.study_name }}</p>
+        {% endif %}
+        <a href="{% url 'tracker:ticket-update' pk=object.pk %}" class="btn btn-warning"
+          role="button">View Ticket</a>
+      </div>
+      <div class="card-footer {% if object.last_updated_color %}{{ object.last_updated_color }}{% endif %}"
+        data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ object.get_ticket_status.0 }}" style="background-color: lightgrey">
+        {{ object.last_updated }} Days Ago
+      </div>
+    </div>
+    {% endfor %}
   </div>
 </div>
 
