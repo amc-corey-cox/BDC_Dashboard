@@ -96,10 +96,12 @@ html {
 }
 .board-panel {
   padding: 0;
-  width: 12rem;
-  margin: 0.25rem;
+  max-width: 12rem;
   border: 0.1rem solid var(--color-light-gray);
   border-radius: 0.25rem;
+}
+.board-panel-col {
+  /*padding: 0;*/
 }
 .board-card h5 {
   font-weight: bold;
