@@ -92,13 +92,11 @@ html {
 }
 
 #board {
-  display: flex;
   overflow-x: auto;
 }
 .board-panel {
-  /* display: inline-block; */
+  padding: 0;
   width: 12rem;
-  /* padding: 0 1rem 1rem 1rem; */
   margin: 0.25rem;
   border: 0.1rem solid var(--color-light-gray);
   border-radius: 0.25rem;
