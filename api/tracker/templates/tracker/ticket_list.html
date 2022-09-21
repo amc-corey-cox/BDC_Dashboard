@@ -1,10 +1,10 @@
 {% extends "base_generic.html" %} {% block content %}
 <h2 class="text-muted" style="text-align: center">Ticket Dashboard</h2>
 
-<div id="board" class="container" ><div class="row">
-  <div class="col-sm board-panel-col">
-  <div class="board-panel mx-auto">
-    <div class="alert alert-primary text-center" role="alert" data-bs-toggle="tooltip" data-bs-placement="bottom"
+<div id="board" class="container" ><div class="row g-3">
+  <div class="col-sm-2 col-xs-12">
+  <div class="board-panel ">
+    <div class="board-panel-header alert alert-primary text-center" role="alert" data-bs-toggle="tooltip" data-bs-placement="bottom"
       title="Awaiting NHLBI Review"
       {% if not awaiting_review %}style="margin-bottom: 0;"{% endif %}
       >
@@ -31,9 +31,9 @@
   </div>
   </div>
 
-  <div class="col-sm board-panel-col">
-  <div class="board-panel mx-auto">
-    <div class="alert alert-primary text-center" role="alert" data-bs-toggle="tooltip" data-bs-placement="bottom"
+  <div class="col-sm-2 col-xs-12">
+  <div class="board-panel ">
+    <div class="board-panel-header alert alert-primary text-center" role="alert" data-bs-toggle="tooltip" data-bs-placement="bottom"
       title="Awaiting NHLBI Cloud Bucket Creation"
       {% if not awaiting_bucket_creation %}style="margin-bottom: 0;"{% endif %}
       >
@@ -60,9 +60,9 @@
   </div>
   </div>
 
-  <div class="col-sm board-panel-col">
-  <div class="board-panel mx-auto">
-    <div class="alert alert-primary text-center" role="alert" data-bs-toggle="tooltip" data-bs-placement="bottom"
+  <div class="col-sm-2 col-xs-12">
+  <div class="board-panel ">
+    <div class="board-panel-header alert alert-primary text-center" role="alert" data-bs-toggle="tooltip" data-bs-placement="bottom"
       title="Awaiting Custodian Upload Start"
       {% if not awaiting_data_upload %}style="margin-bottom: 0;"{% endif %}
       >
@@ -89,9 +89,9 @@
   </div>
   </div>
 
-  <div class="col-sm board-panel-col">
-  <div class="board-panel mx-auto">
-    <div class="alert alert-primary text-center" role="alert" data-bs-toggle="tooltip" data-bs-placement="bottom"
+  <div class="col-sm-2 col-xs-12">
+  <div class="board-panel ">
+    <div class="board-panel-header alert alert-primary text-center" role="alert" data-bs-toggle="tooltip" data-bs-placement="bottom"
       title="Awaiting Custodian Upload Complete">
       <p class="h5">Awaiting Data Custodian Upload Complete</p>
     </div>
@@ -116,9 +116,9 @@
   </div>
   </div>
 
-  <div class="col-sm board-panel-col">
-  <div class="board-panel mx-auto">
-    <div class="alert alert-primary text-center" role="alert" data-bs-toggle="tooltip" data-bs-placement="bottom"
+  <div class="col-sm-2 col-xs-12">
+  <div class="board-panel ">
+    <div class="board-panel-header alert alert-primary text-center" role="alert" data-bs-toggle="tooltip" data-bs-placement="bottom"
       title="Awaiting Gen3 Acceptance">
       <p class="h5">Awaiting Gen3 Acceptance</p>
     </div>
@@ -143,9 +143,9 @@
   </div>
   </div>
 
-  <div class="col-sm board-panel-col">
-  <div class="board-panel mx-auto">
-    <div class="alert alert-primary text-center" role="alert" data-bs-toggle="tooltip" data-bs-placement="bottom"
+  <div class="col-sm-2 col-xs-12">
+  <div class="board-panel ">
+    <div class="board-panel-header alert alert-primary text-center" role="alert" data-bs-toggle="tooltip" data-bs-placement="bottom"
       title="Gen3 Accepted"
       {% if not gen3_accepted %}style="margin-bottom: 0;"{% endif %}
     >
