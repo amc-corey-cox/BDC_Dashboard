@@ -35,6 +35,7 @@ class Mail(EmailMessage):
             "name": ticket.name,
             "study_name": ticket.study_name,
             "ticket_url": f"{ticket_url}/{ticket.id}/update",
+            "ticket_status": status            
         }
 
         # create email message object and fill in the details
@@ -70,10 +71,7 @@ class Mail(EmailMessage):
         # data upload completed message: Awaiting Gen3 Acceptance
         elif status == STATUS_TYPES[5]:
             self.template_id = SENDGRID_TICKET_UPDATED_TEMPLATE_ID_USER
-            self.admin_email.template_id = (
-                SENDGRID_DATA_UPLOAD_COMPLETED_TEMPLATE_ID_ADMIN
-            )
-
+            self.admin_email.template_id = SENDGRID_TICKET_UPDATED_TEMPLATE_ID_ADMIN
             # attach other data here
 
         # update message
@@ -81,7 +79,7 @@ class Mail(EmailMessage):
             self.template_id = SENDGRID_TICKET_UPDATED_TEMPLATE_ID_USER
             self.admin_email.template_id = SENDGRID_TICKET_UPDATED_TEMPLATE_ID_ADMIN
             # attach ticket_status
-            dynamic_template_data["ticket_status"] = status
+
 
         self.admin_email.dynamic_template_data = dynamic_template_data
         self.dynamic_template_data = dynamic_template_data
