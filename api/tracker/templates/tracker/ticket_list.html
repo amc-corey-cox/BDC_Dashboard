@@ -24,7 +24,7 @@
       </div>
       <div class="card-footer {% if object.last_updated_color %}{{ object.last_updated_color }}{% endif %}"
         data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ object.get_ticket_status.0 }}" style="background-color: lightgrey">
-        {{ object.last_updated }} Days Ago
+        {{ object.last_updated }} Day{{ object.last_updated|pluralize }} Ago
       </div>
     </div>
     {% endfor %}
@@ -53,7 +53,7 @@
       </div>
       <div class="card-footer {% if object.last_updated_color %}{{ object.last_updated_color }}{% endif %}"
         data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ object.get_ticket_status.0 }}" style="background-color: lightgrey">
-        {{ object.last_updated }} Days Ago
+        {{ object.last_updated }} Day{{ object.last_updated|pluralize }} Ago
       </div>
     </div>
     {% endfor %}
@@ -82,7 +82,7 @@
       </div>
       <div class="card-footer {% if object.last_updated_color %}{{ object.last_updated_color }}{% endif %}"
         data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ object.get_ticket_status.0 }}" style="background-color: lightgrey">
-        {{ object.last_updated }} Days Ago
+        {{ object.last_updated }} Day{{ object.last_updated|pluralize }} Ago
       </div>
     </div>
     {% endfor %}
@@ -109,7 +109,7 @@
       </div>
       <div class="card-footer {% if object.last_updated_color %}{{ object.last_updated_color }}{% endif %}"
         data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ object.get_ticket_status.0 }}" style="background-color: lightgrey">
-        {{ object.last_updated }} Days Ago
+        {{ object.last_updated }} Day{{ object.last_updated|pluralize }} Ago
       </div>
     </div>
     {% endfor %}
@@ -136,7 +136,7 @@
       </div>
       <div class="card-footer {% if object.last_updated_color %}{{ object.last_updated_color }}{% endif %}"
         data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ object.get_ticket_status.0 }}" style="background-color: lightgrey">
-        {{ object.last_updated }} Days Ago
+        {{ object.last_updated }} Day{{ object.last_updated|pluralize }} Ago
       </div>
     </div>
     {% endfor %}
@@ -165,7 +165,7 @@
       </div>
       <div class="card-footer {% if object.last_updated_color %}{{ object.last_updated_color }}{% endif %}"
         data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ object.get_ticket_status.0 }}" style="background-color: lightgrey">
-        {{ object.last_updated }} Days Ago
+        {{ object.last_updated }} Day{{ object.last_updated|pluralize }} Ago
       </div>
     </div>
     {% endfor %}

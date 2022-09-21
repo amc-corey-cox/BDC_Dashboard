@@ -53,11 +53,13 @@
         <hr />
           {% if user.is_authenticated %}
         <div class="list-group-item list-group-item-success d-column text-center banner-action">
-          <strong>{{ user.name }}</strong>
+          <strong>{{ user.name }}</strong><br/>
           <strong>{{ user.email }}</strong>
           <br>
           {% if request.path != "/accounts/logout/" %}
-          <a href="/accounts/logout" class="btn btn-danger btn-md banner-action w-50" role="button">
+          <a href="/accounts/logout" class="btn btn-danger btn-md banner-action w-50" role="button"
+             style="padding-left: 0; padding-right: 0;"
+              >
             Logout
           </a>
         </div>          
