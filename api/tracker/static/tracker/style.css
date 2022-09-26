@@ -102,6 +102,7 @@ html {
 .board-panel {
   padding: 0;
   max-width: 12rem;
+  margin: auto;
   border: 0.1rem solid var(--color-light-gray);
   border-radius: 0.25rem;
 }
@@ -111,7 +112,7 @@ html {
  * It was necessary because we're not using a sass compiler to get
  * the bootstrap sass variables.
  */
-@media (min-width: 576px) {
+@media (min-width: 1200px) {
     .board-panel {
       max-width: 100%;
     }
