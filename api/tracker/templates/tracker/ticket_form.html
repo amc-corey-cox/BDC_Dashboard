@@ -137,10 +137,11 @@
         <input class="btn btn-success btn-md mb-2" type="submit" name="status_update" value="Approve Ticket" />
         <input class="btn btn-danger btn-md" type="submit" name="status_update" value="Reject Ticket" />
         {% endif %} {% if "Awaiting NHLBI Cloud Bucket Creation" in status and staff %}
-        <textarea class="form-control mb-2" id="{{ form.ticket_bucket_name.auto_id }}"
+        <textarea class="form-control mb-2 w-100" id="{{ form.ticket_bucket_name.auto_id }}"
           name="{{ form.ticket_bucket_name.name }}" placeholder="{{ form.ticket_bucket_name.help_text }}"
           rows="3">{{ form.ticket_bucket_name.value }}</textarea>
-        <input class="btn btn-success btn-md mb-2" type="submit" name="status_update" value="Mark as Bucket Created" />
+        <input class="btn btn-success btn-md mb-2 w-100" type="submit" name="status_update" value="Mark as Bucket Created" />
+        <input class="btn btn-danger btn-md mb-2 w-100" type="submit" name="status_update" value="Create Bucket" />
         {% endif %} {% if "Awaiting Data Custodian Upload Start" in status %}
         <input class="btn btn-success btn-md mb-2" type="submit" name="status_update"
           value="Mark as Data Upload Started" />

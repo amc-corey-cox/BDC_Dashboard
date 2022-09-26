@@ -100,6 +100,8 @@ class TicketUpdate(LoginRequiredMixin, UpdateView):
                 # set status to "Awaiting Data Custodian Upload Start"
                 ticket.bucket_created_dt = datetime.now(timezone.utc)
                 ticket.bucket_created_by = email
+            elif status_update == "Create Bucket":
+                logger.info("Bucket Creation Called")
             elif status_update == "Mark as Data Upload Started":
                 # set status to "Awaiting Data Custodian Upload Complete"
                 ticket.data_uploaded_started_dt = datetime.now(timezone.utc)
