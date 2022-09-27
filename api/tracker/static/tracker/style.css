@@ -92,20 +92,36 @@ html {
 }
 
 #board {
-  display: flex;
   overflow-x: auto;
 }
+
+.board-panel-header {
+  word-wrap: break-word;
+}
+
 .board-panel {
-  /* display: inline-block; */
-  width: 12rem;
-  /* padding: 0 1rem 1rem 1rem; */
-  margin: 0.25rem;
+  padding: 0;
+  max-width: 12rem;
+  margin: auto;
   border: 0.1rem solid var(--color-light-gray);
   border-radius: 0.25rem;
 }
+
+/*
+ * The measure 576px is taken from the bootstrap "sm" breakpoint.
+ * It was necessary because we're not using a sass compiler to get
+ * the bootstrap sass variables.
+ */
+@media (min-width: 1200px) {
+    .board-panel {
+      max-width: 100%;
+    }
+}
+
 .board-card h5 {
   font-weight: bold;
 }
+
 .text-red {
   color: var(--bs-red);
 }
