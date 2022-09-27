@@ -64,7 +64,7 @@ STUDY_ID_VALIDATOR = RegexValidator(
 )
 CONSENT_CODE_VALIDATOR = RegexValidator(
     STUDY_ID_AND_CONSENT_CODE_REGEX,
-    "Consent Code format invalid",
+    "dbGaP Consent Group Code format invalid",
 )
 DATA_SIZE_VALIDATOR = RegexValidator(
     r"^[0-9]{1,5}(.[0-9]{1,5})?\s?(MB|GB|TB|PB)$",
@@ -102,7 +102,7 @@ class Ticket(models.Model):
     )
     consent_code = models.CharField(
         max_length=100,
-        verbose_name="Consent Code",
+        verbose_name="dbGaP Consent Group Code",
         help_text="Please refer to Data Custodian Instructions for more information",
         default="",
         validators=[CONSENT_CODE_VALIDATOR],
