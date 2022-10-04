@@ -137,12 +137,37 @@
         <input class="btn btn-success btn-md mb-2" type="submit" name="status_update" value="Approve Ticket" />
         <input class="btn btn-danger btn-md" type="submit" name="status_update" value="Reject Ticket" />
         {% endif %} {% if "Awaiting NHLBI Cloud Bucket Creation" in status and staff %}
+        {% if form.google_email.value or form.aws_iam.value %}
+        <div class="col-12 p-0">
+          <div class="card card-body mb-3 w-100">
+            <p id="create-bucket-info-header">The following buckets are needed for this study:</p>
+            {% if form.google_email.value %}
+              <div class="text-primary">gs://nhlbi-bdc-{{ form.study_id.value }}-{{ form.consent_code.value }}</div><br/>
+              <div class="text-secondary">{{ form.google_email.value }}</div><br/>
+            {% endif %}
+            {% if form.aws_iam.value %}
+              <div class="text-primary">s3://nhlbi-bdc-{{ form.study_id.value }}-{{ form.consent_code.value }}</div><br/>
+              <div class="text-secondary">{{ form.aws_iam.value }}</div><br/>
+            {% endif %}
+          </div>
+        </div>
+        {% endif %}
+        <div class="col-12 p-0">
+          <div class="form-check mb-3 w-100">
+            <input class="form-check-input" type="checkbox" value="" id="check-make-bucket">
+            <label class="form-check-label" for="check-make-bucket">
+              Create Bucket Automatically
+            </label>
+          </div>
+        </div>
         {% comment %}
-	        <textarea class="form-control mb-2 w-100" id="{{ form.ticket_bucket_name.auto_id }}"
+	        <textarea class="form-control mb-3 w-100" id="{{ form.ticket_bucket_name.auto_id }}"
 	          name="{{ form.ticket_bucket_name.name }}" placeholder="{{ form.ticket_bucket_name.help_text }}"
 	          rows="3">{{ form.ticket_bucket_name.value }}</textarea>
         {% endcomment %}
-        <input class="btn btn-danger btn-md mb-2 w-100" type="submit" name="status_update" value="Create Bucket" />
+        <div class="col-12 p-0">
+          <input id="mark-bucket-button" class="btn btn-success btn-md mb-3 w-100" type="submit" name="status_update" value="Mark as Bucket Created" />
+        </div>
         {% endif %} {% if "Awaiting Data Custodian Upload Start" in status %}
         <input class="btn btn-success btn-md mb-2" type="submit" name="status_update"
           value="Mark as Data Upload Started" />
@@ -442,6 +467,25 @@
 
     $("#ticket-form").submit();
   }
+
+  $(document).ready(function() {
+    // This is to make sure that on reload the checkbox is unchecked.
+    // Without it if you check #check-make-bucket and reload it will
+    // remain checked and leave other elements in an invalid state.
+    $('#check-make-bucket').prop("checked", false);
+
+    $('#check-make-bucket').change(function() {
+      if (this.checked) {
+        $('#mark-bucket-button').val('Create and Mark as Bucket Created');
+        $('#create-bucket-info-header').text('The following buckets will be created with the given permissions:');
+      }
+
+      else {
+        $('#mark-bucket-button').val('Mark as Bucket Created');
+        $('#create-bucket-info-header').text('The following buckets are needed for this study:');
+      }
+    });
+  });
 </script>
 
 {% if object and not form.errors %}
