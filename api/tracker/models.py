@@ -131,7 +131,7 @@ class Ticket(models.Model):
     aws_iam = models.CharField(
         max_length=100,
         verbose_name="AWS IAM",
-        help_text="If you're uploading to Amazon, please provide your AWS IAM (ex: arn:aws:iam::123456789012:user/username)",
+        help_text="If you're uploading to Amazon, please provide your AWS IAM ARN (ex: arn:aws:iam::123456789012:user/username)",
         blank=True,
         default="",
         validators=[AWS_IAM_VALIDATOR],
