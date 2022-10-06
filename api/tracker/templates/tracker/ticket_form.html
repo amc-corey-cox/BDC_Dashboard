@@ -1,4 +1,4 @@
-{% extends "base_generic.html" %} {% load widget_tweaks %} {% block content %}
+{% extends "base_generic.html" %} {% load widget_tweaks %} {% load api_extras %} {% block content %}
 <h2 class="text-muted" style="text-align: center">Data Submission Ticket</h2>
 
 <form id="ticket-form" class="needs-validation pb-5 pe-2" method="post">
@@ -258,10 +258,10 @@
         </div>
         <div class="col-sm-6">
           <label for="{{ form.consent_code.id_for_label }}" class="form-label"><span
-              class="required">*</span>{{ form.consent_code.label }}</label>
+              class="required">*</span>{{ form.consent_code.label|uncapitalize }}</label>
           <input type="text" class="form-control
               {% if form.consent_code.errors %}is-invalid aria-invalid{% endif %}" id="{{ form.consent_code.auto_id }}"
-            name="{{ form.consent_code.name }}" placeholder="{{ form.consent_code.label }}"
+            name="{{ form.consent_code.name }}" placeholder="{{ form.consent_code.label|uncapitalize }}"
             value="{{ form.consent_code.value }}" required {% if form.consent_code.errors %} aria-invalid
             aria-describedby="{% for error in form.name.errors %}id_consent_code_error_{{ forloop.counter }}{% endfor %}"
             {% endif %} aria-required="true" />
@@ -415,7 +415,7 @@
         </div>
         <div class="col-sm-6 card text-center">
           <div class="card-header">
-            <strong>{{ form.consent_code.label }}</strong>
+            <strong>{{ form.consent_code.label|uncapitalize }}</strong>
           </div>
           <p>{{ form.consent_code.value }}</p>
         </div>
