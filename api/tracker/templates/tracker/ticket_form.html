@@ -307,6 +307,23 @@
           <div class="form-text">{{ form.aws_iam.help_text }}</div>
         </div>
 
+        {% if "Awaiting NHLBI Review" in status or "Awaiting NHLBI Cloud Bucket Creation" in status %}
+        <!-- TODO
+        Proposed Data Bucket Name
+        <div class="col-sm-12">
+          <label for="{{ form.data_size.id_for_label }}" class="form-label"><span
+              class="required">*</span>{{ form.data_size.label }}</label>
+          <div class="col-sm-3">
+            <input type="text" class="form-control {% if form.data_size.errors %}is-invalid aria-invalid{% endif %}"
+              id="{{ form.data_size.auto_id }}" name="{{ form.data_size.name }}" placeholder="100 GB"
+              value="{{ form.data_size.value }}" required {% if form.data_size.errors %} aria-invalid
+              aria-describedby="{% for error in form.data_size.errors %}id_data_size_error_{{ forloop.counter }}{% endfor %}"
+              {% endif %} aria-required="true" />
+          </div>
+          <div class="form-text">{{ form.data_size.help_text }}</div>
+        </div>
+        -->
+        {% endif %}
         <!-- Data Size -->
         <div class="col-sm-12">
           <label for="{{ form.data_size.id_for_label }}" class="form-label"><span
@@ -429,6 +446,19 @@
           <p>{{ form.aws_iam.value }}</p>
         </div>
 
+        <!-- TODO Data Bucket Name -->
+        <div class="col-sm-12 card text-center">
+          <div class="card-header">
+            <strong>
+              {% if "Awaiting NHLBI Review" in status or "Awaiting NHLBI Cloud Bucket Creation" in status %}
+              Proposed
+              {% endif %}
+              Data Bucket Name
+            </strong>
+          </div>
+          <p>nhlbi-bdc-{{ form.study_id.value }}-{{ form.consent_code.value }}</p>
+        </div>
+
         <!-- Data Size -->
         <div class="col-sm-12 card text-center">
           <div class="card-header">
@@ -443,6 +473,18 @@
           <h3> THIS IS TEST DATA </h3>
         </div>
         {% endif %}
+        <hr class="my-4" />
+      </div>
+
+      <h3 class="mb-3 ticket-summary">Tracking Information</h3>
+      <div class="row g-3 ticket-summary">
+        <!-- TODO Jira ID -->
+        <div class="col-12 card text-center">
+          <div class="card-header">
+            <strong>Jira Ticket</strong>
+          </div>
+          <p>abc123</p>
+        </div>
         <hr class="my-4" />
       </div>
     </div>
@@ -469,6 +511,7 @@
   }
 
   $(document).ready(function() {
+    {% if "Awaiting NHLBI Cloud Bucket Creation" in status and staff %}
     // This is to make sure that on reload the checkbox is unchecked.
     // Without it if you check #check-make-bucket and reload it will
     // remain checked and leave other elements in an invalid state.
@@ -485,6 +528,7 @@
         $('#create-bucket-info-header').text('The following buckets are needed for this study:');
       }
     });
+    {% endif %}
   });
 </script>
 
