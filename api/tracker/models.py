@@ -131,7 +131,7 @@ class Ticket(models.Model):
     aws_iam = models.CharField(
         max_length=100,
         verbose_name="AWS IAM",
-        help_text="If you're uploading to Amazon, please provide your AWS IAM (ex: arn:aws:iam::123456789012:user/username)",
+        help_text="If you're uploading to Amazon, please provide your AWS IAM ARN (ex: arn:aws:iam::123456789012:user/username)",
         blank=True,
         default="",
         validators=[AWS_IAM_VALIDATOR],
@@ -200,6 +200,24 @@ class Ticket(models.Model):
         verbose_name="Data upload completed by", default=""
     )
     data_accepted_by = models.EmailField(verbose_name="Data accepted by", default="")
+
+    # Bucket Names
+    data_bucket_name = models.CharField(
+        max_length=250,
+        verbose_name="Data Bucket Name",
+        help_text="Name of Cloud Data Bucket",
+        blank=True,
+        default="",
+    )
+
+    # Ticket Jira ID
+    jira_id = models.CharField(
+        max_length=100,
+        verbose_name="Associated Jira Ticket ID",
+        help_text="Associated Jira Ticket ID",
+        blank=True,
+        default="",
+    )
 
     # django-simple-history
     history = HistoricalRecords()
