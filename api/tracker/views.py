@@ -47,6 +47,7 @@ class TicketCreate(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         ticket_obj = form.save(commit=False)
         ticket_obj.created_by = self.request.user
+        ticket_obj.data_bucket_name = ticket_obj.default_data_bucket_name()
         ticket_obj.save()
         Mail(ticket_obj, "Created").send()
         return super().form_valid(form)
@@ -67,6 +68,7 @@ class TicketUpdate(LoginRequiredMixin, UpdateView):
         "study_id",
         "consent_code",
         "ticket_review_comment",
+        "data_bucket_name",
     ]
 
     # add status to context

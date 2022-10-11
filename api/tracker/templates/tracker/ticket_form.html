@@ -142,11 +142,11 @@
           <div class="card card-body mb-3 w-100">
             <p id="create-bucket-info-header">The following buckets are needed for this study:</p>
             {% if form.google_email.value %}
-              <div class="text-primary">gs://nhlbi-bdc-{{ form.study_id.value }}-{{ form.consent_code.value }}</div><br/>
+              <div class="text-primary">gs://{{ form.data_bucket_name.value }}</div><br/>
               <div class="text-secondary">{{ form.google_email.value }}</div><br/>
             {% endif %}
             {% if form.aws_iam.value %}
-              <div class="text-primary">s3://nhlbi-bdc-{{ form.study_id.value }}-{{ form.consent_code.value }}</div><br/>
+              <div class="text-primary">s3://{{ form.data_bucket_name.value }}</div><br/>
               <div class="text-secondary">{{ form.aws_iam.value }}</div><br/>
             {% endif %}
           </div>
@@ -308,21 +308,19 @@
         </div>
 
         {% if "Awaiting NHLBI Review" in status or "Awaiting NHLBI Cloud Bucket Creation" in status %}
-        <!-- TODO
-        Proposed Data Bucket Name
         <div class="col-sm-12">
-          <label for="{{ form.data_size.id_for_label }}" class="form-label"><span
-              class="required">*</span>{{ form.data_size.label }}</label>
+          <label for="{{ form.data_bucket_name.id_for_label }}" class="form-label">
+            Proposed {{ form.data_bucket_name.label }}
+          </label>
           <div class="col-sm-3">
-            <input type="text" class="form-control {% if form.data_size.errors %}is-invalid aria-invalid{% endif %}"
-              id="{{ form.data_size.auto_id }}" name="{{ form.data_size.name }}" placeholder="100 GB"
-              value="{{ form.data_size.value }}" required {% if form.data_size.errors %} aria-invalid
-              aria-describedby="{% for error in form.data_size.errors %}id_data_size_error_{{ forloop.counter }}{% endfor %}"
-              {% endif %} aria-required="true" />
+            <input type="text" class="form-control {% if form.data_bucket_name.errors %}is-invalid aria-invalid{% endif %}"
+              id="{{ form.data_bucket_name.auto_id }}" name="{{ form.data_bucket_name.name }}" placeholder="Name of Data Bucket"
+              value="{{ form.data_bucket_name.value }}" required {% if form.data_bucket_name.errors %} aria-invalid
+              aria-describedby="{% for error in form.data_bucket_name.errors %}id_data_size_error_{{ forloop.counter }}{% endfor %}"
+              {% endif %} />
           </div>
-          <div class="form-text">{{ form.data_size.help_text }}</div>
+          <div class="form-text">{{ form.data_bucket_name.help_text }}</div>
         </div>
-        -->
         {% endif %}
         <!-- Data Size -->
         <div class="col-sm-12">
@@ -456,7 +454,7 @@
               Data Bucket Name
             </strong>
           </div>
-          <p>nhlbi-bdc-{{ form.study_id.value }}-{{ form.consent_code.value }}</p>
+          <p>{{ form.data_bucket_name.value }}</p>
         </div>
 
         <!-- Data Size -->

@@ -4,7 +4,8 @@ from django.db import models
 from django.urls import reverse
 from django.conf import settings
 from django.utils import timezone
-from django.core.validators import RegexValidator
+from django.core.validators import RegexValidator, MinLengthValidator, \
+    MaxLengthValidator, validate_ipv4_address
 from django.contrib.auth.models import (
     AbstractBaseUser,
     BaseUserManager,
@@ -13,6 +14,7 @@ from django.contrib.auth.models import (
 from simple_history.models import HistoricalRecords
 from allauth.account.signals import user_logged_in, user_logged_out
 from django.dispatch import receiver
+from .validators import NegativeValidator
 
 # Ticket
 # ------
@@ -208,6 +210,44 @@ class Ticket(models.Model):
         help_text="Name of Cloud Data Bucket",
         blank=True,
         default="",
+        validators=[
+            MinLengthValidator(
+                3,
+                "Bucket name must have at least 3 characters"
+            ),
+            MaxLengthValidator(
+                63,
+                "Bucket can be no more than 63 characters"
+            ),
+            RegexValidator(
+                r'^[A-Za-z.0-9-]*$',
+                "Bucket name can only contain letters, decimals, numbers,"
+                + " and hyphens"
+            ),
+            RegexValidator(
+                r'^[A-Za-z0-9].*[A-Za-z0-9]$',
+                " Bucket name must begin and end in a letter or number"
+            ),
+            RegexValidator(
+                r'^xn--',
+                "Bucket name cannot begin with 'xn--'",
+                inverse_match=True,
+            ),
+            RegexValidator(
+                r'-s3alias$',
+                "Bucket name cannot end with '-s3alias'",
+                inverse_match=True,
+            ),
+            RegexValidator(
+                r'\.\.',
+                "Bucket name cannot contain two or more consecutive periods",
+                inverse_match=True,
+            ),
+            NegativeValidator(
+                validate_ipv4_address,
+                "Bucket name cannot be an ip address"
+            ),
+        ],
     )
 
     # Ticket Jira ID
@@ -230,6 +270,12 @@ class Ticket(models.Model):
             (field.verbose_name, field.value_from_object(self))
             for field in self.__class__._meta.fields
         ]
+
+    def default_data_bucket_name(self):
+        return (
+            'nhlbi-bdc-{ticket.study_id}-{ticket.consent_code}'
+            .format(ticket=self)
+        )
 
     # get the ticket status based on the date time history
     @property
