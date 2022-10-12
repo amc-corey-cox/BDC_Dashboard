@@ -4,7 +4,7 @@ from django.utils.deconstruct import deconstructible
 
 
 @deconstructible
-class NegativeValidator:
+class NegateValidator:
     def __init__(self, validator, message):
         self.validator = validator
         self.message = message

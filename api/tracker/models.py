@@ -14,7 +14,7 @@ from django.contrib.auth.models import (
 from simple_history.models import HistoricalRecords
 from allauth.account.signals import user_logged_in, user_logged_out
 from django.dispatch import receiver
-from .validators import NegativeValidator
+from .validators import NegateValidator
 
 # Ticket
 # ------
@@ -220,12 +220,12 @@ class Ticket(models.Model):
                 "Bucket can be no more than 63 characters"
             ),
             RegexValidator(
-                r'^[A-Za-z.0-9-]*$',
-                "Bucket name can only contain letters, decimals, numbers,"
-                + " and hyphens"
+                r'^[a-z.0-9-]*$',
+                "Bucket name can only contain lower case letters, decimals,"
+                + " numbers, and hyphens"
             ),
             RegexValidator(
-                r'^[A-Za-z0-9].*[A-Za-z0-9]$',
+                r'^[a-z0-9].*[a-z0-9]$',
                 " Bucket name must begin and end in a letter or number"
             ),
             RegexValidator(
@@ -243,7 +243,7 @@ class Ticket(models.Model):
                 "Bucket name cannot contain two or more consecutive periods",
                 inverse_match=True,
             ),
-            NegativeValidator(
+            NegateValidator(
                 validate_ipv4_address,
                 "Bucket name cannot be an ip address"
             ),

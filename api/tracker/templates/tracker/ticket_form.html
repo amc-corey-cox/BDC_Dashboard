@@ -313,9 +313,13 @@
             Proposed {{ form.data_bucket_name.label }}
           </label>
           <div class="col-sm-3">
-            <input type="text" class="form-control {% if form.data_bucket_name.errors %}is-invalid aria-invalid{% endif %}"
-              id="{{ form.data_bucket_name.auto_id }}" name="{{ form.data_bucket_name.name }}" placeholder="Name of Data Bucket"
-              value="{{ form.data_bucket_name.value }}" required {% if form.data_bucket_name.errors %} aria-invalid
+            <input
+              type="text"
+              class="form-control {% if form.data_bucket_name.errors %}is-invalid aria-invalid{% endif %}"
+              id="{{ form.data_bucket_name.auto_id }}"
+              name="{{ form.data_bucket_name.name }}"
+              placeholder="Name of Data Bucket"
+              value="{{ form.data_bucket_name.value }}" {% if form.data_bucket_name.errors %} aria-invalid
               aria-describedby="{% for error in form.data_bucket_name.errors %}id_data_size_error_{{ forloop.counter }}{% endfor %}"
               {% endif %} />
           </div>
