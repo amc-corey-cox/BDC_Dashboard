@@ -273,7 +273,7 @@ class Ticket(models.Model):
 
     def default_data_bucket_name(self):
         return (
-            'nhlbi-bdc-{ticket.study_id}-{ticket.consent_code}'
+            'nih-nhlbi-bdc-{ticket.study_id}-{ticket.consent_code}'
             .format(ticket=self)
         )
 
