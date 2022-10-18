@@ -272,6 +272,11 @@ class Ticket(models.Model):
         ]
 
     def default_data_bucket_name(self):
+        '''
+        This default adds 11 characters to the study_id and consent_code
+        which are allowed to be up to 60 characters so, we can actually overflow
+        the character requirement for the data bucket field with this method. 
+        '''
         return (
             'nhlbi-bdc-{ticket.study_id}-{ticket.consent_code}'
             .format(ticket=self)
