@@ -15,6 +15,7 @@ from simple_history.models import HistoricalRecords
 from allauth.account.signals import user_logged_in, user_logged_out
 from django.dispatch import receiver
 from .validators import NegateValidator
+from tracker.cloud_storage import get_default_bucket_name
 
 # Ticket
 # ------
@@ -277,9 +278,8 @@ class Ticket(models.Model):
         which are allowed to be up to 60 characters so, we can actually overflow
         the character requirement for the data bucket field with this method. 
         '''
-        return (
-            'nhlbi-bdc-{ticket.study_id}-{ticket.consent_code}'
-            .format(ticket=self)
+        return ( 
+            get_default_bucket_name(self.study_id, self.consent_code)
         )
 
     # get the ticket status based on the date time history
