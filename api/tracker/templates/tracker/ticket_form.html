@@ -493,6 +493,40 @@
   </div>
 </form>
 
+{% if "Awaiting NHLBI Cloud Bucket Creation" in status and staff %}
+<div class="modal" id="bucket-creation-modal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Are you sure?</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>You are about to create the following cloud resources:</p>
+          {% if form.google_email.value %}
+            <div class="text-primary">gs://{{ form.data_bucket_name.value }}</div>
+          {% endif %}
+          {% if form.aws_iam.value %}
+            <div class="text-primary">s3://{{ form.data_bucket_name.value }}</div>
+          {% endif %}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+          <button
+            type="submit"
+            class="btn btn-success"
+            form="ticket-form"
+            value="Mark as Bucket Created"
+            name="status_update"
+          >
+            Create and Mark as Bucket Created
+          </button>
+        </div>
+      </div>
+    </div>
+</div>
+{% endif %}
+
 <script>
   function show_summary() {
     $(".ticket-summary").show();
@@ -521,14 +555,20 @@
 
     $('#check-make-bucket').change(function() {
       if (this.checked) {
-        $('#mark-bucket-button').val('Create and Mark as Bucket Created');
         $('#create-bucket-info-header').text('The following buckets will be created with the given permissions:');
       }
 
       else {
-        $('#mark-bucket-button').val('Mark as Bucket Created');
         $('#create-bucket-info-header').text('The following buckets are needed for this study:');
       }
+    });
+
+    $('#mark-bucket-button').click(function(e) {
+        if ($('#check-make-bucket').is(":checked")) {
+            let bucketCreateModal = new bootstrap.Modal(document.getElementById('bucket-creation-modal'));
+            bucketCreateModal.show();
+            e.preventDefault();
+        }
     });
     {% endif %}
   });
