@@ -3,7 +3,10 @@ FROM registry.access.redhat.com/ubi9@sha256:aee6d39282dabc3374a01d4a81f97c6827cb
 
 ENV APP_HOME=/app \
   PYTHONUNBUFFERED=1 \
-  TINI_VERSION=v0.19.0
+  TINI_VERSION=v0.19.0 \
+  AWS_SHARED_CREDENTIALS_FILE=/app/aws_credentials.txt \
+  GOOGLE_APPLICATION_CREDENTIALS=/app/google_cloud_credentials.json \
+  GCLOUD_PROJECT=weighty-beach-282604
 
 WORKDIR ${APP_HOME}
 
