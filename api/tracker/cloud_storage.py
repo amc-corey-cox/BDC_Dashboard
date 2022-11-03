@@ -93,12 +93,12 @@ def _aws_cloud_add_bucket_upload_permissions(s3_client, bucket, aws_iam):
 
 def main():
 	print("running tests on cloud_storage.py") 
-	bucket_name = 'nimbus-avan-test-bucket5'
+	bucket_name = 'nimbus-clavalle-test-bucket7'
 	result = google_cloud_bucket_exists(bucket_name)
 	print("gs://", bucket_name, ":", result)
 	result = aws_cloud_bucket_exists(bucket_name)
 	print("s3://", bucket_name, ":", result)
-	bucket = google_cloud_create_bucket_with_user_permissions(bucket_name, 'ann@nimbusinformatics.com')
+	bucket = google_cloud_create_bucket_with_user_permissions(bucket_name, 'christopher@nimbusinformatics.com')
 	if (bucket):
 		print("successfully created google bucket")	
 	bucket = aws_cloud_create_bucket_with_user_permissions(bucket_name, None)

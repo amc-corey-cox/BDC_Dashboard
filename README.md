@@ -32,6 +32,7 @@ For local development, the `api` directory should have an `.env` file with the f
 | GOOGLE_CLIENT_ID        |            | The client ID for Google OAuth2                               |
 | GOOGLE_CLIENT_SECRET    |            | The client secret for Google OAuth2                           |
 | NHLBI_JIRA_URL          | URL        | The NHLBI Jira base url                                       |
+| DIST_EMAIL              | Email      | Distribution email for this project, used for support         |
 
 > NOTE: [Unless a static IP is assigned](/ansible/README.md#Reserving-a-Static-IP), you must update the `POSTGRES_HOST` variable each time the VM is restarted
 

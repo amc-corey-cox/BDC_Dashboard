@@ -6,7 +6,7 @@ ENV APP_HOME=/app \
   TINI_VERSION=v0.19.0 \
   AWS_SHARED_CREDENTIALS_FILE=/app/aws_credentials.txt \
   GOOGLE_APPLICATION_CREDENTIALS=/app/google_cloud_credentials.json \
-  GCLOUD_PROJECT=weighty-beach-282604
+  GCLOUD_PROJECT=hopeful-subject-367321
 
 WORKDIR ${APP_HOME}
 

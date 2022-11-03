@@ -13,7 +13,9 @@
       <!-- Handle Errors -->
       {% if form.non_field_errors %}
       <h3 class="text-center" aria-live="polite">
-        <div class="badge bg-danger rounded-pill">Insufficient Permissions</div>
+        <div class="badge bg-danger rounded-pill" style="width:100%;">
+          Error
+        </div>
       </h3>
       {% for error in form.non_field_errors %}
       <h3 class="text-center"><strong>{{ error }}</strong></h3>
@@ -137,16 +139,16 @@
         <input class="btn btn-success btn-md mb-2" type="submit" name="status_update" value="Approve Ticket" />
         <input class="btn btn-danger btn-md" type="submit" name="status_update" value="Reject Ticket" />
         {% endif %} {% if "Awaiting NHLBI Cloud Bucket Creation" in status and staff %}
-        {% if form.google_email.value or form.aws_iam.value %}
+        {% if form.data_bucket_name.value %}
         <div class="col-12 p-0">
           <div class="card card-body mb-3 w-100">
             <p id="create-bucket-info-header">The following buckets are needed for this study:</p>
-            {% if form.google_email.value %}
               <div class="text-primary">gs://{{ form.data_bucket_name.value }}</div><br/>
+            {% if form.google_email.value %}
               <div class="text-secondary">{{ form.google_email.value }}</div><br/>
             {% endif %}
-            {% if form.aws_iam.value %}
               <div class="text-primary">s3://{{ form.data_bucket_name.value }}</div><br/>
+            {% if form.aws_iam.value %}
               <div class="text-secondary">{{ form.aws_iam.value }}</div><br/>
             {% endif %}
           </div>
@@ -495,35 +497,31 @@
 
 {% if "Awaiting NHLBI Cloud Bucket Creation" in status and staff %}
 <div class="modal" id="bucket-creation-modal" tabindex="-1">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Are you sure?</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <p>You are about to create the following cloud resources:</p>
-          {% if form.google_email.value %}
-            <div class="text-primary">gs://{{ form.data_bucket_name.value }}</div>
-          {% endif %}
-          {% if form.aws_iam.value %}
-            <div class="text-primary">s3://{{ form.data_bucket_name.value }}</div>
-          {% endif %}
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-          <button
-            type="submit"
-            class="btn btn-success"
-            form="ticket-form"
-            value="Mark as Bucket Created"
-            name="status_update"
-          >
-            Create and Mark as Bucket Created
-          </button>
-        </div>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Are you sure?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>You are about to create the following cloud resources:</p>
+          <div class="text-primary">gs://{{ form.data_bucket_name.value }}</div>
+          <div class="text-primary">s3://{{ form.data_bucket_name.value }}</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+        <button
+          type="submit"
+          class="btn btn-success"
+          form="ticket-form"
+          value="Create and Mark as Bucket Created"
+          name="status_update"
+        >
+          Create and Mark as Bucket Created
+        </button>
       </div>
     </div>
+  </div>
 </div>
 {% endif %}
 
@@ -555,7 +553,9 @@
 
     $('#check-make-bucket').change(function() {
       if (this.checked) {
-        $('#create-bucket-info-header').text('The following buckets will be created with the given permissions:');
+        $('#create-bucket-info-header').text(
+          'The following buckets will be created and tied to the following accounts if available:'
+        );
       }
 
       else {
