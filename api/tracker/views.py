@@ -134,8 +134,6 @@ class TicketUpdate(LoginRequiredMixin, UpdateView):
             elif status_update == None:
                 # if staff edits ticket
                 logger.info("Ticket Updated by " + email)
-            # TODO I don't think this code works, when I try this elsewhere it throws an exception
-            # since at the end we always call form_valid. We need to call form_invalid if we have errors.
             else:
                 form.errors[forms.forms.NON_FIELD_ERRORS] = ErrorList(
                     ["Only Staff are allowed to perform this action"]

@@ -162,11 +162,6 @@
             </label>
           </div>
         </div>
-        {% comment %}
-	        <textarea class="form-control mb-3 w-100" id="{{ form.ticket_bucket_name.auto_id }}"
-	          name="{{ form.ticket_bucket_name.name }}" placeholder="{{ form.ticket_bucket_name.help_text }}"
-	          rows="3">{{ form.ticket_bucket_name.value }}</textarea>
-        {% endcomment %}
         <div class="col-12 p-0">
           <input id="mark-bucket-button" class="btn btn-success btn-md mb-3 w-100" type="submit" name="status_update" value="Mark as Bucket Created" />
         </div>
@@ -450,7 +445,6 @@
           <p>{{ form.aws_iam.value }}</p>
         </div>
 
-        <!-- TODO Data Bucket Name -->
         <div class="col-sm-12 card text-center">
           <div class="card-header">
             <strong>
@@ -477,18 +471,6 @@
           <h3> THIS IS TEST DATA </h3>
         </div>
         {% endif %}
-        <hr class="my-4" />
-      </div>
-
-      <h3 class="mb-3 ticket-summary">Tracking Information</h3>
-      <div class="row g-3 ticket-summary">
-        <!-- TODO Jira ID -->
-        <div class="col-12 card text-center">
-          <div class="card-header">
-            <strong>Jira Ticket</strong>
-          </div>
-          <p>abc123</p>
-        </div>
         <hr class="my-4" />
       </div>
     </div>
