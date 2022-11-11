@@ -151,16 +151,18 @@ class TicketUpdate(LoginRequiredMixin, UpdateView):
 
 
 class TicketDelete(PermissionRequiredMixin, DeleteView):
-    permission_required = "is_staff"
     model = Ticket
     success_url = reverse_lazy("tracker:tickets-list")
 
-    def delete(self, request, *args, **kwargs):
+    def has_permission(self):
+        return self.request.user.is_staff
+
+    def form_valid(self, form):
         ticket = self.get_object()
 
         # send email notification
         Mail(ticket, "Deleted").send()
-        return super().delete(request, *args, **kwargs)
+        return super().form_valid(form)
 
 
 class TicketsList(LoginRequiredMixin, ListView):
