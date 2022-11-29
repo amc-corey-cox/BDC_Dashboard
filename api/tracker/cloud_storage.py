@@ -3,6 +3,7 @@ from google.cloud import storage
 import logging
 import boto3
 from botocore.exceptions import ClientError
+import json
 
 logger = logging.getLogger("django")
 
@@ -76,10 +77,11 @@ def aws_cloud_create_bucket_with_user_permissions(bucket_name, aws_iam):
 		s3_resource = boto3.resource('s3')
 		bucket = s3_resource.Bucket(bucket_name)
 		if (aws_iam):
-			_aws_cloud_add_bucket_upload_permissions(s3_client, bucket, aws_iam)
+			_aws_cloud_add_bucket_upload_permissions(s3_client, bucket_name, aws_iam)
 		return bucket		
 	except ClientError as e:
-		logging.error(e)
+	
+		logger.error(e.response['Error']['Message'])
 		return None
 
 	
@@ -87,9 +89,19 @@ def _aws_cloud_create_bucket(s3_client, bucket_name):
 	s3_client.create_bucket(Bucket=bucket_name)
 	return True
 
-def _aws_cloud_add_bucket_upload_permissions(s3_client, bucket, aws_iam):
-	# see https://www.learnaws.org/2021/05/12/aws-iam-boto3-guide/#how-to-create-an-iam-policy
-	return
+def _aws_cloud_add_bucket_upload_permissions(s3_client, bucket_name, aws_iam):
+# see https://boto3.amazonaws.com/v1/documentation/api/latest/guide/s3-example-bucket-policies.html 
+# update to nhlbi policy once finalized
+	resource_name = "arn:aws:s3:::" + bucket_name
+	bucket_policy = {"Version":"2012-10-17","Id":"ircphsBucketPolicy","Statement":[{"Sid":"AllowListLocation","Effect":"Allow","Principal":{"AWS":[aws_iam]},"Action":["s3:GetBucketAcl","s3:ListBucket","s3:GetBucketLocation","s3:GetObject"],"Resource":[resource_name,resource_name+ "/*"]},{"Sid":"AllowWriteLocation","Effect":"Allow","Principal":{"AWS":[aws_iam]},"Action":"s3:PutObject","Resource":resource_name+"/*","Condition":{"StringEquals":{"s3:x-amz-acl":"bucket-owner-full-control"}}}]}
+
+	# Convert the policy from JSON dict to string
+	bucket_policy = json.dumps(bucket_policy)
+
+	# Set the new policy
+	s3 = boto3.client('s3')
+	s3.put_bucket_policy(Bucket=bucket_name, Policy=bucket_policy)
+	return True
 
 def main():
 	print("running tests on cloud_storage.py") 
