@@ -201,24 +201,6 @@ class Ticket(models.Model):
     )
     data_accepted_by = models.EmailField(verbose_name="Data accepted by", default="")
 
-    # Bucket Names
-    data_bucket_name = models.CharField(
-        max_length=250,
-        verbose_name="Data Bucket Name",
-        help_text="Name of Cloud Data Bucket",
-        blank=True,
-        default="",
-    )
-
-    # Ticket Jira ID
-    jira_id = models.CharField(
-        max_length=100,
-        verbose_name="Associated Jira Ticket ID",
-        help_text="Associated Jira Ticket ID",
-        blank=True,
-        default="",
-    )
-
     # django-simple-history
     history = HistoricalRecords()
 
