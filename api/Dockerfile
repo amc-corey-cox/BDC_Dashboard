@@ -13,7 +13,7 @@ USER 0
 RUN set -eux; \
   yum update -y; \
   yum install -y \
-    wget gcc zlib-devel openssl-devel libffi-devel \
+    wget gcc zlib-devel openssl-devel libffi-devel libpq-devel \
   ; \
   # add perms
   chown -R 1001:0 ${APP_HOME}; \
@@ -25,13 +25,13 @@ RUN set -eux; \
   chmod +x /sbin/tini \
   ; \
   
-  wget https://www.python.org/ftp/python/3.10.6/Python-3.10.6.tgz; \
-  tar xzf Python-3.10.6.tgz; \ 
-  cd Python-3.10.6; \
+  wget https://www.python.org/ftp/python/3.11.1/Python-3.11.1.tgz; \
+  tar xzf Python-3.11.1.tgz; \ 
+  cd Python-3.11.1; \
   ./configure --enable-optimizations; \
   make install ; \
   cd ../; \
-  rm Python-3.10.6.tgz ; \
+  rm Python-3.11.1.tgz ; \
 
   /usr/local/bin/python3  -m venv ${APP_HOME}; \
   chmod +x ${APP_HOME}/bin/activate ; \
