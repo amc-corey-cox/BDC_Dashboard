@@ -2,6 +2,12 @@
 
 > A web-based data tracker for submission process
 
+Link for current DMC Data Submission Dashboard requirements document (access on request):
+https://docs.google.com/document/d/1cInDpmWSq92_OVRo6zFKwEFiCIzZ3pY-cNB_9pmhrdM/edit?usp=sharing
+
+Link for DMC Data Submission Dashboard diagrams in draw.io (access on request):
+https://drive.google.com/file/d/1IEgmn_Q8E52BPPpQqsEPRSHZ0BrKtxCa/view?usp=sharing
+
 ## Getting started
 
 ### Prerequisites
