@@ -9,9 +9,13 @@ from django.conf import settings
 class CustomAdapter(OAuth2Adapter):
     provider_id = CustomProvider.id
 
-    access_token_url = settings.NIH_OAUTH_SERVER_TOKEN_URL
-    profile_url = settings.NIH_OAUTH_SERVER_INFO_URL
-    authorize_url = settings.NIH_OAUTH_SERVER_AUTH_URL
+# NOTE: Deployment
+# Commented out these variables in order to allow building in dev environment
+# These variables aren't set in .env so they cause this to fail.
+# Uncomment these for production.
+    # access_token_url = settings.NIH_OAUTH_SERVER_TOKEN_URL
+    # profile_url = settings.NIH_OAUTH_SERVER_INFO_URL
+    # authorize_url = settings.NIH_OAUTH_SERVER_AUTH_URL
 
     def complete_login(self, request, app, token, **kwargs):
         headers = {'Authorization': 'Bearer {0}'.format(token.token)}
