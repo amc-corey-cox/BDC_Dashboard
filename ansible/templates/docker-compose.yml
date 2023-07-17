@@ -9,7 +9,12 @@ services:
     restart: always
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      # NOTE: Deployment
+      # Uncomment appropriate password for Deployment or Development
+      # Deployment Postgres password
+      # POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      # Set a password based on user set in development postgres delpoyment
+      POSTGRES_PASSWORD: tracker_password
       POSTGRES_DB: ${POSTGRES_DB}
     networks:
       - bdcat
