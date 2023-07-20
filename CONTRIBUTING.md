@@ -1,32 +1,62 @@
 # Introduction
-This guide will provide instruction and information on setting up the development environment for the BioData Catalyst (BDC) Data Management Core (DMC) Data Submission Dashboard (DSD). This will include installing prerequisites, setting up a development environment, building the container, deploying to BioData Catalyst, running tests/linting, and information about contributing to development.  
+This guide will provide instruction and information on setting up the development environment for the BioData Catalyst (BDC) Data Management Core (DMC) Data Submission Tracker (DST). This will include installing prerequisites, setting up a development environment, building the container, deploying to BioData Catalyst, running tests/linting, and information about contributing to development.
 > At this point all installation is managed system-wide. I think this is a poor way to manage a development environment. I would prefer that we use an environmental encapsulation of some sort, such as poetry or pyenv. We will try to move towards some encapsulation after we have an initial working environment.
 
 # Prerequisites
-The DSD has a number of dependancies that are necessary both for building and deployment as well as for development. This section will describe how to install and set up each of these dependancies. The primary development environment is currently Ubntu 22.04 but other environments will be added as requested.
+In order to build and run the Data Submisison tracker several dependancies will need to be installed and several requirements for the environment will need to be prepared. First we will describe the required dependancies, after these are installed we can set up the appropriate environment to build, run, and test the DST.
 
-## Ansible
-Ansible is an agentless automation tool that can manage multiple machines or devices remotely with SSH or other transports. The DSD uses Ansible to manage deployment and connectivity between separate elements of the DSD environment.
+## Dependancies
+The DSD has a number of dependancies that are necessary both for building and deployment as well as for development. The primary development environment is currently Ubntu 22.04 but other environments will be added as requested. Currently, development of the Data Submission Tracker requires these software tools available or installed on the development system.
 
-### Ansible Requirements
-Ansible is a Python module which requires Python v2.9 or higher and is installed with pip. Check the system Python version.
-```shell
-python --version
-```
-And check to make sure pip is available.
-```shell
-python -m pip --version
-```
+ - Docker
+ - Google Cloud Platform (GCP)
+   - GCP Account 
+   - GCP Command Line Interface
+ - Ansible
 
-### Install Ansible
-Use pip to install Ansible system-wide.
-```shell
-python3 -m pip install --user ansible
-```
-Confirm Ansible is installed.
-```shell
-ansible --version
-```
+ See the [Install Prerequisites](#Install-Dependancies) section for how to install and set up each of these dependancies.
+
+## Optional Dependancies
+Because the Data Submission Tracker runs in a Docker container and all of the relevant code is run within the container these additional dependancies are not strictly necessary for installation on the development system. However, for testing and troubleshootin we recommend also installing the following dependancies.
+
+ - Python v3.10.6 or higher
+ - Django v4.1.4 - higher version not currently recommended
+
+Installation of these Dependancies is fairly standard so we don't cover the details in this document.
+
+## Provision PostgreSQL VM on GCP
+The DST requires an external PostgreSQL accessed via HTML. This project uses an Ansible script to set up the project on an existing Google Cloud Platform Compute instance. We will first need to set up the GCP Compute Engine instance and then run the Ansible scripts to set up the PostgreSQL installation. This installation will then require some manual set up to allow for the Django database 
+
+### Create Compute Engine Instance
+To create the GCP Compute Engine Instance navigate to the GCP site at `` and sign in. Select 'Compute Engine' -> 'VM instances' on the left-side menu. Select 'CREATE INSTANCE' button from the top menu bar to set up a new VM instance for the postgresql database. Settings for the new instance are as follows.
+
+ | Setting | Value | Notes |
+ | ------- | ------- | ------- |
+ | Name |tracker-postgresql-tiny | You can use a different name |
+ | Region | us-central1 (Iowa), us-central1-c | Choose a region near you |
+ | Machhine Configuration | General Purpose |  |
+ | Series | e2 |   |
+ | Preset | e2-micro (2 vCPU, 1 GB memory) | Lowest cost configuration |
+ | Boot Disk Image | Ubuntu 22.04 LTS (x86/64, amd64) | Current long-term-service Ubuntu |
+ | Firewall | postgresql | We need to be able to reach the VM |
+ | On host maintenance | Migrate VM instance (Recommended) | e2 requires this |
+
+Any setting not listed above should be left at the default setting.
+
+### Configure Firewall
+In order to access the Compute instance PostgreSQL database we will need to set up the firewall and networking tags for the VM instance. First set up a Firewall rule by selecting 'VPC networking' then 'Firewall' from the hamburger menu in the upper left corner of the page. On the Firewall page select 'CREATE FIREWALL RULE'. Use the following settings to create the new rule.
+
+| Setting | Value | Notes |
+| ------- | ------- | ------- |
+
+
+## Environment Variables
+
+
+
+---
+
+# Install Dependancies
 
 ## Docker
 Docker is an application containerization environment that allows software to be built in containers and deployed in different environments reducing dependancies and creating a more secure runtime environment by virtue of isolation from the host architecture. The Docker ecosystem provides both tools to create a container image and an engine to run those images on a target system. For basic build and development you will only need the container image creation tools. However for proper testing and to allow access to the software in a development environment we will install both the image creation and engine portions.
@@ -180,6 +210,52 @@ Download the latest version of Docker Desktop from the [Docker Desktop](https://
 ```shell
 sudo apt-get update
 sudo apt-get install ./docker-desktop-<version>-<arch>.deb
+```
+
+## Google Cloud Platform (GCP)
+Setting up the PostgreSQL database with Ansible requires the Google Cloud Platform (GCP) including a GCP Compute Engine instance and local installation of the Command Line Interface (CLI).
+
+### Google Cloud Platform Account
+In order to You can sign into an existing account or create a new account at `https://cloud.google.com/`. Currently, new account sign-up gives $300 in credit
+
+### GCP Compute Engine
+To set up a GCP Compute Engine instance we will first need a GCP account.
+
+### Google Cloud CLI
+For Ubuntu/Debian Google Cloud CLI can be installed with the folowing instructions. If your system supports the signed-by option and your `apt-key` command supports the `--keyring` argument. If you are using a different distribution or your system doesn't support those commands see the instructions [here](https://cloud.google.com/sdk/docs/install#deb).
+```
+sudo apt-get update
+sudo apt-get install apt-transport-https ca-certificates gnupg curl sudo
+echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+sudo apt-get update && sudo apt-get install google-cloud-cli
+```
+
+After Google CLI is successfully installed initialize it with.
+```
+gcloud init
+```
+
+## Ansible
+Ansible is an agentless automation tool that can manage multiple machines or devices remotely with SSH or other transports. The DSD uses Ansible to manage deployment and connectivity between separate elements of the DSD environment.
+
+### Ansible Requirements
+Ansible is a Python module which requires Python v2.9 or higher and is installed with pip. Check the system Python version.
+```shell
+python --version
+```
+And check to make sure pip is available.
+```shell
+python -m pip --version
+```
+
+### Install Ansible
+Use pip to install Ansible system-wide.
+```shell
+python3 -m pip install --user ansible
+```
+Confirm Ansible is installed.
+```shell
+ansible --version
 ```
 
 # Set up Development Environment
