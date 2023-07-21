@@ -46,8 +46,18 @@ Any setting not listed above should be left at the default setting.
 ### Configure Firewall
 In order to access the Compute instance PostgreSQL database we will need to set up the firewall and networking tags for the VM instance. First set up a Firewall rule by selecting 'VPC networking' then 'Firewall' from the hamburger menu in the upper left corner of the page. On the Firewall page select 'CREATE FIREWALL RULE'. Use the following settings to create the new rule.
 
-| Setting | Value | Notes |
-| ------- | ------- | ------- |
+ | Setting | Value | Notes |
+ | ------- | ------- | ------- |
+ | Name | postgresql | You can choose a different name |
+ | Description | Allow connection to the postgresql database on port 5432 |   |
+ | Target tags | postgresql | You can use a different name, use this in the next section |
+ | Source | IPv4 ranges | You may need to include IPv6 depending on your configuration |
+ | Specified Protocols and Ranges | TCP | PostgreSQL communicates over TCP |
+ | Ports | 5432 | This is the standard PostgreSQL port |
+
+ Any settings not listed above should be left at the default setting.
+
+ After setting up the firewall rule we need to add that rule to the Compute Engine Instance. Go back to 'Compute Engine' -> 'VM instances' and select our previously set up compute instance `tracker-posgresql-tiny`. Select 'Edit' and add `postgresql` to 'Network Tags'. The Compute Engine instance should now be ready for set-up as the postgresql data-source using Ansible playbooks from the repository.
 
 
 ## Environment Variables
