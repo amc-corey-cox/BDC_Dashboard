@@ -38,7 +38,7 @@ To create the GCP Compute Engine Instance navigate to the GCP site at `` and sig
  | Series | e2 |   |
  | Preset | e2-micro (2 vCPU, 1 GB memory) | Lowest cost configuration |
  | Boot Disk Image | Ubuntu 22.04 LTS (x86/64, amd64) | Current long-term-service Ubuntu |
- | Firewall | postgresql | We need to be able to reach the VM |
+ | Firewall | Allow HTTP/HTTPs Traffic | We need to be able to reach the VM |
  | On host maintenance | Migrate VM instance (Recommended) | e2 requires this |
 
 Any setting not listed above should be left at the default setting.
@@ -55,10 +55,40 @@ In order to access the Compute instance PostgreSQL database we will need to set 
  | Specified Protocols and Ranges | TCP | PostgreSQL communicates over TCP |
  | Ports | 5432 | This is the standard PostgreSQL port |
 
- Any settings not listed above should be left at the default setting.
+Any settings not listed above should be left at the default setting.
 
- After setting up the firewall rule we need to add that rule to the Compute Engine Instance. Go back to 'Compute Engine' -> 'VM instances' and select our previously set up compute instance `tracker-posgresql-tiny`. Select 'Edit' and add `postgresql` to 'Network Tags'. The Compute Engine instance should now be ready for set-up as the postgresql data-source using Ansible playbooks from the repository.
+After setting up the firewall rule we need to add that rule to the Compute Engine Instance. Go back to 'Compute Engine' -> 'VM instances' and select our previously set up compute instance `tracker-posgresql-tiny`. Select 'Edit' and add `postgresql` to 'Network Tags'. The Compute Engine instance should now be ready for set-up as the postgresql data-source using Ansible playbooks from the repository.
 
+### Enable SSH
+Use an existing SSH key or generate a new key with the following command.
+
+``` shell
+ssh-keygen -t ed25519
+cat ~/.ssh/id_ed25519.pub | xsel -b # Copy to clipboard
+```
+
+Next ssh in to the new VM either through the web interface or using the GCP CLI as below. Change zone, Compute Engine name and project to reflect the VM created above.
+
+``` shell
+gcloud compute ssh --zone "us-central1-c" "tracker-postgresql-tiny" --project "after-yesterday-392719"
+sudo su ubuntu  # Change to user ubuntu
+```
+
+Once you have created the ssh connection and changed to the ubuntu user edit `~/.ssh/authorized_keys` and add the ssh key copied above. Now you should be able to log in locally with this key using the external IP addressed shown on the VM.
+
+``` shell
+ssh -i ~/.ssh/id_ed25519 ubuntu@<VM_EXTERNAL_IP>
+```
+
+Once you have verified you can ssh into the VM this setup is complete.
+
+# Repository Setup
+With the prerequisites installed and set up we are now ready to clone and setup the repository for development. Navigate to where you want the Git reepository located on your system and clone the repository with the following command.
+
+``` shell
+git clone git@github.com:amc-corey-cox/BDC_Dashboard.git
+cd BDC_Dashboard
+```
 
 ## Environment Variables
 
