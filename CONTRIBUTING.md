@@ -38,7 +38,6 @@ To create the GCP Compute Engine Instance navigate to the GCP site at `` and sig
  | Series | e2 |   |
  | Preset | e2-micro (2 vCPU, 1 GB memory) | Lowest cost configuration |
  | Boot Disk Image | Ubuntu 22.04 LTS (x86/64, amd64) | Current long-term-service Ubuntu |
- | Firewall | Allow HTTP/HTTPs Traffic | We need to be able to reach the VM |
  | On host maintenance | Migrate VM instance (Recommended) | e2 requires this |
 
 Any setting not listed above should be left at the default setting.
@@ -89,6 +88,65 @@ With the prerequisites installed and set up we are now ready to clone and setup 
 git clone git@github.com:amc-corey-cox/BDC_Dashboard.git
 cd BDC_Dashboard
 ```
+
+## Ansible Setup
+Before completing the setup of the repository we need to setup and run the Ansible playbooks. In the `ansible` directory copy `inventory.example` to `inventory` and change the `ansible_host` ip address to the VM external IP address above. We also need to copy `group_vars/all/users.yml.example` to `group_vars/all/users.yml` and add the public key used for VM ssh above to authorized keys. The settings for `nimbus.yml` are already updated for dev in the repository. Finally in the `templates/` folder create a `.env` file with the following information.
+
+``` .env
+POSTGRES_DATA_DIR={{db_data_dir}}
+POSTGRES_DB=tickets
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=
+```
+
+Ansible setup is now complete and you should be ready to run the Ansible playbooks. For further information on setting up Ansible it may be useful to read the documentation in `ansible/README.md`.
+
+## Run Ansible Playbooks
+These two Ansible playbooks set up the Ubuntu Compute Engine. First we will set up the Compute Engine for Docker.
+
+``` shell
+ansible-playbook -i inventory setup.yml
+```
+
+Then we will deploy the PostgreSQL Docker image and run it.
+
+``` shell
+ansible-playbook -i inventory deploy-pg.yml
+```
+
+## Finalize PostgreSQL Setup
+One final manual setup step is necessary to complete the PostgreSQL setup for the database. We need to setup the initial password for the `postgres` (admin) user of the database. First log in to the VM with ssh using your external IP. 
+
+``` shell
+ssh -i ~/.ssh/id_ed25519 ubuntu@<VM_EXTERNAL_IP>
+```
+
+Once logged in change to super user and verify the docker image is running.
+
+``` shell
+sudo su
+docker ps
+```
+
+Now we will run psql on the hosted Docker image to set the password for `postgres`.
+
+``` shell
+docker exec -it bdcat_database_1 psql -U postgres
+```
+
+In the `psql` shell change the password with this command.
+
+``` sql
+ALTER USER postgres WITH PASSWORD 'password';
+```
+
+Exit the psql shell and the ssh shell when you have finished setting the password. If you would like to check the PostgreSQL setup you can run psql (if installed) locally.
+
+``` shell
+psql -h <VM_EXTERNAL_IP> -U postgres -d tickets -p 5432
+```
+
+Now the PostgreSQL database should be ready to receive connections from the Django app. We will migrate the Django model automatically when we build the tracker container. However, if you have installed Django locally you can migrate the Django model manually see `ansible/README.md` for instructions.
 
 ## Environment Variables
 
