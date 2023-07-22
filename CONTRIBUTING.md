@@ -2,10 +2,18 @@
 This guide will provide instruction and information on setting up the development environment for the BioData Catalyst (BDC) Data Management Core (DMC) Data Submission Tracker (DST). This will include installing prerequisites, setting up a development environment, building the container, deploying to BioData Catalyst, running tests/linting, and information about contributing to development.
 > At this point all installation is managed system-wide. I think this is a poor way to manage a development environment. I would prefer that we use an environmental encapsulation of some sort, such as poetry or pyenv. We will try to move towards some encapsulation after we have an initial working environment.
 
-# Prerequisites
+---
+# Contributing to the Project
+To contribute to the project, follow the steps outlined in the [Setup the Development Environment](#setup-the-development-environment) section to create a local development environment. Once your environment is set up, you can make changes to the codebase and submit pull requests for review. If you encounter any issues during the setup process or while working on the project please submit an issue and describe the steps you are having trouble with.
+
+---
+# Setup the Development Environment
+The steps necessary to set up the development are fairly  involved. First we will need to satisfy the [Prerequisites](#prerequisites), including [Dependancies](#dependancies), [Optional Dependancies](#optional-dependancies), and [Provision PostgreSQL VM on GCP](#provision-postgresql-vm-on-gcp). Please follow these instructions to properly setup and verify a functioning development environment.
+
+## Prerequisites
 In order to build and run the Data Submisison tracker several dependancies will need to be installed and several requirements for the environment will need to be prepared. First we will describe the required dependancies, after these are installed we can set up the appropriate environment to build, run, and test the DST.
 
-## Dependancies
+### Dependancies
 The DSD has a number of dependancies that are necessary both for building and deployment as well as for development. The primary development environment is currently Ubntu 22.04 but other environments will be added as requested. Currently, development of the Data Submission Tracker requires these software tools available or installed on the development system.
 
  - Docker
@@ -16,7 +24,7 @@ The DSD has a number of dependancies that are necessary both for building and de
 
  See the [Install Prerequisites](#Install-Dependancies) section for how to install and set up each of these dependancies.
 
-## Optional Dependancies
+### Optional Dependancies
 Because the Data Submission Tracker runs in a Docker container and all of the relevant code is run within the container these additional dependancies are not strictly necessary for installation on the development system. However, for testing and troubleshootin we recommend also installing the following dependancies.
 
  - Python v3.10.6 or higher
@@ -24,10 +32,10 @@ Because the Data Submission Tracker runs in a Docker container and all of the re
 
 Installation of these Dependancies is fairly standard so we don't cover the details in this document.
 
-## Provision PostgreSQL VM on GCP
+### Provision PostgreSQL VM on GCP
 The DST requires an external PostgreSQL accessed via HTML. This project uses an Ansible script to set up the project on an existing Google Cloud Platform Compute instance. We will first need to set up the GCP Compute Engine instance and then run the Ansible scripts to set up the PostgreSQL installation. This installation will then require some manual set up to allow for the Django database 
 
-### Create Compute Engine Instance
+#### Create Compute Engine Instance
 To create the GCP Compute Engine Instance navigate to the GCP site at `` and sign in. Select 'Compute Engine' -> 'VM instances' on the left-side menu. Select 'CREATE INSTANCE' button from the top menu bar to set up a new VM instance for the postgresql database. Settings for the new instance are as follows.
 
  | Setting | Value | Notes |
@@ -42,7 +50,7 @@ To create the GCP Compute Engine Instance navigate to the GCP site at `` and sig
 
 Any setting not listed above should be left at the default setting.
 
-### Configure Firewall
+#### Configure GCP Firewall
 In order to access the Compute instance PostgreSQL database we will need to set up the firewall and networking tags for the VM instance. First set up a Firewall rule by selecting 'VPC networking' then 'Firewall' from the hamburger menu in the upper left corner of the page. On the Firewall page select 'CREATE FIREWALL RULE'. Use the following settings to create the new rule.
 
  | Setting | Value | Notes |
@@ -58,7 +66,7 @@ Any settings not listed above should be left at the default setting.
 
 After setting up the firewall rule we need to add that rule to the Compute Engine Instance. Go back to 'Compute Engine' -> 'VM instances' and select our previously set up compute instance `tracker-posgresql-tiny`. Select 'Edit' and add `postgresql` to 'Network Tags'. The Compute Engine instance should now be ready for set-up as the postgresql data-source using Ansible playbooks from the repository.
 
-### Enable SSH
+#### Enable SSH on GCP VM
 Use an existing SSH key or generate a new key with the following command.
 
 ``` shell
@@ -81,7 +89,7 @@ ssh -i ~/.ssh/id_ed25519 ubuntu@<VM_EXTERNAL_IP>
 
 Once you have verified you can ssh into the VM this setup is complete.
 
-# Repository Setup
+## Repository Setup
 With the prerequisites installed and set up we are now ready to clone and setup the repository for development. Navigate to where you want the Git reepository located on your system and clone the repository with the following command.
 
 ``` shell
@@ -89,7 +97,7 @@ git clone git@github.com:amc-corey-cox/BDC_Dashboard.git
 cd BDC_Dashboard
 ```
 
-## Ansible Setup
+### Ansible Setup
 Before completing the setup of the repository we need to setup and run the Ansible playbooks. In the `ansible` directory copy `inventory.example` to `inventory` and change the `ansible_host` ip address to the VM external IP address above. We also need to copy `group_vars/all/users.yml.example` to `group_vars/all/users.yml` and add the public key used for VM ssh above to authorized keys. The settings for `nimbus.yml` are already updated for dev in the repository. Finally in the `templates/` folder create a `.env` file with the following information.
 
 ``` .env
@@ -101,7 +109,7 @@ POSTGRES_PASSWORD=
 
 Ansible setup is now complete and you should be ready to run the Ansible playbooks. For further information on setting up Ansible it may be useful to read the documentation in `ansible/README.md`.
 
-## Run Ansible Playbooks
+### Run Ansible Playbooks
 These two Ansible playbooks set up the Ubuntu Compute Engine. First we will set up the Compute Engine for Docker.
 
 ``` shell
@@ -114,7 +122,7 @@ Then we will deploy the PostgreSQL Docker image and run it.
 ansible-playbook -i inventory deploy-pg.yml
 ```
 
-## Finalize PostgreSQL Setup
+### Finalize PostgreSQL Setup
 One final manual setup step is necessary to complete the PostgreSQL setup for the database. We need to setup the initial password for the `postgres` (admin) user of the database. First log in to the VM with ssh using your external IP. 
 
 ``` shell
@@ -148,7 +156,7 @@ psql -h <VM_EXTERNAL_IP> -U postgres -d tickets -p 5432
 
 Now the PostgreSQL database should be ready to receive connections from the Django app. We will migrate the Django model automatically when we build the tracker container. However, if you have installed Django locally you can migrate the Django model manually see `ansible/README.md` for instructions.
 
-## Environment Variables
+### Environment Variables
 For development purposes a number of environment variables need to be set. In the `api` folder create a `.env` file with the following data.
 
 ``` .env
@@ -207,7 +215,7 @@ You will need to update `GOOGLE_CLOUD_PROJECT`, `SECRET_KEY`, `POSTGRES_PASSWORD
 python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'
 ```
 
-# Build Tracker Docker Container
+## Build Tracker Docker Container
 With the PostgreSQL database set up and running and the environment variables set, the repository should be ready for development. To test the development environment, we will build the Docker container and access the application.
 
 First, build the Docker container using `docker-compose`.
@@ -436,10 +444,3 @@ Confirm Ansible is installed.
 ```shell
 ansible --version
 ```
-
-# Set up Development Environment
-For development, the `api` directory should have a `.env` containing environment variables.
-The values of these variables will be different for the production environment.
-
-# 
-
