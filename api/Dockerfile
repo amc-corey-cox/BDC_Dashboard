@@ -19,55 +19,35 @@ RUN set -eux; \
   # install tini
   wget https://github.com/krallin/tini/releases/download/$TINI_VERSION/tini -O /sbin/tini; 
 
-# RUN set -eux; \
-#   # install pyenv
-#   git clone https://github.com/pyenv/pyenv.git ~/.pyenv; \
-#   echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc; \
-#   echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc; \
-#   echo 'eval "$(pyenv init --path)"' >> ~/.bashrc; \
-#   echo 'eval "$(pyenv init -)"' >> ~/.bashrc; \
-#   echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.bashrc;
-
-# RUN set -eux; \
-#   exec bash ; \
-#   # source ~/.bashrc; \
-#   pyenv install 3.11.1; \
-#   pyenv global 3.11.1; \
-#   pyenv rehash;
-
 RUN set -eux; \
+  # install pyenv
+  git clone https://github.com/pyenv/pyenv.git /.pyenv; \
+  export PYENV_ROOT="/.pyenv"; \
+  export PATH="${PYENV_ROOT}/bin:${PATH}"; \
+  eval "$(pyenv init -)"; \
+
   # install python 3.11.1
-  wget https://www.python.org/ftp/python/3.11.1/Python-3.11.1.tgz; \
-  tar xzf Python-3.11.1.tgz; \ 
-  cd Python-3.11.1; \
-  ./configure --enable-optimizations; \
-  make install ; \
-  cd ../; \
-  rm Python-3.11.1.tgz ; \
+  pyenv install 3.11.1; \
+  pyenv global 3.11.1; \
+  pyenv rehash; \
 
-  # create venv
-  /usr/local/bin/python3  -m venv ${APP_HOME};
-
-# add perms
-RUN set -eux; \
-  chown -R 1001:0 ${APP_HOME} ; \
-  chmod a+w ${APP_HOME}/tracker/migrations ; \
-  chmod a+x ${APP_HOME}/docker_entrypoint.sh ; \
-  chmod +x /sbin/tini ; \
-  chmod +x ${APP_HOME}/bin/activate ; \
-  chown -R 1001:0 ${APP_HOME} ;
-
-# install python modules
-RUN set -eux; \
-  ${APP_HOME}/bin/activate ; \
-  /usr/local/bin/python3 -m pip install --upgrade pip ; \
-  /usr/local/bin/python3 -m pip install wheel ; \
-  /usr/local/bin/python3 -m pip install -r requirements.txt ; \
+  # install python modules
+  python3.11 -m pip install --upgrade pip; \
+  python3.11 -m pip install wheel; \
+  python3.11 -m pip install -r requirements.txt; \
   
   # Django collectstatic
-  /usr/local/bin/python3 /app/manage.py collectstatic --noinput; 
+  python3.11 /app/manage.py collectstatic --noinput; \
+
+  # add perms
+  chmod a+w ${APP_HOME}/tracker/migrations; \
+  chmod a+x ${APP_HOME}/docker_entrypoint.sh; \
+  chmod +x /sbin/tini; \
+  chown -R 1001:0 ${APP_HOME}; \
+  chown -R 1001:0 /.pyenv;
 
 USER 1001
+
 ENTRYPOINT ["/sbin/tini", "--"]
 EXPOSE 8000 2222
 CMD ["./docker_entrypoint.sh"]
