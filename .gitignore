@@ -134,6 +134,9 @@ dmypy.json
 # VSCode
 .vscode
 
+# PyCharm
+.idea
+
 # GCloud
 cloud_sql_proxy
 service_account.json
