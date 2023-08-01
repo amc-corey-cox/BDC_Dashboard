@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM ubuntu:latest 
+FROM ubuntu:22.04
 
 ARG TINI_VERSION=v0.19.0
 
