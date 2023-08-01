@@ -11,7 +11,9 @@ from django.urls import reverse_lazy
 
 from datetime import datetime, timezone
 from .models import Ticket, User, STATUS_TYPES
-from .mail import Mail
+# NOTE: Development: Mail
+# Commented out until we get mail/SendGrid working
+#from .mail import Mail
 import logging
 
 logger = logging.getLogger("django")
@@ -48,7 +50,9 @@ class TicketCreate(LoginRequiredMixin, CreateView):
         ticket_obj = form.save(commit=False)
         ticket_obj.created_by = self.request.user
         ticket_obj.save()
-        Mail(ticket_obj, "Created").send()
+        # NOTE: Development: Mail
+        # Commented out until we get mail/SendGrid working
+        # Mail(ticket_obj, "Created").send()
         return super().form_valid(form)
 
 
@@ -146,7 +150,9 @@ class TicketUpdate(LoginRequiredMixin, UpdateView):
         self.object = ticket
 
         # send email with status update
-        Mail(ticket, ticket.get_ticket_status[1]).send()
+        # NOTE: Development: Mail
+        # Commented out until we get mail/SendGrid working
+        # Mail(ticket, ticket.get_ticket_status[1]).send()
         return super().form_valid(form)
 
 
@@ -161,7 +167,9 @@ class TicketDelete(PermissionRequiredMixin, DeleteView):
         ticket = self.get_object()
 
         # send email notification
-        Mail(ticket, "Deleted").send()
+        # NOTE: Development: Mail
+        # Commented out until we get mail/SendGrid working
+        # Mail(ticket, "Deleted").send()
         return super().form_valid(form)
 
 
