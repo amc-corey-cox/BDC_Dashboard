@@ -97,9 +97,15 @@ git clone git@github.com:amc-corey-cox/BDC_Dashboard.git
 cd BDC_Dashboard
 ```
 
-I recommend setting up pyenv and a virtual environment using venv for development. See [Python Development Environment](#python-development-environment) for more information on how I set up my Python development environment.
+I recommend setting up pyenv and a virtual environment using venv for development. See [Python Development Environment](#python-development-environment) for more information on how I set up my Python development environment. If you are following my recommendations you can set up a local pyenv and virtual environment with the following commands.
 
 ``` shell
+pyenv install 3.11.1
+pyenv local 3.11.1
+python -m venv venv
+source venv/bin/activate
+poetry install
+```
 
 ### Ansible Setup
 Before completing the setup of the repository we need to setup and run the Ansible playbooks. In the `ansible` directory copy `inventory.example` to `inventory` and change the `ansible_host` ip address to the VM external IP address above. We also need to copy `group_vars/all/users.yml.example` to `group_vars/all/users.yml` and add the public key used for VM ssh above to authorized keys. The settings for `nimbus.yml` are already updated for dev in the repository. Finally in the `templates/` folder create a `.env` file with the following information.
@@ -447,4 +453,79 @@ python3 -m pip install --user ansible
 Confirm Ansible is installed.
 ```shell
 ansible --version
+```
+
+
+---
+# Python Development Environment
+The DST is written in Python and uses the Django framework. This section will cover setting up a Python development environment for the DST. Because of the complexity of this project, I recommend setting up pyenv, venv, and poetry to manage the Python environment. This will also allow you to install the exact versions of Python and Python packages required for the DST.
+
+## pyenv
+pyenv is a Python version manager. It allows you to install and manage multiple versions of Python on the same system. It also allows you to install the exact version of Python required for a project. This allows you to use the same version of Python in development and as the DST will use in production.
+
+First, we need to install the python build dependencies.
+```shell
+sudo apt update; sudo apt install build-essential libssl-dev zlib1g-dev \
+libbz2-dev libreadline-dev libsqlite3-dev curl \
+libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
+```
+
+Now we can install pyenv. This will install pyenv to the `~/.pyenv` directory.
+```bash
+curl https://pyenv.run | bash
+```
+
+Now we need to add pyenv to the PATH. Add the following to the end of your `~/.bashrc` file.
+```bash
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init --path)"
+```
+
+Now we can install the version of Python required for the DST.
+```shell
+pyenv install 3.11.1
+```
+
+To use pyenv local to your repository you can run the following command in the root of your repository, `cd /path/to/repository`.
+```shell
+pyenv local 3.11.1
+```
+
+## venv
+venv is a Python module that allows you to create virtual environments for Python. This allows you to install Python packages for a specific project without affecting the system Python installation. This is useful for isolating the Python environment for the DST.
+
+To create a virtual environment for the DST run the following command in the root of your repository.
+```shell
+python -m venv .venv
+```
+
+I create a file named `venv_name.txt` in the root of the venv directory. This file contains the name of the virtual environment. I use this in my .bashrc to read the name and track which virtual environment I have active in $PS1. This is optional but I find it useful. If you would like to know how to do this please reach out and I'll share my .bashrc.
+```shell
+echo "dst" > .venv/venv_name.txt
+````
+
+To activate the virtual environment run the following command in the root of your repository.
+```shell
+source .venv/bin/activate
+```
+
+To deactivate the virtual environment run the following command in the root of your repository.
+```shell
+deactivate
+```
+
+## Poetry
+Poetry is a Python dependency manager. It allows you to manage Python dependencies for a project. Poetry will also create a virtual environment for the project and install the dependencies in that environment. This allows you to install the exact versions of dependencies required for the DST.
+
+Install poetry with pip in the virtual environment then initialize with the following commands.
+```shell
+pip install poetry
+poetry init
+```
+
+Install dependencies from requirements.txt in the Poetry virtual environment with the following command.
+```shell
+poetry add $(cat requirements.txt)
+poetry install
 ```
