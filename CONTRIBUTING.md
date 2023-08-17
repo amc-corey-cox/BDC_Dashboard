@@ -523,9 +523,12 @@ Install poetry with pip in the virtual environment then initialize with the foll
 pip install poetry
 poetry init
 ```
+Set up the 
 
-Install dependencies from requirements.txt in the Poetry virtual environment with the following command.
+Reformat requirements.txt and install in Poetry virtual environment with the following command.
 ```shell
-poetry add $(cat requirements.txt)
+poetry add $(sed -E 's/;.*$//; s/\[.*\]//g' api/requirements.txt)
+poetry add --extras "grpc" google-api-core
+poetry add --extras "crypto" pyjwt
 poetry install
 ```
