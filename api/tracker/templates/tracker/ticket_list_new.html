@@ -4,26 +4,19 @@
 
 <div id="board" class="container">
   {% for status_title, status_list in tickets_by_status.items %}
-  <div class="row g-3">
     {% if not status_title == 'rejected' %}
-    <div class="col-xl-12">
-      <div class="board-panel">
-        <div class="board-panel-header alert alert-primary text-center" role="alert"
-          data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ status_title }}"
-          {% if not status_list %}style="margin-bottom: 0;"{% endif %}>
+      <div class="board-section">
+        <div class="board-section-header">
           <p class="h5">{{ status_title }}</p>
         </div>
         {% for object in status_list %}
-        <div class="row">
-          <div class="col-12">
+          <div class="board-item">
             <div class="card text-center m-2">
               <div class="card-header" style="background-color: lightgrey">
                 <strong>{{ object.study_id }}.{{ object.consent_code }}</strong>
               </div>
               <div class="card-body">
-                {% if object.study_name %}
                 <p class="card-text">{{ object.study_name }}</p>
-                {% endif %}
                 <a href="{% url 'tracker:ticket-update' pk=object.pk %}" class="btn btn-warning"
                   role="button">View Ticket</a>
               </div>
@@ -34,18 +27,15 @@
               </div>
             </div>
           </div>
-        </div>
         {% endfor %}
       </div>
-    </div>
     {% endif %}
-  </div>
   {% endfor %}
 </div>
+
 {% if user.is_staff %}
 <div class="row">
   <a href="/rejected" class="btn btn-cancel btn-md" role="button">View Rejected Tickets</a>
 </div>
 {% endif %}
 {% endblock %}
-
