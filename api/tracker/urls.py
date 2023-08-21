@@ -9,8 +9,8 @@ urlpatterns = [
     path("create/", views.TicketCreate.as_view(), name="ticket-create"),
     path("<int:pk>/update/", views.TicketUpdate.as_view(), name="ticket-update"),
     path("<int:pk>/delete/", views.TicketDelete.as_view(), name="ticket-delete"),
+    # path("list/", views.TicketsList.as_view(), name="tickets-list"),
     path("list/", views.TicketsList.as_view(), name="tickets-list"),
-    path("list_new/", views.TicketsListNew.as_view(), name="tickets-list-new"),
     path(
         "rejected/", views.RejectedTicketsList.as_view(), name="rejected-tickets-list"
     ),
