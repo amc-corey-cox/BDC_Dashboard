@@ -25,6 +25,10 @@ class UserDocsView(TemplateView):
     template_name = "tracker/user_docs.html"
 
 
+class AboutView(TemplateView):
+    template_name = "tracker/about.html"
+
+
 class CustodianInfoView(TemplateView):
     template_name = "tracker/custodian_instructions.html"
 
