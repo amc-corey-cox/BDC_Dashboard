@@ -1,3 +1,5 @@
+import json
+
 from django.contrib.auth.mixins import (
     LoginRequiredMixin,
     PermissionRequiredMixin,
@@ -9,20 +11,53 @@ from django.views.generic.list import ListView
 from django.forms.utils import ErrorList
 from django.urls import reverse_lazy
 
+import requests
+from requests.auth import HTTPBasicAuth
+
 from datetime import datetime, timezone
 from .models import Ticket, User, STATUS_TYPES
 # NOTE: Development: Mail
 # Commented out until we get mail/SendGrid working
-#from .mail import Mail
+# from .mail import Mail
 import logging
 
 logger = logging.getLogger("django")
+
+
 class IndexView(TemplateView):
     template_name = "tracker/index.html"
 
 
-class UserDocsView(TemplateView):
+class DocumentationView(TemplateView):
     template_name = "tracker/user_docs.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # Make the API request
+        jira_api_url = "https://nhlbijira.nhlbi.nih.gov/rest/api/2/project/DMC/statuses"
+        jira_bearer_token = "MzgzOTQzOTMxNzYzOmtZgUfpLBwifqv9AwvL6aLLtX+U"
+
+        headers = {
+            "Authorization": "Bearer " + jira_bearer_token,
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+        }
+
+        response = requests.get(jira_api_url, headers=headers)
+
+        # Pass the API response data to the template context
+        context["api_response"] = response.text
+        context["api_response_json"] = json.loads(response.text)
+
+        # try:
+        #     parsed_json = json.loads(response.text)
+        # except json.JSONDecodeError:
+        #     parsed_json = None
+        #
+        # context["api_response_json"] = json.loads(parsed_json)
+
+        return context
 
 
 class AboutView(TemplateView):
@@ -115,7 +150,7 @@ class TicketUpdate(LoginRequiredMixin, UpdateView):
             elif status_update == "Mark as Data Upload Completed":
                 # set status to "Awaiting Gen3 Acceptance"
                 ticket.data_uploaded_completed_dt = datetime.now(timezone.utc)
-                ticket.data_uploaded_completed_by = email                
+                ticket.data_uploaded_completed_by = email
             elif status_update == "Mark as Gen3 Approved":
                 # set status to "Gen3 Accepted"
                 ticket.data_accepted_dt = datetime.now(timezone.utc)
@@ -141,7 +176,7 @@ class TicketUpdate(LoginRequiredMixin, UpdateView):
                 ticket.data_uploaded_completed_dt = datetime.now(timezone.utc)
                 ticket.data_uploaded_completed_by = email
             elif (
-                status_update == None and ticket.get_ticket_status[1] == STATUS_TYPES[1]
+                    status_update == None and ticket.get_ticket_status[1] == STATUS_TYPES[1]
             ):
                 # if user edits ticket
                 logger.info("Ticket Updated by " + email)
@@ -277,7 +312,7 @@ class RejectedTicketsList(PermissionRequiredMixin, ListView):
             status = object.get_ticket_status[1]
             if status == STATUS_TYPES[0]:
                 object.last_updated = (
-                    datetime.now(timezone.utc) - object.get_ticket_status[0]
+                        datetime.now(timezone.utc) - object.get_ticket_status[0]
                 ).days
                 object.status_color = object.get_ticket_status[2]
 

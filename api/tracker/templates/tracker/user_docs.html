@@ -1,7 +1,16 @@
 {% extends "base_generic.html" %} {% block content %}
-<h2 class="text-muted" style="text-align: center">User Documentation</h2>
+<h2 class="text-muted" style="text-align: center">
+    Data Management Core</h2>
+<h3 class="text-muted" style="text-align: center">Data Ingest Tracker Documentation</h3>
 
 <div class="m-2">
-  <p>This is a placeholder for user documentation.</p>
+    <p>This is a placeholder for documentation for the Data Ingest Tracker.</p>
+    <hr>
+
+    <h3>API Response from Jira:</h3>
+    <pre>{{ api_response|safe }}</pre>
+
+    <h4>Parsed JSON Response:</h4>
+    <pre id="parsedJson">{{ api_response_json }}</pre>
 </div>
 {% endblock %}
