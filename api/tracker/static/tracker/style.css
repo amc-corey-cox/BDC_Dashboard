@@ -95,6 +95,34 @@ html {
   overflow-x: auto;
 }
 
+/* Add these styles to your style.css */
+
+.board-section {
+  margin: 20px 0;
+  border: 1px solid var(--color-light-gray);
+  border-radius: 0.25rem;
+  padding: 10px;
+  background-color: var(--color-background-grey);
+}
+
+.board-section-header {
+  background-color: var(--color-catalyst-blue);
+  color: var(--color-white);
+  font-weight: bold;
+  padding: 10px;
+  border-radius: 0.25rem 0.25rem 0 0;
+}
+
+.board-item {
+  border: 1px solid var(--color-light-gray);
+  border-radius: 0.25rem;
+  margin: 10px 0;
+  padding: 10px;
+  background-color: var(--color-white);
+}
+
+
+
 .board-panel-header {
   word-wrap: break-word;
 }

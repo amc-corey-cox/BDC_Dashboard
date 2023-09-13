@@ -22,7 +22,7 @@
   <link rel="icon" href="{% static 'tracker/favicon.png' %}" />
 
   <title>
-    {% block title %}NHLBI BioData Catalyst | Data Submission Tracker{% endblock %}
+    {% block title %}NHLBI BioData Catalyst | Data Management Core | Submission Tracker{% endblock %}
   </title>
 </head>
 
@@ -35,19 +35,22 @@
         </a>
         <hr />
         <div class="list-group">
-          <a class="list-group-item list-group-item-action banner-action" href="/">Home</a>
-          <a class="list-group-item list-group-item-action banner-action" href="/list">
-            Ticket Dashboard
+          <a class="list-group-item list-group-item-action banner-action" href="/">
+            My Submissions
           </a>
+          <a class="list-group-item list-group-item-action banner-action" href="/profile">User Profile</a>
           <a class="list-group-item list-group-item-action banner-action" href="/create">
             Create Ticket
           </a>
           <hr />
-          <a class="list-group-item list-group-item-action banner-action" href="/custodian_instructions">
-            Data Custodian Instructions
-          </a>
+<!--          <a class="list-group-item list-group-item-action banner-action" href="/custodian_instructions">-->
+<!--            Data Custodian Instructions-->
+<!--          </a>-->
           <a class="list-group-item list-group-item-action banner-action" href="/user_docs">
-            User Documentation
+            Documentation
+          </a>
+          <a class="list-group-item list-group-item-action banner-action" href="/about">
+            About the Tracker
           </a>
         </div>
         <hr />
