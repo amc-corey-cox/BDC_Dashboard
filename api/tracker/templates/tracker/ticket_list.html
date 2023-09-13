@@ -3,33 +3,30 @@
 <h2 class="text-muted" style="text-align: center">Ticket Tracker</h2>
 
 <div id="board" class="container">
-  {% for status_title, status_list in tickets_by_status.items %}
-    {% if not status_title == 'rejected' %}
+  {% for status_idx, status_data in statuses.items %}
       <div class="board-section">
         <div class="board-section-header">
-          <p class="h5">{{ status_title }}</p>
+          <p class="h5">{{ status_data.name }}</p>
         </div>
-        {% for object in status_list %}
+        {% for issue in status_data.issues %}
           <div class="board-item">
             <div class="card text-center m-2">
               <div class="card-header" style="background-color: lightgrey">
-                <strong>{{ object.study_id }}.{{ object.consent_code }}</strong>
+                <strong>{{ issue.fields.parent.key }}.{{ issue.key }}</strong>
               </div>
               <div class="card-body">
-                <p class="card-text">{{ object.study_name }}</p>
-                <a href="{% url 'tracker:ticket-update' pk=object.pk %}" class="btn btn-warning"
-                  role="button">View Ticket</a>
+                <p class="card-text">{{ issue.fields.summary }}</p>
+                <p class="card-text">{{ issue.fields.description }}</p>
               </div>
-              <div class="card-footer {% if object.last_updated_color %}{{ object.last_updated_color }}{% endif %}"
-                data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ object.get_ticket_status.0 }}"
+              <div class="card-footer {% if issue.last_updated_color %}{{ issue.last_updated_color }}{% endif %}"
+                data-bs-toggle="tooltip" data-bs-placement="bottom" title="test {{ issue.labels }}"
                 style="background-color: lightgrey">
-                {{ object.last_updated }} Day{{ object.last_updated|pluralize }} Ago
+                <p class="card-text">{{ issue.fields.labels }}</p>
               </div>
             </div>
           </div>
         {% endfor %}
       </div>
-    {% endif %}
   {% endfor %}
 </div>
 
