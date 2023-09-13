@@ -1,0 +1,31 @@
+{
+    "issue_fields": [
+        "parent",
+        "labels",
+        "summary",
+        "components",
+        "priority",
+        "assignee",
+        "reporter",
+        "customfield_12004",
+        "customfield_12005",
+        "description",
+        "issuelinks",
+        "attachment",
+        "comment",
+        "customfield_15000",
+        "customfield_15001",
+        "customfield_15002",
+        "customfield_15200",
+        "customfield_15201",
+        "customfield_15202",
+        "customfield_15203",
+        "customfield_15205",
+        "customfield_15206",
+        "customfield_15207",
+        "customfield_15208",
+        "customfield_15209",
+        "customfield_15210",
+        "status"
+    ]
+}
