@@ -1,3 +1,5 @@
+import json
+
 from django.contrib.auth.mixins import (
     LoginRequiredMixin,
     PermissionRequiredMixin,
@@ -8,21 +10,29 @@ from django.views.generic import TemplateView
 from django.views.generic.list import ListView
 from django.forms.utils import ErrorList
 from django.urls import reverse_lazy
-
 from datetime import datetime, timezone
 from .models import Ticket, User, STATUS_TYPES
-# NOTE: Development: Mail
-# Commented out until we get mail/SendGrid working
-#from .mail import Mail
+from .jira_data import JiraInteraction
 import logging
 
 logger = logging.getLogger("django")
+
+
 class IndexView(TemplateView):
     template_name = "tracker/index.html"
 
 
-class UserDocsView(TemplateView):
+class DocumentationView(TemplateView):
     template_name = "tracker/user_docs.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        return context
+
+
+class AboutView(TemplateView):
+    template_name = "tracker/about.html"
 
 
 class CustodianInfoView(TemplateView):
@@ -111,7 +121,7 @@ class TicketUpdate(LoginRequiredMixin, UpdateView):
             elif status_update == "Mark as Data Upload Completed":
                 # set status to "Awaiting Gen3 Acceptance"
                 ticket.data_uploaded_completed_dt = datetime.now(timezone.utc)
-                ticket.data_uploaded_completed_by = email                
+                ticket.data_uploaded_completed_by = email
             elif status_update == "Mark as Gen3 Approved":
                 # set status to "Gen3 Accepted"
                 ticket.data_accepted_dt = datetime.now(timezone.utc)
@@ -137,7 +147,7 @@ class TicketUpdate(LoginRequiredMixin, UpdateView):
                 ticket.data_uploaded_completed_dt = datetime.now(timezone.utc)
                 ticket.data_uploaded_completed_by = email
             elif (
-                status_update == None and ticket.get_ticket_status[1] == STATUS_TYPES[1]
+                    status_update == None and ticket.get_ticket_status[1] == STATUS_TYPES[1]
             ):
                 # if user edits ticket
                 logger.info("Ticket Updated by " + email)
@@ -178,60 +188,23 @@ class TicketsList(LoginRequiredMixin, ListView):
     context_object_name = "tickets"
 
     def get_context_data(self, **kwargs):
-        context = super(ListView, self).get_context_data(**kwargs)
-        queryset = self.object_list
-        user = self.request.user
+        context = super().get_context_data(**kwargs)
 
-        # generate a list of status types
-        context["awaiting_review"] = []
-        context["awaiting_bucket_creation"] = []
-        context["awaiting_data_upload_start"] = []
-        context["awaiting_data_upload_complete"] = []
-        context["awaiting_gen3_approval"] = []
-        context["gen3_accepted"] = []
-        context["rejected"] = []
+        jira_board_config = JiraInteraction().get_board_config()
+        issues = JiraInteraction().get_board_issues()
 
-        # iterate through all tickets and sort accordingly
-        for object in queryset:
-            # only add object to list if user has perms
-            if object.created_by.email != user.email and not user.is_staff:
-                continue
+        statuses = {}
+        for idx, column in enumerate(jira_board_config["columnConfig"]["columns"]):
+            statuses[idx] = {}
+            statuses[idx]["name"] = column["name"]
+            statuses[idx]["ids"] = [status['id'] for status in column["statuses"]]
+            statuses[idx]["issues"] = []
+            for issue in issues['issues']:
+                if issue['fields']['status']['id'] in statuses[idx]["ids"]:
+                    statuses[idx]["issues"].append(issue)
+            statuses[idx]["issues_count"] = len(statuses[idx]["issues"])
 
-            # calculate last updated and set colors
-            object.last_updated = (
-                datetime.now(timezone.utc) - object.get_ticket_status[0]
-            ).days
-            object.status_color = object.get_ticket_status[2]
-            if object.last_updated > 14:
-                object.last_updated_color = "text-red"
-            elif object.last_updated > 7:
-                object.last_updated_color = "text-yellow"
-            else:
-                object.last_updated_color = "text-green"
-
-            # filter tickets by status
-            status = object.get_ticket_status[1]
-            if status == STATUS_TYPES[1]:
-                # Awaiting Review
-                context["awaiting_review"].append(object)
-            elif status == STATUS_TYPES[2]:
-                # Awaiting Bucket Creation
-                context["awaiting_bucket_creation"].append(object)
-            elif status == STATUS_TYPES[3]:
-                # Awaiting Data Upload
-                context["awaiting_data_upload_start"].append(object)
-            elif status == STATUS_TYPES[4]:
-                # Data Upload in Progress
-                context["awaiting_data_upload_complete"].append(object)
-            elif status == STATUS_TYPES[5]:
-                # Awaiting Gen3 Approval
-                context["awaiting_gen3_approval"].append(object)
-            elif status == STATUS_TYPES[6]:
-                # Gen3 Accepted
-                context["gen3_accepted"].append(object)
-            else:
-                # Data Intake Form Rejected
-                context["rejected"].append(object)
+        context["statuses"] = statuses
 
         return context
 
@@ -256,7 +229,7 @@ class RejectedTicketsList(PermissionRequiredMixin, ListView):
             status = object.get_ticket_status[1]
             if status == STATUS_TYPES[0]:
                 object.last_updated = (
-                    datetime.now(timezone.utc) - object.get_ticket_status[0]
+                        datetime.now(timezone.utc) - object.get_ticket_status[0]
                 ).days
                 object.status_color = object.get_ticket_status[2]
 

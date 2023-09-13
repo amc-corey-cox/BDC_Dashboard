@@ -51,6 +51,9 @@ else:
     )
 
 SECRET_KEY = env("SECRET_KEY")
+JIRA_BASE_URL = env("JIRA_BASE_URL")
+JIRA_TOKEN = env("JIRA_TOKEN")
+JIRA_BOARD_ID = env("JIRA_BOARD_ID")
 
 # debug toolbar
 DEBUG = env("DEBUG")
