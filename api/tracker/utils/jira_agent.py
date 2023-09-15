@@ -3,7 +3,7 @@ import requests
 import json
 
 
-class JiraInteraction:
+class JiraAgent:
     def __init__(self):
         self.jira_token = settings.JIRA_TOKEN
         self.headers = {
@@ -15,7 +15,7 @@ class JiraInteraction:
         self.board_id = settings.JIRA_BOARD_ID
         self.board_config = self.get_board_config()
 
-        with open('tracker/jira_fields.json', 'r') as file:
+        with open('tracker/utils/jira_fields.json', 'r') as file:
             jira_fields_data = json.load(file)
         self.fields = jira_fields_data
         self.fields_string = self.get_fields_string()
