@@ -16,9 +16,8 @@ class JiraAgent:
         self.board_config = self.get_board_config()
 
         with open('tracker/utils/jira_fields.json', 'r') as file:
-            jira_fields_data = json.load(file)
-        self.fields = jira_fields_data
-        self.fields_string = self.get_fields_string()
+            self.fields_data = json.load(file)
+        self.fields = self.fields_data.keys()
 
     def get_data(self, api_endpoint):
         response = requests.get(self.base_url + api_endpoint, headers=self.headers)
@@ -31,14 +30,18 @@ class JiraAgent:
         api_endpoint = f"/rest/agile/1.0/board/{self.board_id}/configuration"
         return self.get_data(api_endpoint)
 
-    def get_fields_string(self):
-        return "fields=" + ",".join(self.fields["issue_fields"])
+    def get_fields_string(self, fields=None):
+        if fields is None:
+            fields = self.fields
+        return "fields=" + ",".join(fields)
 
-    def get_board_issues(self):
+    def get_board_issues(self, fields=None):
         board_filter = self.board_config["filter"]
-        api_endpoint = f"/rest/api/2/search?jql=filter={board_filter['id']}&{self.fields_string}"
+        fields_string = self.get_fields_string(fields)
+        api_endpoint = f"/rest/api/2/search?jql=filter={board_filter['id']}&{fields_string}"
         return self.get_data(api_endpoint)
 
-    def get_issue(self, issue_id):
-        api_endpoint = f"/rest/api/2/issue/" + issue_id + "/" + self.fields_string
+    def get_issue(self, issue_id, fields=None):
+        fields_string = self.get_fields_string(fields)
+        api_endpoint = f"/rest/api/2/issue/" + issue_id + "/" + fields_string
         return self.get_data(api_endpoint)
