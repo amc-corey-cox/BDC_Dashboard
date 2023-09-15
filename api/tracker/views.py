@@ -12,7 +12,7 @@ from django.forms.utils import ErrorList
 from django.urls import reverse_lazy
 from datetime import datetime, timezone
 from .models import Ticket, User, STATUS_TYPES
-from .jira_data import JiraInteraction
+from .utils.jira_agent import JiraAgent
 import logging
 
 logger = logging.getLogger("django")
@@ -190,8 +190,9 @@ class TicketsList(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        jira_board_config = JiraInteraction().get_board_config()
-        issues = JiraInteraction().get_board_issues()
+        jira_agent = JiraAgent()
+        jira_board_config = jira_agent.get_board_config()
+        jira_issues = jira_agent.get_board_issues()
 
         statuses = {}
         for idx, column in enumerate(jira_board_config["columnConfig"]["columns"]):
@@ -199,7 +200,7 @@ class TicketsList(LoginRequiredMixin, ListView):
             statuses[idx]["name"] = column["name"]
             statuses[idx]["ids"] = [status['id'] for status in column["statuses"]]
             statuses[idx]["issues"] = []
-            for issue in issues['issues']:
+            for issue in jira_issues['issues']:
                 if issue['fields']['status']['id'] in statuses[idx]["ids"]:
                     statuses[idx]["issues"].append(issue)
             statuses[idx]["issues_count"] = len(statuses[idx]["issues"])
