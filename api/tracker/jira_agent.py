@@ -1,6 +1,35 @@
 from django.conf import settings
 import requests
-import json
+
+JIRA_FIELDS = {
+  "parent": "parent",
+  "labels": "labels",
+  "summary": "summary",
+  "components": "components",
+  "priority": "priority",
+  "assignee": "assignee",
+  "reporter": "reporter",
+  "customfield_12004": "customfield_12004",
+  "customfield_12005": "customfield_12005",
+  "description": "description",
+  "issuelinks": "issuelinks",
+  "attachment": "attachment",
+  "comment": "comment",
+  "customfield_15000": "customfield_15000",
+  "customfield_15001": "customfield_15001",
+  "customfield_15002": "customfield_15002",
+  "customfield_15200": "customfield_15200",
+  "customfield_15201": "customfield_15201",
+  "customfield_15202": "customfield_15202",
+  "customfield_15203": "customfield_15203",
+  "customfield_15205": "customfield_15205",
+  "customfield_15206": "customfield_15206",
+  "customfield_15207": "customfield_15207",
+  "customfield_15208": "customfield_15208",
+  "customfield_15209": "customfield_15209",
+  "customfield_15210": "customfield_15210",
+  "status": "status"
+}
 
 
 class JiraAgent:
@@ -15,8 +44,7 @@ class JiraAgent:
         self.board_id = settings.JIRA_BOARD_ID
         self.board_config = self.get_board_config()
 
-        with open('tracker/utils/jira_fields.json', 'r') as file:
-            self.fields_data = json.load(file)
+        self.fields_data = JIRA_FIELDS
         self.fields = self.fields_data.keys()
 
     def get_data(self, api_endpoint):
