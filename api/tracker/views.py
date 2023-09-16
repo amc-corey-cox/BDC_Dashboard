@@ -12,7 +12,7 @@ from django.forms.utils import ErrorList
 from django.urls import reverse_lazy
 from datetime import datetime, timezone
 from .models import Ticket, User, STATUS_TYPES
-from .utils.jira_agent import JiraAgent
+from .jira_agent import JiraAgent
 import logging
 
 logger = logging.getLogger("django")
