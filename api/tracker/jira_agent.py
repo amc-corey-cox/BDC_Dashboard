@@ -41,9 +41,7 @@ class JiraAgent:
         self.base_url = settings.JIRA_BASE_URL
         self.board_id = settings.JIRA_BOARD_ID
         self.board_config = self.get_board_config()
-
-        self.fields_data = JIRA_FIELDS
-        self.fields = self.fields_data.keys()
+        self.fields = JIRA_FIELDS
 
     def get_data(self, api_endpoint):
         response = requests.get(self.base_url + api_endpoint, headers=self.headers)
@@ -56,9 +54,14 @@ class JiraAgent:
         api_endpoint = f"/rest/agile/1.0/board/{self.board_id}/configuration"
         return self.get_data(api_endpoint)
 
+    def get_fields_info(self):
+        api_endpoint = f"/rest/api/2/field"
+        field_info_list = self.get_data(api_endpoint)
+        return {field["id"]: field for field in field_info_list if field["id"] in self.fields}
+
     def get_fields_string(self, fields=None):
         if fields is None:
-            fields = self.fields
+            fields = self.fields.keys()
         return "fields=" + ",".join(fields)
 
     def get_board_issues(self, fields=None):
