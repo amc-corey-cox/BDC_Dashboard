@@ -1,6 +1,7 @@
 from django.conf import settings
 import requests
 
+# JIRA field names to descriptions
 JIRA_FIELDS = {
   "parent": "parent",
   "labels": "labels",
@@ -28,6 +29,35 @@ JIRA_FIELDS = {
   "customfield_15210": "Data Generator Message",
   "status": "status"
 }
+
+# Lookup table for short field name to JIRA field names
+JIRA_NAMES = {
+    "parent": "parent",
+    "labels": "labels",
+    "summary": "summary",
+    "assignee": "assignee",
+    "reporter": "reporter",
+    "start_date": "customfield_12004",
+    "end_date": "customfield_12005",
+    "description": "description",
+    "issuelinks": "issuelinks",
+    "attachment": "attachment",
+    "requirements": "customfield_15000",
+    "blockers": "customfield_15001",
+    "award_id": "customfield_15200",
+    "award_entity": "customfield_15201",
+    "contacts": "customfield_15202",
+    "study_name": "customfield_15203",
+    "dataset_name": "customfield_15204",
+    "version_update": "customfield_15205",
+    "accession_number": "customfield_15206",
+    "accession_version": "customfield_15301",
+    "bucket_url": "customfield_15207",
+    "gen3_names": "customfield_15208",
+    "gen3_name": "customfield_15209",
+    "message": "customfield_15210",
+    "status": "status",
+    }
 
 
 class JiraAgent:
