@@ -146,6 +146,11 @@ class JiraTicket(models.Model):
         help_text=jira_description_lookup("issuelinks"),
         blank=True,
         default=[], )
+    subtasks = models.JSONField(
+        verbose_name=jira_description_lookup("subtasks"),
+        help_text=jira_description_lookup("subtasks"),
+        blank=True,
+        default=[], )
     attachment = models.JSONField(
         verbose_name=jira_description_lookup("attachment"),
         help_text=jira_description_lookup("attachment"),
