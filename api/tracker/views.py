@@ -196,6 +196,8 @@ class TicketsList(LoginRequiredMixin, ListView):
 
         statuses = {}
         for idx, column in enumerate(jira_board_config["columnConfig"]["columns"]):
+            if column["name"] == "Backlog":
+                continue
             statuses[idx] = {}
             statuses[idx]["name"] = column["name"]
             statuses[idx]["ids"] = [status['id'] for status in column["statuses"]]
