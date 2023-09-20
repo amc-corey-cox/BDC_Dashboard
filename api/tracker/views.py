@@ -18,6 +18,28 @@ import logging
 logger = logging.getLogger("django")
 
 
+LIST_FIELDS = {
+    "description": "description",
+    "issuelinks": "issuelinks",
+    "issuetype": "issuetype",
+    "labels": "labels",
+    "status": "status",
+    "subtasks": "subtasks",
+    "summary": "summary",
+}
+
+
+GENERATOR_FIELDS = {
+    # "description": "description",
+    "issuelinks": "issuelinks",
+    # "issuetype": "issuetype",
+    # "labels": "labels",
+    # "status": "status",
+    # "subtasks": "subtasks",
+    "summary": "summary",
+}
+
+
 class IndexView(TemplateView):
     template_name = "tracker/index.html"
 
@@ -192,17 +214,27 @@ class TicketsList(LoginRequiredMixin, ListView):
 
         jira_agent = JiraAgent()
         jira_board_config = jira_agent.get_board_config()
-        jira_issues = jira_agent.get_board_issues()
+        data_generators = jira_agent.get_dg_by_contact('staff', GENERATOR_FIELDS)
+
+        link_keys = []
+        issues = []
+        for data_generator in data_generators:
+            for link in data_generator["fields"]["issuelinks"]:
+                if link["outwardIssue"]["key"] not in link_keys:
+                    link_keys.append(link["outwardIssue"]["key"])
+                    issue = jira_agent.get_issue(link["outwardIssue"]["key"], LIST_FIELDS)
+                    issue["fields"]["parent"] = data_generator
+                    issues.append(issue)
 
         statuses = {}
         for idx, column in enumerate(jira_board_config["columnConfig"]["columns"]):
-            if column["name"] == "Backlog":
+            if column["name"] == "Backlog" or column["name"] == "BLOCKED":
                 continue
             statuses[idx] = {}
             statuses[idx]["name"] = column["name"]
             statuses[idx]["ids"] = [status['id'] for status in column["statuses"]]
             statuses[idx]["issues"] = []
-            for issue in jira_issues['issues']:
+            for issue in issues:
                 if issue['fields']['status']['id'] in statuses[idx]["ids"]:
                     statuses[idx]["issues"].append(issue)
             statuses[idx]["issues_count"] = len(statuses[idx]["issues"])

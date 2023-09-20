@@ -2,7 +2,7 @@ from django.conf import settings
 import requests
 
 # JIRA field names to descriptions
-JIRA_FIELDS = {
+ISSUE_FIELDS = {
   "parent": "parent",
   "labels": "labels",
   "summary": "Data Set Name",
@@ -32,7 +32,7 @@ JIRA_FIELDS = {
 }
 
 # Lookup table for short field name to JIRA field names
-JIRA_NAMES = {
+FIELD_NAMES = {
     "parent": "parent",
     "labels": "labels",
     "summary": "summary",
@@ -73,7 +73,8 @@ class JiraAgent:
         self.base_url = settings.JIRA_BASE_URL
         self.board_id = settings.JIRA_BOARD_ID
         self.board_config = self.get_board_config()
-        self.fields = JIRA_FIELDS
+        self.fields = ISSUE_FIELDS
+        self.field_names = FIELD_NAMES
 
     def get_data(self, api_endpoint):
         response = requests.get(self.base_url + api_endpoint, headers=self.headers)
@@ -102,7 +103,19 @@ class JiraAgent:
         api_endpoint = f"/rest/api/2/search?jql=filter={board_filter['id']}&{fields_string}"
         return self.get_data(api_endpoint)
 
+    def get_dg_by_contact(self, contact, fields=None):
+        project = "BDJW"
+        issuetype = "12900"
+        fields_string = self.get_fields_string(fields)
+        api_search = f"rest/api/2/search?jql=project={project}+AND+issuetype={issuetype}"
+        # f"/rest/api/2/search?jql=&{fields_string}"
+        api_filter = ""
+        if contact != "staff":
+            api_filter = f"cf[15202]+~+{contact}"
+        api_endpoint = api_search + "+" + api_filter + "&" + fields_string
+        return self.get_data(api_endpoint)["issues"]
+
     def get_issue(self, issue_id, fields=None):
         fields_string = self.get_fields_string(fields)
-        api_endpoint = f"/rest/api/2/issue/" + issue_id + "/" + fields_string
+        api_endpoint = f"/rest/api/2/issue/" + issue_id + "?" + fields_string
         return self.get_data(api_endpoint)
