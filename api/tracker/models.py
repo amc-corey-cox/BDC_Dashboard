@@ -14,7 +14,7 @@ from simple_history.models import HistoricalRecords
 from allauth.account.signals import user_logged_in, user_logged_out
 from django.dispatch import receiver
 
-from .jira_agent import JiraAgent, JIRA_FIELDS, JIRA_NAMES
+from .jira_agent import JiraAgent, ISSUE_FIELDS, FIELD_NAMES
 
 STATUS_TYPES = {
     0: "Data Intake Form Rejected",
@@ -90,8 +90,8 @@ VERSION_UPDATE_CHOICES = {
 
 
 def jira_description_lookup(field_name):
-    if field_name in JIRA_NAMES:
-        return JIRA_FIELDS[JIRA_NAMES[field_name]]
+    if field_name in FIELD_NAMES:
+        return ISSUE_FIELDS[FIELD_NAMES[field_name]]
     else:
         return field_name
 

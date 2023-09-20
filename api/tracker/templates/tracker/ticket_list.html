@@ -10,17 +10,35 @@
         </div>
         {% for issue in status_data.issues %}
           <div class="board-item">
-            <div class="card text-center m-2">
-              <div class="card-header" style="background-color: lightgrey">
-                <strong>{{ issue.fields.parent.key }}.{{ issue.key }}</strong>
+            <div class="card m-2 custom-card">
+              <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <strong>{{ issue.fields.parent.fields.summary }}  -  {{ issue.fields.summary }}</strong>
+                </div>
+                <div>
+                  <button class="btn btn-lozenge">Details</button>
+                </div>
               </div>
               <div class="card-body">
-                <p class="card-text">{{ issue.fields.summary }}</p>
+                <p class="card-text">{{ issue.fields.customfield_15203 }}</p>
+                <p class="card-text">{{ issue.fields.customfield_15204 }}</p>
                 <p class="card-text">{{ issue.fields.description }}</p>
+                <!-- Subtasks section -->
+                <div class="subtasks">
+                  {% if issue.fields.subtasks %}
+                    <div class="subtask-columns" style="--min-subtask-width: auto;">
+                      {% for subtask in issue.fields.subtasks %}
+                        <label>
+                          <input type="checkbox" {% if subtask.fields.status.name == 'Done' %}checked{% endif %} disabled>
+                          {{ subtask.fields.summary }}
+                        </label>
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+                </div>
               </div>
               <div class="card-footer {% if issue.last_updated_color %}{{ issue.last_updated_color }}{% endif %}"
-                data-bs-toggle="tooltip" data-bs-placement="bottom" title="test {{ issue.labels }}"
-                style="background-color: lightgrey">
+                data-bs-toggle="tooltip" data-bs-placement="bottom" title="test {{ issue.labels }}">
                 <p class="card-text">{{ issue.fields.labels }}</p>
               </div>
             </div>
@@ -36,3 +54,19 @@
 </div>
 {% endif %}
 {% endblock %}
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const subtaskColumns = document.querySelector(".subtask-columns");
+    const subtaskLabels = subtaskColumns.querySelectorAll("label");
+
+    let maxWidth = 0;
+    subtaskLabels.forEach(label => {
+      const labelWidth = label.offsetWidth;
+      maxWidth = Math.max(maxWidth, labelWidth);
+    });
+
+    subtaskColumns.style.setProperty("--min-subtask-width", `${maxWidth}px`);
+  });
+</script>
