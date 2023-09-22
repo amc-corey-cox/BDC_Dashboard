@@ -179,19 +179,14 @@ html {
 }
 
 
-/* Define the responsive grid layout for subtasks */
-.subtask-columns {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 10px; /* Adjust the gap as needed for spacing */
+/* Define styles subtasks */
+ul.subtask-list {
+    list-style-type: none; /* Remove default bullet points for this specific list */
+    margin: 0; /* Adjust the margin to reduce indenting */
+    padding: 0; /* Optionally adjust padding as well */
 }
 
-/* Adjust styles for the labels and checkboxes */
-.subtask-columns label {
-  display: flex;
-  align-items: center;
-}
-
-.subtask-columns input[type="checkbox"] {
-  margin-right: 5px; /* Add spacing between the checkbox and label */
+ul.subtask-list li {
+    margin: 0; /* Adjust the margin to reduce indenting */
+    padding: 0; /* Optionally adjust padding as well */
 }
