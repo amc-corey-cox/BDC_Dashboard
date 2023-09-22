@@ -32,7 +32,11 @@
                           <input type="checkbox"
                             {% if subtask.fields.status.name == 'Done' or subtask.fields.status.name == 'Not Required' %}checked{% endif %}
                             disabled>
-                          {{ subtask.fields.summary }}
+                          {% if subtask.fields.status.name == 'In Progress' %}
+                            <b>{{ subtask.fields.summary }}</b>
+                          {% else %}
+                            {{ subtask.fields.summary }}
+                          {% endif %}
                         </li>
                       {% endfor %}
                     </ul>
