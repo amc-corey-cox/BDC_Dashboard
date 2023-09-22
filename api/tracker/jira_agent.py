@@ -88,7 +88,7 @@ class JiraAgent:
         return self.get_data(api_endpoint)
 
     def get_fields_info(self):
-        api_endpoint = f"/rest/api/2/field"
+        api_endpoint = f"/rest/api/latest/field"
         field_info_list = self.get_data(api_endpoint)
         return {field["id"]: field for field in field_info_list if field["id"] in self.fields}
 
@@ -100,15 +100,14 @@ class JiraAgent:
     def get_board_issues(self, fields=None):
         board_filter = self.board_config["filter"]
         fields_string = self.get_fields_string(fields)
-        api_endpoint = f"/rest/api/2/search?jql=filter={board_filter['id']}&{fields_string}"
+        api_endpoint = f"/rest/api/latest/search?jql=filter={board_filter['id']}&{fields_string}"
         return self.get_data(api_endpoint)
 
     def get_dg_by_contact(self, contact, fields=None):
         project = "BDJW"
         issuetype = "12900"
         fields_string = self.get_fields_string(fields)
-        api_search = f"rest/api/2/search?jql=project={project}+AND+issuetype={issuetype}"
-        # f"/rest/api/2/search?jql=&{fields_string}"
+        api_search = f"/rest/api/latest/search?jql=project={project}+AND+issuetype={issuetype}"
         api_filter = ""
         if contact != "staff":
             api_filter = f"cf[15202]+~+{contact}"
@@ -117,5 +116,5 @@ class JiraAgent:
 
     def get_issue(self, issue_id, fields=None):
         fields_string = self.get_fields_string(fields)
-        api_endpoint = f"/rest/api/2/issue/" + issue_id + "?" + fields_string
+        api_endpoint = f"/rest/api/latest/issue/{issue_id}?{fields_string}"
         return self.get_data(api_endpoint)

@@ -27,6 +27,8 @@ LIST_FIELDS = {
     "status": "status",
     "subtasks": "subtasks",
     "summary": "summary",
+    "customfield_15203": "study_name",
+    "customfield_15204": "study_dataset",
 }
 
 
