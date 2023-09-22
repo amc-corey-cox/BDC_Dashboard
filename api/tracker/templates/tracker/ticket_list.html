@@ -23,25 +23,7 @@
                 <p class="card-text">{{ issue.fields.customfield_15203 }}</p>
                 <p class="card-text">{{ issue.fields.customfield_15204 }}</p>
                 <p class="card-text">{{ issue.fields.description }}</p>
-                <!-- Subtasks section -->
-                {% if issue.fields.subtasks %}
-                  <div class="subtasks">
-                    <ul class="subtask-list">
-                      {% for subtask in issue.fields.subtasks %}
-                        <li class="{% if subtask.fields.status.name == 'Not Required' %}subtask-not-required{% endif %}">
-                          <input type="checkbox"
-                            {% if subtask.fields.status.name == 'Done' or subtask.fields.status.name == 'Not Required' %}checked{% endif %}
-                            disabled>
-                          {% if subtask.fields.status.name == 'In Progress' %}
-                            <b>{{ subtask.fields.summary }}</b>
-                          {% else %}
-                            {{ subtask.fields.summary }}
-                          {% endif %}
-                        </li>
-                      {% endfor %}
-                    </ul>
-                  </div>
-                {% endif %}
+                {% include "tracker/subtasks_section.html" %}
               </div>
               {% if issue.fields.subtasks %}
               <div class="card-footer {% if issue.last_updated_color %}{{ issue.last_updated_color }}{% endif %}"
