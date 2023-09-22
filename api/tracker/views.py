@@ -1,4 +1,5 @@
 import json
+import re
 
 from django.contrib.auth.mixins import (
     LoginRequiredMixin,
@@ -38,6 +39,25 @@ GENERATOR_FIELDS = {
     # "subtasks": "subtasks",
     "summary": "summary",
 }
+
+SUBTASK_NAMES = {
+    "PRE-INGESTION": [
+        "PRE-REG",
+        "DBGAP-REG",
+        "BDC-BUCKET-GEN",
+        "DBGAP-SUB",
+        "DATA PREP",
+        "DATA-UPLOAD",
+        "DATA-QC",
+    ],
+    "BDC DATA RELEASE": [
+        "SB-DATA-RELEASE",
+        "PS-DATA-RELEASE",
+        "COMM-RELEASE",
+    ],
+}
+
+SUBTASK_NAMES["BDC RELEASED"] = SUBTASK_NAMES["PRE-INGESTION"] + SUBTASK_NAMES["BDC DATA RELEASE"]
 
 
 class IndexView(TemplateView):
@@ -234,8 +254,17 @@ class TicketsList(LoginRequiredMixin, ListView):
             statuses[idx]["name"] = column["name"]
             statuses[idx]["ids"] = [status['id'] for status in column["statuses"]]
             statuses[idx]["issues"] = []
+            if column["name"] in SUBTASK_NAMES:
+                column_regex = re.compile('|'.join(SUBTASK_NAMES[column["name"]]))
+            else:
+                column_regex = re.compile(r'^$')
             for issue in issues:
                 if issue['fields']['status']['id'] in statuses[idx]["ids"]:
+                    sub_tasks = []
+                    for sub_task in issue['fields']['subtasks']:
+                        if column_regex.search(sub_task['fields']['summary']):
+                            sub_tasks.append(sub_task)
+                    issue['fields']['subtasks'] = sub_tasks
                     statuses[idx]["issues"].append(issue)
             statuses[idx]["issues_count"] = len(statuses[idx]["issues"])
 
