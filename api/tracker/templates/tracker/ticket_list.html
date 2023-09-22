@@ -28,8 +28,10 @@
                   <div class="subtasks">
                     <ul class="subtask-list">
                       {% for subtask in issue.fields.subtasks %}
-                        <li>
-                          <input type="checkbox" {% if subtask.fields.status.name == 'Done' %}checked{% endif %} disabled>
+                        <li class="{% if subtask.fields.status.name == 'Not Required' %}subtask-not-required{% endif %}">
+                          <input type="checkbox"
+                            {% if subtask.fields.status.name == 'Done' or subtask.fields.status.name == 'Not Required' %}checked{% endif %}
+                            disabled>
                           {{ subtask.fields.summary }}
                         </li>
                       {% endfor %}

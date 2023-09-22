@@ -190,3 +190,7 @@ ul.subtask-list li {
     margin: 0; /* Adjust the margin to reduce indenting */
     padding: 0; /* Optionally adjust padding as well */
 }
+
+ul.subtask-list li.subtask-not-required {
+    text-decoration: line-through;
+}
