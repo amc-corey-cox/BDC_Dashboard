@@ -20,16 +20,15 @@
                 </div>
               </div>
               <div class="card-body">
-                <p class="card-text">{{ issue.fields.customfield_15203 }}</p>
+                <p class="card-text" style="margin-bottom: 0px;">{{ issue.fields.customfield_15203 }}</p>
                 <p class="card-text">{{ issue.fields.customfield_15204 }}</p>
                 <p class="card-text">{{ issue.fields.description }}</p>
-                {% include "tracker/subtasks_section.html" %}
               </div>
               {% if issue.fields.subtasks %}
-              <div class="card-footer {% if issue.last_updated_color %}{{ issue.last_updated_color }}{% endif %}"
-                data-bs-toggle="tooltip" data-bs-placement="bottom" title="test {{ issue.labels }}">
-                <p class="card-text">{{ issue.fields.labels }}</p>
-              </div>
+                <div class="card-footer"
+                  data-bs-toggle="tooltip" data-bs-placement="bottom" title="Subtasks">
+                  {% include "tracker/subtasks_section.html" %}
+                </div>
               {% endif %}
             </div>
         {% endfor %}
@@ -37,10 +36,4 @@
       </div>
   {% endfor %}
 </div>
-
-{% if user.is_staff %}
-<div class="row">
-  <a href="/rejected" class="btn btn-cancel btn-md" role="button">View Rejected Tickets</a>
-</div>
-{% endif %}
 {% endblock %}
