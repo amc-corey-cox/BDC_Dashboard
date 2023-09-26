@@ -105,7 +105,7 @@ class JiraAgent:
 
     def get_dg_by_contact(self, contact, fields=None):
         project = "BDJW"
-        issuetype = "12900"
+        issuetype = "10000"
         fields_string = self.get_fields_string(fields)
         api_search = f"/rest/api/latest/search?jql=project={project}+AND+issuetype={issuetype}"
         api_filter = ""
