@@ -3,22 +3,22 @@ import requests
 
 # JIRA field names to descriptions
 ISSUE_FIELDS = {
-  "parent": "parent",
-  "labels": "labels",
+  "parent": "Parent",
+  "labels": "Labels",
   "summary": "Data Set Name",
   "assignee": "Current Assignee",
   "reporter": "Ticket Creator",
   "customfield_12004": "Target Start Date",
   "customfield_12005": "Target End Date",
   "description": "Data Set Information",
-  "issuelinks": "issuelinks",
-  "subtasks": "subtasks",
-  "attachment": "attachment",
+  "issuelinks": "Issuelinks",
+  "subtasks": "Subtasks",
+  "attachment": "Attachment",
   "customfield_15000": "Additional Data Requirements",
-  "customfield_15001": "blockers",
+  "customfield_15001": "Blockers",
   "customfield_15200": "Award Identifier",
   "customfield_15201": "Award Entity",
-  "customfield_15202": "contacts",
+  "customfield_15202": "Contacts",
   "customfield_15203": "Study Name",
   "customfield_15204": "Dataset Name",
   "customfield_15205": "Version Update",
@@ -28,7 +28,7 @@ ISSUE_FIELDS = {
   "customfield_15208": "Gen(3) Project Name(s)",
   "customfield_15209": "Gen(3) Project Name",
   "customfield_15210": "Data Generator Message",
-  "status": "status"
+  "status": "Status"
 }
 
 # Lookup table for short field name to JIRA field names

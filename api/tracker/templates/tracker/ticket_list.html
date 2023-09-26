@@ -16,7 +16,9 @@
                   <strong>{{ issue.fields.parent.fields.summary }}  -  {{ issue.fields.summary }}</strong>
                 </div>
                 <div>
-                  <button class="btn btn-lozenge">Details</button>
+                  <a href="{% url 'tracker:ticket-detail' pk=issue.key %}">
+                    <button class="btn btn-lozenge">Detail</button>
+                  </a>
                 </div>
               </div>
               <div class="card-body">
