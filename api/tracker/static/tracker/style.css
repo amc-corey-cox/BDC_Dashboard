@@ -24,17 +24,16 @@ label {
 
   --color-white: #fff;
   --color-black: #000;
-  --color-background-grey: #f4f4f6;
   --color-catalyst-blue: #1a568c;
   --color-catalyst-dark-blue: #12385a;
   --color-catalyst-dark-grey: #393939;
   --color-catalyst-bright-blue: #41abf5;
 
-  --color-crimson: #b33243;
-  --color-crimson-dark: #5a2a38;
-  --color-light-gray: #a0a2a4;
-
-  --color-almost-white: #f9f9f9;
+  --color-darker-gray: #eeeeee;
+  --color-dark-gray: #f0f0f0;
+  --color-base-gray: #f5f5f5;
+  --color-light-gray: #fafafa;
+  --color-almost-white: #fcfcfc;
 }
 html {
   font-family: "Montserrat, sans-serif";
@@ -64,7 +63,7 @@ html {
 
 #footer {
   /* position: fixed; */
-  background-color: var(--color-background-grey);
+  background-color: var(--color-base-gray);
   padding: 1vw;
 }
 #footer a:link {
@@ -102,15 +101,11 @@ html {
   border: 1px solid var(--color-light-gray);
   border-radius: 0.25rem;
   padding: 10px;
-  background-color: var(--color-background-grey);
+  background-color: var(--color-base-gray);
 }
 
 .custom-card {
-    background-color: var(--color-almost-white);
-}
-
-.custom-card-text {
-    background-color: var(--color-almost-white);
+  background-color: var(--color-base-gray);
 }
 
 .board-section-header {
@@ -124,7 +119,7 @@ html {
   border-radius: 0.25rem;
   margin: 10px 0;
   padding: 10px;
-  background-color: var(--color-white);
+  background-color: var(--color-almost-white);
 }
 
 .board-panel-header {
@@ -135,7 +130,7 @@ html {
   padding: 0;
   max-width: 12rem;
   margin: auto;
-  border: 0.1rem solid var(--color-light-gray);
+  border: 0.1rem solid var(--color-base-gray);
   border-radius: 0.25rem;
 }
 
@@ -165,7 +160,7 @@ html {
 }
 .btn-cancel {
   color: var(--color-catalyst-blue);
-  background-color: var(--color-background-grey);
+  background-color: var(--color-base-gray);
   text-decoration: underline;
 }
 .btn-google-logo {
@@ -193,4 +188,27 @@ ul.subtask-list li {
 
 ul.subtask-list li.subtask-not-required {
     text-decoration: line-through;
+}
+
+
+/* Define the styles for the btn-lozenge*/
+.btn-lozenge {
+  display: inline-block;
+  padding: 10px 20px;
+  border: 2px solid #999;
+  border-radius: 50px;
+  background-color: #f0f0f0;
+  color: #333;
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+.btn-lozenge:hover {
+  background-color: #666;
+  color: #fff;
+  border-color: #666;
 }
