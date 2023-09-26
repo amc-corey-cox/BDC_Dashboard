@@ -14,7 +14,7 @@ urlpatterns = [
     path(
         "rejected/", views.RejectedTicketsList.as_view(), name="rejected-tickets-list"
     ),
-    # path("<int:pk>/detail/", views.TicketDetail.as_view(), name="ticket-detail"),
+    path("<str:pk>/detail/", views.TicketDetail.as_view(), name="ticket-detail"),
     path("user_docs/", views.DocumentationView.as_view(), name="documentation"),
     path("about/", views.AboutView.as_view(), name="about"),
     path(

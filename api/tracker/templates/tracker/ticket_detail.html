@@ -1,0 +1,21 @@
+{% extends "base_generic.html" %}
+{% block content %}
+  <h2 class="text-muted" style="text-align: center">Issue {{ issue.key }} Details</h2>
+  {% if issue.fields.subtasks %}
+    <h2>Subtasks</h2>
+      <div>{% include "tracker/subtasks_section.html" %}</div>
+  {% endif %}
+  {% for section, values in issue_content.items %}
+    <h2>{{ section.title }}</h2>
+      <table>
+        <tbody>
+          {% for field_values in values.fields.values %}
+            <tr>
+              <td>{{ field_values.name }}</td>
+              <td>{{ field_values.value }}</td>
+            </tr>
+          {% endfor %}
+      </tbody>
+      </table>
+  {% endfor %}
+{% endblock %}

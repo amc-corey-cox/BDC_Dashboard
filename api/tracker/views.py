@@ -13,7 +13,7 @@ from django.forms.utils import ErrorList
 from django.urls import reverse_lazy
 from datetime import datetime, timezone
 from .models import Ticket, User, STATUS_TYPES
-from .jira_agent import JiraAgent
+from .jira_agent import JiraAgent, ISSUE_FIELDS
 import logging
 
 logger = logging.getLogger("django")
@@ -272,6 +272,65 @@ class TicketsList(LoginRequiredMixin, ListView):
 
         context["statuses"] = statuses
 
+        return context
+
+
+class TicketDetail(LoginRequiredMixin, TemplateView):
+    template_name = 'tracker/ticket_detail.html'
+
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     ticket_id = kwargs['pk']  # Assuming 'pk' is the primary key of the ticket
+    #
+    #     # Fetch ticket data from Jira using your library or API calls
+    #     # Replace this with actual code to fetch ticket data from Jira
+    #     # jira_ticket_data = jira_api_library.fetch_ticket_data(ticket_id)
+    #
+    #     # Pass the ticket data to the template
+    #     context['jira_ticket_data'] = ticket_id
+    #
+    #     return context
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        ticket_id = kwargs['pk']
+
+        jira_agent = JiraAgent()
+        issue = jira_agent.get_issue(ticket_id)
+
+        # Group the fields into sections
+        sections = {
+            "Study": ["summary", "description", "status"],
+            "Assignee and Reporter": ["assignee", "reporter"],
+            "Dates": ["customfield_12004", "customfield_12005"],
+            "Custom Fields": ["customfield_15000", "customfield_15001", "customfield_15200", "customfield_15201",
+                              "customfield_15202", "customfield_15203", "customfield_15204", #"customfield_15205",
+                              "customfield_15206", "customfield_15301", "customfield_15207", "customfield_15208",
+                              "customfield_15209", "customfield_15210"],
+            "Others": [# "customfield_10005", #"parent",
+                       "labels",  # "issuelinks", "subtasks",
+                        "attachment"],
+        }
+
+        issue_content = {}
+        for title, fields in sections.items():
+            issue_content[title] = {}
+            issue_content[title]["title"] = title
+            issue_content[title]["fields"] = {}
+            for field in fields:
+                issue_content[title]['fields'][field] = {
+                    "name": ISSUE_FIELDS[field],
+                    "value": issue["fields"][field],
+                }
+                # if type(issue["fields"][field]) is list:
+                #     issue_content[title]["fields"][field]["value"] = ", ".join(issue["fields"][field])
+                if type(issue["fields"][field]) is dict:
+                    issue_content[title]["fields"][field]["value"] = issue["fields"][field]["name"]
+                # else:
+                #     issue_content[title]["fields"][field]["value"] = issue["fields"][field]
+
+        context["issue"] = issue
+        context["issue_content"] = issue_content
         return context
 
 
