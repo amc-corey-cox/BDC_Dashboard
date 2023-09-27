@@ -298,11 +298,7 @@ class TicketDetail(LoginRequiredMixin, TemplateView):
         issue = jira_agent.get_issue(ticket_id)
         context["issue"] = issue
 
-        jira_board_statuses = jira_agent.get_board_statuses(remove_statuses=["Backlog", "BLOCKED"])
-        for idx, column in enumerate(jira_board_statuses):
-            if column['name'] == issue['fields']['status']['name'].upper():
-                column['selected'] = True
-                break
+        jira_board_statuses = jira_agent.get_board_statuses(["Backlog", "BLOCKED"], issue['fields']['status']['name'])
         context["workflow"] = jira_board_statuses
 
         # Group the fields into sections

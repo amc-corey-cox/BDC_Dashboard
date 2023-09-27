@@ -29,6 +29,8 @@ label {
   --color-catalyst-dark-grey: #393939;
   --color-catalyst-bright-blue: #41abf5;
 
+  --color-selected-gray: #666666;
+
   --color-darker-gray: #eeeeee;
   --color-dark-gray: #f0f0f0;
   --color-base-gray: #f5f5f5;
@@ -249,8 +251,8 @@ ul.subtask-list li.subtask-not-required {
 }
 
 .arrowText{
-	color:black;
-	font-weight:bold;
+	color: black;
+	font-weight: bold;
 	line-height: 40px;
 	padding-left: 20px;
 }
@@ -266,10 +268,14 @@ ul.subtask-list li.subtask-not-required {
   right: -20px;
 }
 
-.arrowLast:after {
-  content: '';
-  position: absolute;
-  border-left: 20px solid white;
-  left: 0px;
-  z-index: 2;
+.selectedArrow{
+  background-color: var(--color-selected-gray);
+}
+
+.selectedArrow .arrowText{
+  color: var(--color-light-gray);
+}
+
+.selectedArrow.arrowHead:after{
+  color: var(--color-selected-gray);
 }
