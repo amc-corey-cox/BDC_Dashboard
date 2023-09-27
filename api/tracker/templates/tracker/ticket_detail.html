@@ -1,6 +1,9 @@
 {% extends "base_generic.html" %}
 {% block content %}
   <h2 class="text-muted" style="text-align: center">Issue {{ issue.key }} Details</h2>
+
+  {% include "tracker/workflow_arrows.html" %}
+
   {% if issue.fields.subtasks %}
     <h2>Subtasks</h2>
       <div>{% include "tracker/subtasks_section.html" %}</div>

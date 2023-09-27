@@ -219,3 +219,57 @@ ul.subtask-list li.subtask-not-required {
   border-color: #999;
   cursor: default;
 }
+
+/* Define styles for workflow arrows */
+.arrowsBanner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.arrowTail:before {
+  content: '';
+  position: absolute;
+  border-left: 20px solid white;
+  border-top: 20px solid transparent;
+  border-bottom: 20px solid transparent;
+  left: 0px;
+  z-index: 2;
+}
+
+.arrowBase {
+  background-color: var(--color-base-gray);
+  height: 40px;
+  display: inline-block;
+  position: relative;
+  margin-right: 20px;
+  width: 200px;
+  text-align: center;
+}
+
+.arrowText{
+	color:black;
+	font-weight:bold;
+	line-height: 40px;
+	padding-left: 20px;
+}
+
+.arrowHead:after {
+  color: var(--color-base-gray);
+  border-left: 20px solid;
+  border-top: 20px solid transparent;
+  border-bottom: 20px solid transparent;
+  display: inline-block;
+  content: '';
+  position: absolute;
+  right: -20px;
+}
+
+.arrowLast:after {
+  content: '';
+  position: absolute;
+  border-left: 20px solid white;
+  left: 0px;
+  z-index: 2;
+}
