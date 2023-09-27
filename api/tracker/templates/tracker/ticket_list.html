@@ -2,37 +2,42 @@
 {% block content %}
 <h2 class="text-muted" style="text-align: center">Ticket Tracker</h2>
 
+{% include "tracker/workflow_arrows.html" %}
+
 <div id="board" class="container">
   {% for status_idx, status_data in statuses.items %}
       <div class="board-section">
         <div class="board-section-header">
           <p class="h5">{{ status_data.name }}</p>
         </div>
+        <div class="board-item">
         {% for issue in status_data.issues %}
-          <div class="board-item">
-            <div class="card text-center m-2">
-              <div class="card-header" style="background-color: lightgrey">
-                <strong>{{ issue.fields.parent.key }}.{{ issue.key }}</strong>
+            <div class="card m-2 custom-card">
+              <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <strong>{{ issue.fields.parent.fields.summary }}  -  {{ issue.fields.summary }}</strong>
+                </div>
+                <div>
+                  <a href="{% url 'tracker:ticket-detail' pk=issue.key %}">
+                    <button class="btn btn-lozenge">Detail</button>
+                  </a>
+                </div>
               </div>
               <div class="card-body">
-                <p class="card-text">{{ issue.fields.summary }}</p>
+                <p class="card-text" style="margin-bottom: 0px;">{{ issue.fields.customfield_15203 }}</p>
+                <p class="card-text">{{ issue.fields.customfield_15204 }}</p>
                 <p class="card-text">{{ issue.fields.description }}</p>
               </div>
-              <div class="card-footer {% if issue.last_updated_color %}{{ issue.last_updated_color }}{% endif %}"
-                data-bs-toggle="tooltip" data-bs-placement="bottom" title="test {{ issue.labels }}"
-                style="background-color: lightgrey">
-                <p class="card-text">{{ issue.fields.labels }}</p>
-              </div>
+              {% if issue.fields.subtasks %}
+                <div class="card-footer"
+                  data-bs-toggle="tooltip" data-bs-placement="bottom" title="Subtasks">
+                  {% include "tracker/subtasks_section.html" %}
+                </div>
+              {% endif %}
             </div>
-          </div>
         {% endfor %}
+        </div>
       </div>
   {% endfor %}
 </div>
-
-{% if user.is_staff %}
-<div class="row">
-  <a href="/rejected" class="btn btn-cancel btn-md" role="button">View Rejected Tickets</a>
-</div>
-{% endif %}
 {% endblock %}

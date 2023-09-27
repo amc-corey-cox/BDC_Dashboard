@@ -24,15 +24,18 @@ label {
 
   --color-white: #fff;
   --color-black: #000;
-  --color-background-grey: #f4f4f6;
   --color-catalyst-blue: #1a568c;
   --color-catalyst-dark-blue: #12385a;
   --color-catalyst-dark-grey: #393939;
   --color-catalyst-bright-blue: #41abf5;
 
-  --color-crimson: #b33243;
-  --color-crimson-dark: #5a2a38;
-  --color-light-gray: #a0a2a4;
+  --color-selected-gray: #666666;
+
+  --color-darker-gray: #eeeeee;
+  --color-dark-gray: #f0f0f0;
+  --color-base-gray: #f5f5f5;
+  --color-light-gray: #fafafa;
+  --color-almost-white: #fcfcfc;
 }
 html {
   font-family: "Montserrat, sans-serif";
@@ -62,7 +65,7 @@ html {
 
 #footer {
   /* position: fixed; */
-  background-color: var(--color-background-grey);
+  background-color: var(--color-base-gray);
   padding: 1vw;
 }
 #footer a:link {
@@ -95,19 +98,19 @@ html {
   overflow-x: auto;
 }
 
-/* Add these styles to your style.css */
-
 .board-section {
   margin: 20px 0;
   border: 1px solid var(--color-light-gray);
   border-radius: 0.25rem;
   padding: 10px;
-  background-color: var(--color-background-grey);
+  background-color: var(--color-base-gray);
+}
+
+.custom-card {
+  background-color: var(--color-base-gray);
 }
 
 .board-section-header {
-  background-color: var(--color-catalyst-blue);
-  color: var(--color-white);
   font-weight: bold;
   padding: 10px;
   border-radius: 0.25rem 0.25rem 0 0;
@@ -118,10 +121,8 @@ html {
   border-radius: 0.25rem;
   margin: 10px 0;
   padding: 10px;
-  background-color: var(--color-white);
+  background-color: var(--color-almost-white);
 }
-
-
 
 .board-panel-header {
   word-wrap: break-word;
@@ -131,7 +132,7 @@ html {
   padding: 0;
   max-width: 12rem;
   margin: auto;
-  border: 0.1rem solid var(--color-light-gray);
+  border: 0.1rem solid var(--color-base-gray);
   border-radius: 0.25rem;
 }
 
@@ -161,7 +162,7 @@ html {
 }
 .btn-cancel {
   color: var(--color-catalyst-blue);
-  background-color: var(--color-background-grey);
+  background-color: var(--color-base-gray);
   text-decoration: underline;
 }
 .btn-google-logo {
@@ -172,4 +173,109 @@ html {
 .required {
   font-weight: bold;
   color: red;
+}
+
+
+/* Define styles subtasks */
+ul.subtask-list {
+    list-style-type: none; /* Remove default bullet points for this specific list */
+    margin: 0; /* Adjust the margin to reduce indenting */
+    padding: 0; /* Optionally adjust padding as well */
+}
+
+ul.subtask-list li {
+    margin: 0; /* Adjust the margin to reduce indenting */
+    padding: 0; /* Optionally adjust padding as well */
+}
+
+ul.subtask-list li.subtask-not-required {
+    text-decoration: line-through;
+}
+
+
+/* Define the styles for the btn-lozenge*/
+.btn-lozenge {
+  display: inline-block;
+  padding: 10px 20px;
+  border: 2px solid #999;
+  border-radius: 50px;
+  background-color: #f0f0f0;
+  color: #333;
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+.btn-lozenge:hover {
+  background-color: #666;
+  color: #fff;
+  border-color: #666;
+}
+
+.read-only-field {
+  background-color: #f0f0f0;
+  color: #333;
+  border-color: #999;
+  cursor: default;
+}
+
+/* Define styles for workflow arrows */
+.arrowsBanner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.arrowTail:before {
+  content: '';
+  position: absolute;
+  border-left: 20px solid white;
+  border-top: 20px solid transparent;
+  border-bottom: 20px solid transparent;
+  left: 0px;
+  z-index: 2;
+}
+
+.arrowBase {
+  background-color: var(--color-base-gray);
+  height: 40px;
+  display: inline-block;
+  position: relative;
+  margin-right: 20px;
+  width: 200px;
+  text-align: center;
+}
+
+.arrowText{
+	color: black;
+	font-weight: bold;
+	line-height: 40px;
+	padding-left: 20px;
+}
+
+.arrowHead:after {
+  color: var(--color-base-gray);
+  border-left: 20px solid;
+  border-top: 20px solid transparent;
+  border-bottom: 20px solid transparent;
+  display: inline-block;
+  content: '';
+  position: absolute;
+  right: -20px;
+}
+
+.selectedArrow{
+  background-color: var(--color-selected-gray);
+}
+
+.selectedArrow .arrowText{
+  color: var(--color-light-gray);
+}
+
+.selectedArrow.arrowHead:after{
+  color: var(--color-selected-gray);
 }
