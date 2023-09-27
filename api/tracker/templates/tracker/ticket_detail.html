@@ -11,8 +11,8 @@
         <tbody>
           {% for field_values in values.fields.values %}
             <tr>
-              <td>{{ field_values.name }}</td>
-              <td>{{ field_values.value }}</td>
+              <td style="width: 250px;">{{ field_values.name }}</td>
+              <td><input type="text" value="{{ field_values.value }}" class="read-only-field" readonly></td>
             </tr>
           {% endfor %}
       </tbody>
