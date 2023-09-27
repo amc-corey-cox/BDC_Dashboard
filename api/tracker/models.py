@@ -14,26 +14,7 @@ from simple_history.models import HistoricalRecords
 from allauth.account.signals import user_logged_in, user_logged_out
 from django.dispatch import receiver
 
-# Ticket
-# ------
-# email
-# name
-# organization
-# study_name
-# dataset_desription
-# is_test_data
-# google_email
-# aws_iam
-# data_size
-# study_id
-# consent_code
-# created_dt
-#
-# Status
-# ------
-# status_type
-# status_dt
-
+from .jira_agent import JiraAgent, ISSUE_FIELDS, FIELD_NAMES
 
 STATUS_TYPES = {
     0: "Data Intake Form Rejected",
@@ -72,6 +53,202 @@ DATA_SIZE_VALIDATOR = RegexValidator(
 )
 
 logger = logging.getLogger("django")
+
+
+def create_fields(model, fields=None, fields_info=None):
+    jira_agent = JiraAgent()
+    if fields is None:
+        fields = jira_agent.fields
+    if fields_info is None:
+        fields_info = jira_agent.get_fields_info()
+
+    for field_name, field_description in fields.items():
+        if field_name in fields_info:
+            field_type = fields_info[field_name]["schema"]["type"]
+            if field_type == "string":
+                field_type = models.CharField
+            elif field_type == "date":
+                field_type = models.DateTimeField
+            elif field_type == "array" or field_type == "user" or field_type == "status":
+                field_type = models.JSONField
+            else:
+                field_type = models.JSONField
+
+            field = field_type(
+                verbose_name=field_description,
+                help_text=field_description,
+                blank=True,
+                default="",
+            )
+            setattr(model, field_name, field)
+
+
+VERSION_UPDATE_CHOICES = {
+    "Yes": "Yes",
+    "No": "No",
+}
+
+
+def jira_description_lookup(field_name):
+    if field_name in FIELD_NAMES:
+        return ISSUE_FIELDS[FIELD_NAMES[field_name]]
+    else:
+        return field_name
+
+
+class JiraTicket(models.Model):
+    parent = models.JSONField(
+        verbose_name=jira_description_lookup("parent"),
+        help_text=jira_description_lookup("parent"),
+        blank=True,
+        default={}, )
+    labels = models.JSONField(
+        verbose_name=jira_description_lookup("labels"),
+        help_text=jira_description_lookup("labels"),
+        blank=True,
+        default=[], )
+    summary = models.CharField(
+        verbose_name=jira_description_lookup("summary"),
+        help_text=jira_description_lookup("summary"),
+        max_length=255,
+        blank=True,
+        default="", )
+    assignee = models.JSONField(
+        verbose_name=jira_description_lookup("assignee"),
+        help_text=jira_description_lookup("assignee"),
+        blank=True,
+        default={}, )
+    reporter = models.JSONField(
+        verbose_name=jira_description_lookup("reporter"),
+        help_text=jira_description_lookup("reporter"),
+        blank=True,
+        default={}, )
+    start_date = models.DateTimeField(
+        verbose_name=jira_description_lookup("start_date"),
+        help_text=jira_description_lookup("start_date"),
+        blank=True,
+        null=True,
+        default=None, )
+    end_date = models.DateTimeField(
+        verbose_name=jira_description_lookup("end_date"),
+        help_text=jira_description_lookup("end_date"),
+        blank=True,
+        null=True,
+        default=None, )
+    description = models.CharField(
+        verbose_name=jira_description_lookup("description"),
+        help_text=jira_description_lookup("description"),
+        max_length=32767,
+        blank=True,
+        default="", )
+    issuelinks = models.JSONField(
+        verbose_name=jira_description_lookup("issuelinks"),
+        help_text=jira_description_lookup("issuelinks"),
+        blank=True,
+        default=[], )
+    subtasks = models.JSONField(
+        verbose_name=jira_description_lookup("subtasks"),
+        help_text=jira_description_lookup("subtasks"),
+        blank=True,
+        default=[], )
+    attachment = models.JSONField(
+        verbose_name=jira_description_lookup("attachment"),
+        help_text=jira_description_lookup("attachment"),
+        blank=True,
+        default=[], )
+    requirements = models.JSONField(
+        verbose_name=jira_description_lookup("requirements"),
+        help_text=jira_description_lookup("requirements"),
+        blank=True,
+        default=[], )
+    blockers = models.JSONField(
+        verbose_name=jira_description_lookup("blockers"),
+        help_text=jira_description_lookup("blockers"),
+        blank=True,
+        default=[], )
+    award_id = models.CharField(
+        verbose_name=jira_description_lookup("award_id"),
+        help_text=jira_description_lookup("award_id"),
+        max_length=255,  # May be 32767
+        blank=True,
+        default="", )
+    award_entity = models.CharField(
+        verbose_name=jira_description_lookup("award_entity"),
+        help_text=jira_description_lookup("award_entity"),
+        max_length=255,  # May be 32767
+        blank=True,
+        default="", )
+    contacts = models.JSONField(
+        verbose_name=jira_description_lookup("contacts"),
+        help_text=jira_description_lookup("contacts"),
+        blank=True,
+        default=[], )
+    study_name = models.CharField(
+        verbose_name=jira_description_lookup("study_name"),
+        help_text=jira_description_lookup("study_name"),
+        max_length=255,
+        blank=True,
+        default="", )
+    dataset_name = models.CharField(
+        verbose_name=jira_description_lookup("dataset_name"),
+        help_text=jira_description_lookup("dataset_name"),
+        max_length=255,
+        blank=True,
+        default="", )
+    version_update = models.CharField(
+        verbose_name=jira_description_lookup("version_update"),
+        help_text=jira_description_lookup("version_update"),
+        max_length=255,
+        choices=VERSION_UPDATE_CHOICES,
+        blank=True,
+        default="", )
+    accession_number = models.CharField(
+        verbose_name=jira_description_lookup("accession_number"),
+        help_text=jira_description_lookup("accession_number"),
+        max_length=255,
+        blank=True,
+        default="", )
+    accession_version = models.CharField(
+        verbose_name=jira_description_lookup("accession_version"),
+        help_text=jira_description_lookup("accession_version"),
+        max_length=255,
+        blank=True,
+        default="", )
+    bucket_url = models.CharField(
+        verbose_name=jira_description_lookup("bucket_url"),
+        help_text=jira_description_lookup("bucket_url"),
+        max_length=255,
+        blank=True,
+        default="", )
+    gen3_names = models.JSONField(
+        verbose_name=jira_description_lookup("gen3_names"),
+        help_text=jira_description_lookup("gen3_names"),
+        blank=True,
+        default=[], )
+    gen3_name = models.CharField(
+        verbose_name=jira_description_lookup("gen3_name"),
+        help_text=jira_description_lookup("gen3_name"),
+        max_length=255,
+        blank=True,
+        default="", )
+    message = models.CharField(
+        verbose_name=jira_description_lookup("message"),
+        help_text=jira_description_lookup("message"),
+        max_length=32767,
+        blank=True,
+        default="", )
+    status = models.JSONField(
+        verbose_name=jira_description_lookup("status"),
+        help_text=jira_description_lookup("status"),
+        blank=True,
+        default={}, )
+
+    class Meta:
+        abstract = True
+
+
+create_fields(JiraTicket)
+
 
 class Ticket(models.Model):
     name = models.CharField(

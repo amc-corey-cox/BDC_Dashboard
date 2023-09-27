@@ -39,9 +39,9 @@
             My Submissions
           </a>
           <a class="list-group-item list-group-item-action banner-action" href="/profile">User Profile</a>
-          <a class="list-group-item list-group-item-action banner-action" href="/create">
-            Create Ticket
-          </a>
+<!--          <a class="list-group-item list-group-item-action banner-action" href="/create">-->
+<!--            Create Ticket-->
+<!--          </a>-->
           <hr />
 <!--          <a class="list-group-item list-group-item-action banner-action" href="/custodian_instructions">-->
 <!--            Data Custodian Instructions-->
@@ -55,12 +55,12 @@
         </div>
         <hr />
           {% if user.is_authenticated %}
-        <div class="list-group-item list-group-item-success d-column text-center banner-action">
+        <div class="list-group-item d-column text-center banner-action">
           <strong>{{ user.name }}</strong><br/>
           <strong>{{ user.email }}</strong>
           <br>
           {% if request.path != "/accounts/logout/" %}
-          <a href="/accounts/logout" class="btn btn-danger btn-md banner-action w-50" role="button"
+          <a href="/accounts/logout" class="btn btn-lozenge banner-action w-50" role="button"
              style="padding-left: 0; padding-right: 0;"
               >
             Logout

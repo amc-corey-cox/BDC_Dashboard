@@ -1,0 +1,17 @@
+{% if issue.fields.subtasks %}
+  <div class="subtasks">
+    <ul class="subtask-list">
+      {% for subtask in issue.fields.subtasks %}
+        {% if subtask.fields.status.name == 'Not Required' %}
+<!--          <li><input type="checkbox" checked disabled><s>{{ subtask.fields.summary }}</s></li>-->
+        {% elif subtask.fields.status.name == 'Done' %}
+          <li><input type="checkbox" checked disabled>{{ subtask.fields.summary }}</li>
+        {% elif subtask.fields.status.name == 'In Progress' %}
+          <li><input type="checkbox" disabled><b>{{ subtask.fields.summary }}</b></li>
+        {% else %}
+          <li><input type="checkbox" disabled>{{ subtask.fields.summary }}</li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  </div>
+{% endif %}
