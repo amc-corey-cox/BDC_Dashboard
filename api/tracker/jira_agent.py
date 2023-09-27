@@ -87,10 +87,15 @@ class JiraAgent:
         api_endpoint = f"/rest/agile/1.0/board/{self.board_id}/configuration"
         return self.get_data(api_endpoint)
 
-    def get_board_statuses(self, remove_statuses=None):
-        statuses = self.board_config["columnConfig"]["columns"]
-        if remove_statuses is not None:
-            statuses = [status for status in statuses if status["name"] not in remove_statuses]
+    def get_board_statuses(self, remove_statuses=None, selected_status=""):
+        all_statuses = self.board_config["columnConfig"]["columns"]
+        statuses = [status for status in all_statuses if status["name"] not in remove_statuses]
+
+        if selected_status == "Data Available":
+            selected_status = "BDC RELEASED"
+        for status in statuses:
+            status["selected"] = status["name"] == selected_status.upper()
+
         return statuses
 
     def get_fields_info(self):
