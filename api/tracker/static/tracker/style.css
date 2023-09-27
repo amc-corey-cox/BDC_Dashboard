@@ -212,3 +212,10 @@ ul.subtask-list li.subtask-not-required {
   color: #fff;
   border-color: #666;
 }
+
+.read-only-field {
+  background-color: #f0f0f0;
+  color: #333;
+  border-color: #999;
+  cursor: default;
+}
