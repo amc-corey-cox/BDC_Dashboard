@@ -235,7 +235,8 @@ class TicketsList(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
 
         jira_agent = JiraAgent()
-        jira_board_config = jira_agent.get_board_config()
+        jira_board_statuses = jira_agent.get_board_statuses(remove_statuses=["Backlog", "BLOCKED"])
+        context["workflow"] = jira_board_statuses
         data_generators = jira_agent.get_dg_by_contact('staff', GENERATOR_FIELDS)
 
         link_keys = []
@@ -249,9 +250,7 @@ class TicketsList(LoginRequiredMixin, ListView):
                     issues.append(issue)
 
         statuses = {}
-        for idx, column in enumerate(jira_board_config["columnConfig"]["columns"]):
-            if column["name"] == "Backlog" or column["name"] == "BLOCKED":
-                continue
+        for idx, column in enumerate(jira_board_statuses):
             statuses[idx] = {}
             statuses[idx]["name"] = column["name"]
             statuses[idx]["ids"] = [status['id'] for status in column["statuses"]]
@@ -271,7 +270,6 @@ class TicketsList(LoginRequiredMixin, ListView):
             statuses[idx]["issues_count"] = len(statuses[idx]["issues"])
 
         context["statuses"] = statuses
-
         return context
 
 
@@ -296,7 +294,16 @@ class TicketDetail(LoginRequiredMixin, TemplateView):
         ticket_id = kwargs['pk']
 
         jira_agent = JiraAgent()
+
         issue = jira_agent.get_issue(ticket_id)
+        context["issue"] = issue
+
+        jira_board_statuses = jira_agent.get_board_statuses(remove_statuses=["Backlog", "BLOCKED"])
+        for idx, column in enumerate(jira_board_statuses):
+            if column['name'] == issue['fields']['status']['name'].upper():
+                column['selected'] = True
+                break
+        context["workflow"] = jira_board_statuses
 
         # Group the fields into sections
         sections = {
@@ -329,7 +336,6 @@ class TicketDetail(LoginRequiredMixin, TemplateView):
                 # else:
                 #     issue_content[title]["fields"][field]["value"] = issue["fields"][field]
 
-        context["issue"] = issue
         context["issue_content"] = issue_content
         return context
 

@@ -87,6 +87,12 @@ class JiraAgent:
         api_endpoint = f"/rest/agile/1.0/board/{self.board_id}/configuration"
         return self.get_data(api_endpoint)
 
+    def get_board_statuses(self, remove_statuses=None):
+        statuses = self.board_config["columnConfig"]["columns"]
+        if remove_statuses is not None:
+            statuses = [status for status in statuses if status["name"] not in remove_statuses]
+        return statuses
+
     def get_fields_info(self):
         api_endpoint = f"/rest/api/latest/field"
         field_info_list = self.get_data(api_endpoint)

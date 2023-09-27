@@ -2,6 +2,8 @@
 {% block content %}
 <h2 class="text-muted" style="text-align: center">Ticket Tracker</h2>
 
+{% include "tracker/workflow_arrows.html" %}
+
 <div id="board" class="container">
   {% for status_idx, status_data in statuses.items %}
       <div class="board-section">
