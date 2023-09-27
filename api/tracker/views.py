@@ -61,6 +61,9 @@ SUBTASK_NAMES = {
 
 SUBTASK_NAMES["BDC RELEASED"] = SUBTASK_NAMES["PRE-INGESTION"] + SUBTASK_NAMES["BDC DATA RELEASE"]
 
+SUBTASK_REGEX = {status: re.compile('|'.join(SUBTASK_NAMES[status])) for status in SUBTASK_NAMES}
+NO_MATCH_REGEX = re.compile(r'^$')
+
 
 class IndexView(TemplateView):
     template_name = "tracker/index.html"
@@ -227,6 +230,14 @@ class TicketDelete(PermissionRequiredMixin, DeleteView):
         return super().form_valid(form)
 
 
+def filter_subtasks(issue, status_regex=re.compile(r'^$')):
+    subtasks = []
+    for subtask in issue['fields']['subtasks']:
+        if status_regex.search(subtask['fields']['summary']):
+            subtasks.append(subtask)
+    issue['fields']['subtasks'] = subtasks
+
+
 class TicketsList(LoginRequiredMixin, ListView):
     model = Ticket
     context_object_name = "tickets"
@@ -255,17 +266,10 @@ class TicketsList(LoginRequiredMixin, ListView):
             statuses[idx]["name"] = column["name"]
             statuses[idx]["ids"] = [status['id'] for status in column["statuses"]]
             statuses[idx]["issues"] = []
-            if column["name"] in SUBTASK_NAMES:
-                column_regex = re.compile('|'.join(SUBTASK_NAMES[column["name"]]))
-            else:
-                column_regex = re.compile(r'^$')
+            column_regex = SUBTASK_REGEX.get(column["name"], NO_MATCH_REGEX)
             for issue in issues:
                 if issue['fields']['status']['id'] in statuses[idx]["ids"]:
-                    sub_tasks = []
-                    for sub_task in issue['fields']['subtasks']:
-                        if column_regex.search(sub_task['fields']['summary']):
-                            sub_tasks.append(sub_task)
-                    issue['fields']['subtasks'] = sub_tasks
+                    filter_subtasks(issue, column_regex)
                     statuses[idx]["issues"].append(issue)
             statuses[idx]["issues_count"] = len(statuses[idx]["issues"])
 
@@ -296,6 +300,11 @@ class TicketDetail(LoginRequiredMixin, TemplateView):
         jira_agent = JiraAgent()
 
         issue = jira_agent.get_issue(ticket_id)
+        issue_status = issue['fields']['status']['name']
+        issue_status = issue_status.upper() if issue_status != "Data Available" else "BDC RELEASED"
+
+        status_regex = SUBTASK_REGEX.get(issue_status, NO_MATCH_REGEX)
+        filter_subtasks(issue, status_regex)
         context["issue"] = issue
 
         jira_board_statuses = jira_agent.get_board_statuses(["Backlog", "BLOCKED"], issue['fields']['status']['name'])
