@@ -1,17 +1,9 @@
-import json
 import re
-
 from django.contrib.auth.mixins import (
     LoginRequiredMixin,
     PermissionRequiredMixin,
 )
-from django import forms
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import TemplateView
-from django.views.generic.list import ListView
-from django.forms.utils import ErrorList
-from django.urls import reverse_lazy
-from datetime import datetime, timezone
 from .models import Ticket, User, STATUS_TYPES
 from .jira_agent import JiraAgent, ISSUE_FIELDS
 import logging
@@ -20,6 +12,7 @@ logger = logging.getLogger("django")
 
 
 LIST_FIELDS = {
+    "customfield_10005": "epic_link",
     "description": "description",
     "issuelinks": "issuelinks",
     "issuetype": "issuetype",
@@ -65,10 +58,6 @@ SUBTASK_REGEX = {status: re.compile('|'.join(SUBTASK_NAMES[status])) for status 
 NO_MATCH_REGEX = re.compile(r'^$')
 
 
-class IndexView(TemplateView):
-    template_name = "tracker/index.html"
-
-
 class DocumentationView(TemplateView):
     template_name = "tracker/user_docs.html"
 
@@ -82,154 +71,6 @@ class AboutView(TemplateView):
     template_name = "tracker/about.html"
 
 
-class CustodianInfoView(TemplateView):
-    template_name = "tracker/custodian_instructions.html"
-
-
-class TicketCreate(LoginRequiredMixin, CreateView):
-    model = Ticket
-    fields = [
-        "email",
-        "name",
-        "organization",
-        "study_name",
-        "dataset_description",
-        "is_test_data",
-        "google_email",
-        "aws_iam",
-        "data_size",
-        "study_id",
-        "consent_code",
-    ]
-
-    # send email if form is valid
-    def form_valid(self, form):
-        ticket_obj = form.save(commit=False)
-        ticket_obj.created_by = self.request.user
-        ticket_obj.save()
-        # NOTE: Development: Mail
-        # Commented out until we get mail/SendGrid working
-        # Mail(ticket_obj, "Created").send()
-        return super().form_valid(form)
-
-
-class TicketUpdate(LoginRequiredMixin, UpdateView):
-    model = Ticket
-    fields = [
-        "name",
-        "email",
-        "organization",
-        "study_name",
-        "dataset_description",
-        "is_test_data",
-        "google_email",
-        "aws_iam",
-        "data_size",
-        "study_id",
-        "consent_code",
-        "ticket_review_comment",
-    ]
-
-    # add status to context
-    def get_context_data(self, **kwargs):
-        context = super(UpdateView, self).get_context_data(**kwargs)
-        context["status"] = self.object.get_ticket_status
-        context["staff"] = self.request.user.is_staff
-
-        return context
-
-    # handle ticket status logic
-    def form_valid(self, form):
-        status_update = self.request.POST.get("status_update")
-        ticket = form.save(commit=False)
-
-        # extract user data
-        user = self.request.user
-        email = user.email
-        staff = user.is_staff
-
-        if staff:
-            if status_update == "Approve Ticket":
-                # set status to "Awaiting NHLBI Cloud Bucket Creation"
-                ticket.ticket_approved_dt = datetime.now(timezone.utc)
-                ticket.ticket_approved_by = email
-            elif status_update == "Reject Ticket":
-                # add rejected timestamp
-                ticket.ticket_rejected_dt = datetime.now(timezone.utc)
-                ticket.ticket_rejected_by = email
-            elif status_update == "Mark as Bucket Created":
-                # set status to "Awaiting Data Custodian Upload Start"
-                ticket.bucket_created_dt = datetime.now(timezone.utc)
-                ticket.bucket_created_by = email
-            elif status_update == "Mark as Data Upload Started":
-                # set status to "Awaiting Data Custodian Upload Complete"
-                ticket.data_uploaded_started_dt = datetime.now(timezone.utc)
-                ticket.data_uploaded_started_by = email
-            elif status_update == "Mark as Data Upload Completed":
-                # set status to "Awaiting Gen3 Acceptance"
-                ticket.data_uploaded_completed_dt = datetime.now(timezone.utc)
-                ticket.data_uploaded_completed_by = email
-            elif status_update == "Mark as Gen3 Approved":
-                # set status to "Gen3 Accepted"
-                ticket.data_accepted_dt = datetime.now(timezone.utc)
-                ticket.data_accepted_by = email
-            elif status_update == "Revive Ticket":
-                # remove rejected timestamp
-                ticket.ticket_rejected_dt = None
-                ticket.ticket_rejected_by = email
-            elif status_update == None:
-                # if staff edits ticket
-                logger.info("Ticket Updated by " + email)
-            else:
-                form.errors[forms.forms.NON_FIELD_ERRORS] = ErrorList(
-                    ["Only Staff are allowed to perform this action"]
-                )
-        else:
-            if status_update == "Mark as Data Upload Started":
-                # set status to "Awaiting Data Custodian Upload Complete"
-                ticket.data_uploaded_started_dt = datetime.now(timezone.utc)
-                ticket.data_uploaded_started_by = email
-            elif status_update == "Mark as Data Upload Completed":
-                # set status to "Awaiting Gen3 Acceptance"
-                ticket.data_uploaded_completed_dt = datetime.now(timezone.utc)
-                ticket.data_uploaded_completed_by = email
-            elif (
-                    status_update == None and ticket.get_ticket_status[1] == STATUS_TYPES[1]
-            ):
-                # if user edits ticket
-                logger.info("Ticket Updated by " + email)
-            else:
-                form.errors[forms.forms.NON_FIELD_ERRORS] = ErrorList(
-                    ["Only Data Custodians are allowed to perform this action"]
-                )
-
-        ticket.save()
-        self.object = ticket
-
-        # send email with status update
-        # NOTE: Development: Mail
-        # Commented out until we get mail/SendGrid working
-        # Mail(ticket, ticket.get_ticket_status[1]).send()
-        return super().form_valid(form)
-
-
-class TicketDelete(PermissionRequiredMixin, DeleteView):
-    model = Ticket
-    success_url = reverse_lazy("tracker:tickets-list")
-
-    def has_permission(self):
-        return self.request.user.is_staff
-
-    def form_valid(self, form):
-        ticket = self.get_object()
-
-        # send email notification
-        # NOTE: Development: Mail
-        # Commented out until we get mail/SendGrid working
-        # Mail(ticket, "Deleted").send()
-        return super().form_valid(form)
-
-
 def filter_subtasks(issue, status_regex=re.compile(r'^$')):
     subtasks = []
     for subtask in issue['fields']['subtasks']:
@@ -238,9 +79,8 @@ def filter_subtasks(issue, status_regex=re.compile(r'^$')):
     issue['fields']['subtasks'] = subtasks
 
 
-class TicketsList(LoginRequiredMixin, ListView):
-    model = Ticket
-    context_object_name = "tickets"
+class TicketsList(LoginRequiredMixin, TemplateView):
+    template_name = "tracker/ticket_list.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -248,17 +88,9 @@ class TicketsList(LoginRequiredMixin, ListView):
         jira_agent = JiraAgent()
         jira_board_statuses = jira_agent.get_board_statuses(remove_statuses=["Backlog", "BLOCKED"])
         context["workflow"] = jira_board_statuses
-        data_generators = jira_agent.get_dg_by_contact('staff', GENERATOR_FIELDS)
 
-        link_keys = []
-        issues = []
-        for data_generator in data_generators:
-            for link in data_generator["fields"]["issuelinks"]:
-                if link["outwardIssue"]["key"] not in link_keys:
-                    link_keys.append(link["outwardIssue"]["key"])
-                    issue = jira_agent.get_issue(link["outwardIssue"]["key"], LIST_FIELDS)
-                    issue["fields"]["parent"] = data_generator
-                    issues.append(issue)
+        # issues = jira_agent.get_issues_by_contact('corey@tislab.org', LIST_FIELDS)
+        issues = jira_agent.get_issues_by_contact('staff', LIST_FIELDS)
 
         statuses = {}
         for idx, column in enumerate(jira_board_statuses):
@@ -279,19 +111,6 @@ class TicketsList(LoginRequiredMixin, ListView):
 
 class TicketDetail(LoginRequiredMixin, TemplateView):
     template_name = 'tracker/ticket_detail.html'
-
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     ticket_id = kwargs['pk']  # Assuming 'pk' is the primary key of the ticket
-    #
-    #     # Fetch ticket data from Jira using your library or API calls
-    #     # Replace this with actual code to fetch ticket data from Jira
-    #     # jira_ticket_data = jira_api_library.fetch_ticket_data(ticket_id)
-    #
-    #     # Pass the ticket data to the template
-    #     context['jira_ticket_data'] = ticket_id
-    #
-    #     return context
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -342,36 +161,6 @@ class TicketDetail(LoginRequiredMixin, TemplateView):
                 #     issue_content[title]["fields"][field]["value"] = issue["fields"][field]
 
         context["issue_content"] = issue_content
-        return context
-
-
-class RejectedTicketsList(PermissionRequiredMixin, ListView):
-    permission_required = "is_staff"
-    template_name = "tracker/ticket_rejected_list.html"
-    model = Ticket
-
-    context_object_name = "tickets"
-
-    def get_context_data(self, **kwargs):
-        context = super(ListView, self).get_context_data(**kwargs)
-        queryset = self.object_list
-
-        # generate a list of status types
-        context["rejected"] = []
-
-        # iterate through all tickets and sort rejected tickets
-        for object in queryset:
-            # Data Intake Form Rejected
-            status = object.get_ticket_status[1]
-            if status == STATUS_TYPES[0]:
-                object.last_updated = (
-                        datetime.now(timezone.utc) - object.get_ticket_status[0]
-                ).days
-                object.status_color = object.get_ticket_status[2]
-
-                # filter tickets by status
-                context["rejected"].append(object)
-
         return context
 
 

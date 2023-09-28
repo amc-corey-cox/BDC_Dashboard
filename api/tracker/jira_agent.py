@@ -3,6 +3,7 @@ import requests
 
 # JIRA field names to descriptions
 ISSUE_FIELDS = {
+  "customfield_10005": "Epic Link",
   "parent": "Parent",
   "labels": "Labels",
   "summary": "Data Set Name",
@@ -33,6 +34,7 @@ ISSUE_FIELDS = {
 
 # Lookup table for short field name to JIRA field names
 FIELD_NAMES = {
+    "epic_link": "customfield_10005",
     "parent": "parent",
     "labels": "labels",
     "summary": "summary",
@@ -72,6 +74,8 @@ class JiraAgent:
         }
         self.base_url = settings.JIRA_BASE_URL
         self.board_id = settings.JIRA_BOARD_ID
+        self.project = settings.JIRA_PROJECT
+        self.epic_issuetype = settings.JIRA_EPIC_ISSUETYPE
         self.board_config = self.get_board_config()
         self.fields = ISSUE_FIELDS
         self.field_names = FIELD_NAMES
@@ -114,16 +118,24 @@ class JiraAgent:
         api_endpoint = f"/rest/api/latest/search?jql=filter={board_filter['id']}&{fields_string}"
         return self.get_data(api_endpoint)
 
-    def get_dg_by_contact(self, contact, fields=None):
-        project = "BDJW"
-        issuetype = "10000"
+    def get_epics_by_contact(self, contact, fields=None):
+        search_string = f"/rest/api/latest/search?jql=project={self.project}+AND+issuetype={self.epic_issuetype}"
+        filter_string = "" if contact == "staff" else f"+AND+cf[15202]+~+'{contact}'"
         fields_string = self.get_fields_string(fields)
-        api_search = f"/rest/api/latest/search?jql=project={project}+AND+issuetype={issuetype}"
-        api_filter = ""
-        if contact != "staff":
-            api_filter = f"cf[15202]+~+{contact}"
-        api_endpoint = api_search + "+" + api_filter + "&" + fields_string
+        api_endpoint = f"{search_string}{filter_string}&{fields_string}"
         return self.get_data(api_endpoint)["issues"]
+
+    def get_issues_by_contact(self, contact, fields=None):
+        epic_issues = self.get_epics_by_contact(contact, [FIELD_NAMES["contacts"], FIELD_NAMES["summary"]])
+        epic_keys_string = ",".join([epic["key"] for epic in epic_issues])
+        fields_string = self.get_fields_string(fields)
+        api_endpoint = f"/rest/api/latest/search?jql=cf[10005]+in+({epic_keys_string})&{fields_string}"
+        issues = self.get_data(api_endpoint)["issues"]
+        for issue in issues:
+            for epic in epic_issues:
+                if issue["fields"]["customfield_10005"] == epic["key"]:
+                    issue["fields"]["parent"] = epic
+        return issues
 
     def get_issue(self, issue_id, fields=None):
         fields_string = self.get_fields_string(fields)
