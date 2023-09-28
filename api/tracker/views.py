@@ -12,6 +12,7 @@ logger = logging.getLogger("django")
 
 
 LIST_FIELDS = {
+    "customfield_10005": "epic_link",
     "description": "description",
     "issuelinks": "issuelinks",
     "issuetype": "issuetype",
@@ -87,17 +88,9 @@ class TicketsList(LoginRequiredMixin, TemplateView):
         jira_agent = JiraAgent()
         jira_board_statuses = jira_agent.get_board_statuses(remove_statuses=["Backlog", "BLOCKED"])
         context["workflow"] = jira_board_statuses
-        data_generators = jira_agent.get_dg_by_contact('staff', GENERATOR_FIELDS)
 
-        link_keys = []
-        issues = []
-        for data_generator in data_generators:
-            for link in data_generator["fields"]["issuelinks"]:
-                if link["outwardIssue"]["key"] not in link_keys:
-                    link_keys.append(link["outwardIssue"]["key"])
-                    issue = jira_agent.get_issue(link["outwardIssue"]["key"], LIST_FIELDS)
-                    issue["fields"]["parent"] = data_generator
-                    issues.append(issue)
+        # issues = jira_agent.get_issues_by_contact('corey@tislab.org', LIST_FIELDS)
+        issues = jira_agent.get_issues_by_contact('staff', LIST_FIELDS)
 
         statuses = {}
         for idx, column in enumerate(jira_board_statuses):
