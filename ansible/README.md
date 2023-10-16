@@ -116,9 +116,9 @@ Change the password for the user `postgres`:
 ALTER USER postgres WITH PASSWORD 'password';
 ```
 
-Make sure you replace `password` with a (secure) password you set in the [`api/.env`](/api/.env) file
+Make sure you replace `password` with a (secure) password you set in the [`api/.env`](/.env) file
 
-> NOTE: If using another user, change `postgres` with the user set in the [`api/.env`](/api/.env) file
+> NOTE: If using another user, change `postgres` with the user set in the [`api/.env`](/.env) file
 
 On your local machine, you must migrate the Django model into the Postgres database:
 
