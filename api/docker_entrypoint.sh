@@ -1,7 +1,4 @@
-#!/usr/bin/bash
-
-export PATH="/.pyenv/bin:${PATH}"; \
-eval "$(pyenv init -)"; \
+#!/usr/bin/env bash
 
 # Apply database migrations
 echo "Apply database migrations"
