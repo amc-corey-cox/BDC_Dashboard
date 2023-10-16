@@ -8,12 +8,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
-import datetime
-import os, io
+import io
+import os
+
 import environ
-import logging
 from google.cloud import secretmanager
-from django.utils.timezone import get_current_timezone_name
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -28,9 +27,7 @@ env = environ.Env(DEBUG=(bool, False))
 # load .env
 env_file = os.path.join(BASE_DIR, ".env")
 if os.path.isfile(env_file):
-    print(
-        "Using local .env file: " + env_file
-    )
+    print("Using local .env file: " + env_file)
     # if local env file
     env.read_env(env_file)
 elif os.environ.get("GOOGLE_CLOUD_PROJECT", None):
@@ -42,13 +39,9 @@ elif os.environ.get("GOOGLE_CLOUD_PROJECT", None):
     name = f"projects/{project_id}/secrets/{settings_name}/versions/latest"
     payload = client.access_secret_version(name=name).payload.data.decode("UTF-8")
     env.read_env(io.StringIO(payload))
-    print(
-        "Using Google Cloud secrets"
-    )
+    print("Using Google Cloud secrets")
 else:
-    print(
-        "No local .env or GOOGLE_CLOUD_PROJECT detected. Using container environment variables."
-    )
+    print("No local .env or GOOGLE_CLOUD_PROJECT detected. Using container environment variables.")
 
 SECRET_KEY = env("SECRET_KEY")
 JIRA_BASE_URL = env("JIRA_BASE_URL")
@@ -86,7 +79,7 @@ INSTALLED_APPS = [
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
-#    "allauth.socialaccount.providers.google",
+    #    "allauth.socialaccount.providers.google",
     # custom nih sso provider
     "nihsso",
     # audit log
@@ -110,7 +103,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "simple_history.middleware.HistoryRequestMiddleware",
-    "tracker.middleware.CustomHeaderMiddleware"
+    "tracker.middleware.CustomHeaderMiddleware",
 ]
 
 TEMPLATES = [
@@ -135,18 +128,18 @@ TEMPLATES = [
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
-    'formatters': {
-        'verbose': {
-            'format': '{asctime} {levelname} [{module}] {message}',
-            'style': '{',
+    "formatters": {
+        "verbose": {
+            "format": "{asctime} {levelname} [{module}] {message}",
+            "style": "{",
         },
     },
-    "handlers": { 
+    "handlers": {
         "console": {
             "level": os.getenv("DJANGO_LOG_LEVEL", "DEBUG"),
             "class": "logging.StreamHandler",
             "formatter": "verbose",
-        },        
+        },
     },
     "loggers": {
         "django": {
@@ -171,7 +164,6 @@ if os.environ.get("POSTGRES_HOST", None):
         }
     }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 AUTH_PASSWORD_VALIDATORS = [
@@ -189,48 +181,47 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # django-allauth
 # https://github.com/pennersr/django-allauth
 SOCIALACCOUNT_AUTO_SIGNUP = True
 SOCIALACCOUNT_PROVIDERS = {}
 
 if os.environ.get("GOOGLE_CLIENT_ID", None):
-	google_settings = {
-		"SCOPE": ["profile", "email", "openid"],
-		"AUTH_PARAMS": {
-			"access_type": "online",
-		},
-		"APP": {
-			"client_id": env("GOOGLE_CLIENT_ID"),
-			"secret": env("GOOGLE_CLIENT_SECRET"),
-			"key": "",
-		},
-	}
-	SOCIALACCOUNT_PROVIDERS['google'] = google_settings
-	print("Adding Google as an Account Provider")
+    google_settings = {
+        "SCOPE": ["profile", "email", "openid"],
+        "AUTH_PARAMS": {
+            "access_type": "online",
+        },
+        "APP": {
+            "client_id": env("GOOGLE_CLIENT_ID"),
+            "secret": env("GOOGLE_CLIENT_SECRET"),
+            "key": "",
+        },
+    }
+    SOCIALACCOUNT_PROVIDERS["google"] = google_settings
+    print("Adding Google as an Account Provider")
 
 if os.environ.get("NIH_CLIENT_ID", None):
-	nih_settings = {
-		"SCOPE": ["openid", "profile", "email", "member"],
-		"APP": {
-			"client_id": env("NIH_CLIENT_ID"),
-			"secret": env("NIH_CLIENT_SECRET"),
-			"key": "",
-		},
-	}
-	SOCIALACCOUNT_PROVIDERS['nihsso'] = nih_settings
-	NIH_OAUTH_SERVER_TOKEN_URL = os.environ.get("NIH_OAUTH_SERVER_TOKEN_URL")
-	NIH_OAUTH_SERVER_INFO_URL = os.environ.get("NIH_OAUTH_SERVER_INFO_URL")
-	NIH_OAUTH_SERVER_AUTH_URL= os.environ.get("NIH_OAUTH_SERVER_AUTH_URL")
-	print("Adding NIH SSO as an Account Provider")
+    nih_settings = {
+        "SCOPE": ["openid", "profile", "email", "member"],
+        "APP": {
+            "client_id": env("NIH_CLIENT_ID"),
+            "secret": env("NIH_CLIENT_SECRET"),
+            "key": "",
+        },
+    }
+    SOCIALACCOUNT_PROVIDERS["nihsso"] = nih_settings
+    NIH_OAUTH_SERVER_TOKEN_URL = os.environ.get("NIH_OAUTH_SERVER_TOKEN_URL")
+    NIH_OAUTH_SERVER_INFO_URL = os.environ.get("NIH_OAUTH_SERVER_INFO_URL")
+    NIH_OAUTH_SERVER_AUTH_URL = os.environ.get("NIH_OAUTH_SERVER_AUTH_URL")
+    print("Adding NIH SSO as an Account Provider")
 
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
     "development_backend.DevelopmentBackend",
-# NOTE: Deployment
-# Commented out the allauth backend to allow to run for dev. Uncomment for production/deployment.
-#    "allauth.account.auth_backends.AuthenticationBackend",
+    # NOTE: Deployment
+    # Commented out the allauth backend to allow to run for dev. Uncomment for production/deployment.
+    #    "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
 SITE_ID = int(os.environ.get("ALLAUTH_SITE_ID", 3))
@@ -254,7 +245,6 @@ LOGOUT_REDIRECT_URL = "/"
 if os.environ.get("AZURE_SITES_URL", None):
     CSRF_TRUSTED_ORIGINS = [env("AZURE_SITES_URL")]  # this is required for Django 4+
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 LANGUAGE_CODE = "en-us"
@@ -263,8 +253,8 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-DATE_FORMAT = 'N j, Y, P T'
-DATETIME_FORMAT = 'N j, Y, P T'
+DATE_FORMAT = "N j, Y, P T"
+DATETIME_FORMAT = "N j, Y, P T"
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
@@ -276,25 +266,23 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 WHITENOISE_AUTOREFRESH = True
 WHITENOISE_MANIFEST_STRICT = False
 
-
 # SendGrid settings
 if os.environ.get("SENDGRID_API_KEY", None):
-	EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
-	SENDGRID_API_KEY = env("SENDGRID_API_KEY")
-	SENDGRID_ADMIN_EMAIL = env("SENDGRID_ADMIN_EMAIL")
-	SENDGRID_NO_REPLY_EMAIL = env("SENDGRID_NO_REPLY_EMAIL")
-	SENDGRID_SANDBOX_MODE_IN_DEBUG = False
-	# sendgrid templates for users
-	SENDGRID_TICKET_CREATED_TEMPLATE_ID_USER = env("SENDGRID_TICKET_CREATED_TEMPLATE_ID_USER")
-	SENDGRID_TICKET_DELETED_TEMPLATE_ID_USER = env("SENDGRID_TICKET_DELETED_TEMPLATE_ID_USER")
-	SENDGRID_TICKET_REJECTED_TEMPLATE_ID_USER = env("SENDGRID_TICKET_REJECTED_TEMPLATE_ID_USER")
-	SENDGRID_TICKET_UPDATED_TEMPLATE_ID_USER = env("SENDGRID_TICKET_UPDATED_TEMPLATE_ID_USER")
-	SENDGRID_BUCKET_CREATED_TEMPLATE_ID_USER = env("SENDGRID_BUCKET_CREATED_TEMPLATE_ID_USER")
-	# sendgrid templates for admins
-	SENDGRID_TICKET_CREATED_TEMPLATE_ID_ADMIN = env("SENDGRID_TICKET_CREATED_TEMPLATE_ID_ADMIN")
-	SENDGRID_TICKET_DELETED_TEMPLATE_ID_ADMIN = env("SENDGRID_TICKET_DELETED_TEMPLATE_ID_ADMIN")
-	SENDGRID_TICKET_UPDATED_TEMPLATE_ID_ADMIN = env("SENDGRID_TICKET_UPDATED_TEMPLATE_ID_ADMIN")
-
+    EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
+    SENDGRID_API_KEY = env("SENDGRID_API_KEY")
+    SENDGRID_ADMIN_EMAIL = env("SENDGRID_ADMIN_EMAIL")
+    SENDGRID_NO_REPLY_EMAIL = env("SENDGRID_NO_REPLY_EMAIL")
+    SENDGRID_SANDBOX_MODE_IN_DEBUG = False
+    # sendgrid templates for users
+    SENDGRID_TICKET_CREATED_TEMPLATE_ID_USER = env("SENDGRID_TICKET_CREATED_TEMPLATE_ID_USER")
+    SENDGRID_TICKET_DELETED_TEMPLATE_ID_USER = env("SENDGRID_TICKET_DELETED_TEMPLATE_ID_USER")
+    SENDGRID_TICKET_REJECTED_TEMPLATE_ID_USER = env("SENDGRID_TICKET_REJECTED_TEMPLATE_ID_USER")
+    SENDGRID_TICKET_UPDATED_TEMPLATE_ID_USER = env("SENDGRID_TICKET_UPDATED_TEMPLATE_ID_USER")
+    SENDGRID_BUCKET_CREATED_TEMPLATE_ID_USER = env("SENDGRID_BUCKET_CREATED_TEMPLATE_ID_USER")
+    # sendgrid templates for admins
+    SENDGRID_TICKET_CREATED_TEMPLATE_ID_ADMIN = env("SENDGRID_TICKET_CREATED_TEMPLATE_ID_ADMIN")
+    SENDGRID_TICKET_DELETED_TEMPLATE_ID_ADMIN = env("SENDGRID_TICKET_DELETED_TEMPLATE_ID_ADMIN")
+    SENDGRID_TICKET_UPDATED_TEMPLATE_ID_ADMIN = env("SENDGRID_TICKET_UPDATED_TEMPLATE_ID_ADMIN")
 
 # Misc
 ROOT_URLCONF = "bdcat_data_submission.urls"
