@@ -2,7 +2,8 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from simple_history.admin import SimpleHistoryAdmin
 
-from .models import User, Ticket
+# from .models import User, Ticket
+from .models import User
 
 
 class UserAdmin(BaseUserAdmin, SimpleHistoryAdmin):
@@ -48,4 +49,4 @@ class UserAdmin(BaseUserAdmin, SimpleHistoryAdmin):
 
 
 admin.site.register(User, UserAdmin)
-admin.site.register(Ticket, SimpleHistoryAdmin)
+# admin.site.register(Ticket, SimpleHistoryAdmin)
