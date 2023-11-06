@@ -5,10 +5,8 @@ services:
     container_name: bdc-dashboard-db
     image: postgres:latest
     restart: always
-    environment:
-      POSTGRES_DB: "${POSTGRES_DB}"
-      POSTGRES_USER: "${POSTGRES_USER}"
-      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+    env_file:
+      - api/.env
     volumes:
       - /var/lib/postgresql/data/
     expose:
@@ -22,6 +20,8 @@ services:
     build:
       context: api
       dockerfile: Dockerfile
+    env_file:
+      - api/.env
     volumes:
       - "./api:/app"
     expose:
