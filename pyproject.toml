@@ -59,7 +59,9 @@ urllib3 = "1.26.13"
 whitenoise = "6.2.0"
 jira = "^3.5.2"
 
-
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 160
