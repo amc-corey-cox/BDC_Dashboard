@@ -1,13 +1,33 @@
 version: "3.8"
 
 services:
-  api:
+  bdc-dashboard-db:
+    container_name: bdc-dashboard-db
+    image: postgres:latest
+    restart: always
+    env_file:
+      - api/.env
+    volumes:
+      - /var/lib/postgresql/data/
+    expose:
+      - 5432
+    ports:
+      - "5432:5432"
+
+  bdc-dashboard-app:
     environment:
       - DEBUG=True
     build:
       context: api
       dockerfile: Dockerfile
+    env_file:
+      - api/.env
     volumes:
       - "./api:/app"
+    expose:
+      - 8000
+      - 2222
     ports:
       - "8000:8000"
+    depends_on:
+      - bdc-dashboard-db
