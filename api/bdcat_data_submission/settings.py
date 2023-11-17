@@ -153,6 +153,12 @@ LOGGING = {
     },
 }
 
+# Check if we're running in a Docker container
+if os.environ.get("SUMMARY", None):
+    postgres_host = os.environ.get("POSTGRES_HOST")
+else:
+    postgres_host = "localhost"
+
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 if os.environ.get("POSTGRES_HOST", None):
@@ -162,7 +168,7 @@ if os.environ.get("POSTGRES_HOST", None):
             "NAME": env("POSTGRES_DB"),
             "USER": env("POSTGRES_USER"),
             "PASSWORD": env("POSTGRES_PASSWORD"),
-            "HOST": env("POSTGRES_HOST"),
+            "HOST": postgres_host,
             "PORT": env("POSTGRES_PORT"),
         }
     }
