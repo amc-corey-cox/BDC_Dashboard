@@ -1,10 +1,9 @@
 import re
-from django.contrib.auth.mixins import (
-    LoginRequiredMixin,
-    PermissionRequiredMixin,
-)
+# from django.contrib.auth.mixins import (LoginRequiredMixin, PermissionRequiredMixin, )
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
-from .models import Ticket, User, STATUS_TYPES
+# from .models import Ticket, User, STATUS_TYPES
+from .models import User
 from .jira_agent import JiraAgent, ISSUE_FIELDS
 import logging
 
@@ -135,12 +134,12 @@ class TicketDetail(LoginRequiredMixin, TemplateView):
             "Assignee and Reporter": ["assignee", "reporter"],
             "Dates": ["customfield_12004", "customfield_12005"],
             "Custom Fields": ["customfield_15000", "customfield_15001", "customfield_15200", "customfield_15201",
-                              "customfield_15202", "customfield_15203", #"customfield_15205", "customfield_15301",
-                              "customfield_15206", "customfield_15204", "customfield_15208", #"customfield_15207",
+                              "customfield_15202", "customfield_15203",  # "customfield_15205", "customfield_15301",
+                              "customfield_15206", "customfield_15204", "customfield_15208",  # "customfield_15207",
                               "customfield_15209", "customfield_15210"],
-            "Others": [# "customfield_10005", #"parent",
+            "Others": [  # "customfield_10005", #"parent",
                        "labels",  # "issuelinks", "subtasks",
-                        "attachment"],
+                       "attachment"],
         }
 
         issue_content = {}

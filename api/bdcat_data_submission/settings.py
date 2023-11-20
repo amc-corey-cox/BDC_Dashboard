@@ -7,13 +7,10 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
-
-import datetime
-import os, io
+import os
+import io
 import environ
-import logging
 from google.cloud import secretmanager
-from django.utils.timezone import get_current_timezone_name
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -85,7 +82,7 @@ INSTALLED_APPS = [
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
-#    "allauth.socialaccount.providers.google",
+    # "allauth.socialaccount.providers.google",
     # custom nih sso provider
     "nihsso",
     # audit log
@@ -156,6 +153,12 @@ LOGGING = {
     },
 }
 
+# Check if we're running in a Docker container
+if os.environ.get("SUMMARY", None):
+    postgres_host = os.environ.get("POSTGRES_HOST")
+else:
+    postgres_host = "localhost"
+
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 if os.environ.get("POSTGRES_HOST", None):
@@ -165,7 +168,7 @@ if os.environ.get("POSTGRES_HOST", None):
             "NAME": env("POSTGRES_DB"),
             "USER": env("POSTGRES_USER"),
             "PASSWORD": env("POSTGRES_PASSWORD"),
-            "HOST": env("POSTGRES_HOST"),
+            "HOST": postgres_host,
             "PORT": env("POSTGRES_PORT"),
         }
     }
@@ -195,41 +198,41 @@ SOCIALACCOUNT_AUTO_SIGNUP = True
 SOCIALACCOUNT_PROVIDERS = {}
 
 if os.environ.get("GOOGLE_CLIENT_ID", None):
-	google_settings = {
-		"SCOPE": ["profile", "email", "openid"],
-		"AUTH_PARAMS": {
-			"access_type": "online",
-		},
-		"APP": {
-			"client_id": env("GOOGLE_CLIENT_ID"),
-			"secret": env("GOOGLE_CLIENT_SECRET"),
-			"key": "",
-		},
-	}
-	SOCIALACCOUNT_PROVIDERS['google'] = google_settings
-	print("Adding Google as an Account Provider")
+    google_settings = {
+        "SCOPE": ["profile", "email", "openid"],
+        "AUTH_PARAMS": {
+            "access_type": "online",
+        },
+        "APP": {
+            "client_id": env("GOOGLE_CLIENT_ID"),
+            "secret": env("GOOGLE_CLIENT_SECRET"),
+            "key": "",
+        },
+    }
+    SOCIALACCOUNT_PROVIDERS['google'] = google_settings
+    print("Adding Google as an Account Provider")
 
 if os.environ.get("NIH_CLIENT_ID", None):
-	nih_settings = {
-		"SCOPE": ["openid", "profile", "email", "member"],
-		"APP": {
-			"client_id": env("NIH_CLIENT_ID"),
-			"secret": env("NIH_CLIENT_SECRET"),
-			"key": "",
-		},
-	}
-	SOCIALACCOUNT_PROVIDERS['nihsso'] = nih_settings
-	NIH_OAUTH_SERVER_TOKEN_URL = os.environ.get("NIH_OAUTH_SERVER_TOKEN_URL")
-	NIH_OAUTH_SERVER_INFO_URL = os.environ.get("NIH_OAUTH_SERVER_INFO_URL")
-	NIH_OAUTH_SERVER_AUTH_URL= os.environ.get("NIH_OAUTH_SERVER_AUTH_URL")
-	print("Adding NIH SSO as an Account Provider")
+    nih_settings = {
+        "SCOPE": ["openid", "profile", "email", "member"],
+        "APP": {
+            "client_id": env("NIH_CLIENT_ID"),
+            "secret": env("NIH_CLIENT_SECRET"),
+            "key": "",
+        },
+    }
+    SOCIALACCOUNT_PROVIDERS['nihsso'] = nih_settings
+    NIH_OAUTH_SERVER_TOKEN_URL = os.environ.get("NIH_OAUTH_SERVER_TOKEN_URL")
+    NIH_OAUTH_SERVER_INFO_URL = os.environ.get("NIH_OAUTH_SERVER_INFO_URL")
+    NIH_OAUTH_SERVER_AUTH_URL = os.environ.get("NIH_OAUTH_SERVER_AUTH_URL")
+    print("Adding NIH SSO as an Account Provider")
 
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
     "development_backend.DevelopmentBackend",
-# NOTE: Deployment
-# Commented out the allauth backend to allow to run for dev. Uncomment for production/deployment.
-#    "allauth.account.auth_backends.AuthenticationBackend",
+    # NOTE: Deployment
+    # Commented out the allauth backend to allow to run for dev. Uncomment for production/deployment.
+    #    "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
 SITE_ID = int(os.environ.get("ALLAUTH_SITE_ID", 3))
@@ -274,25 +277,6 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 # Whitenoise
 WHITENOISE_AUTOREFRESH = True
 WHITENOISE_MANIFEST_STRICT = False
-
-
-# SendGrid settings
-if os.environ.get("SENDGRID_API_KEY", None):
-	EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
-	SENDGRID_API_KEY = env("SENDGRID_API_KEY")
-	SENDGRID_ADMIN_EMAIL = env("SENDGRID_ADMIN_EMAIL")
-	SENDGRID_NO_REPLY_EMAIL = env("SENDGRID_NO_REPLY_EMAIL")
-	SENDGRID_SANDBOX_MODE_IN_DEBUG = False
-	# sendgrid templates for users
-	SENDGRID_TICKET_CREATED_TEMPLATE_ID_USER = env("SENDGRID_TICKET_CREATED_TEMPLATE_ID_USER")
-	SENDGRID_TICKET_DELETED_TEMPLATE_ID_USER = env("SENDGRID_TICKET_DELETED_TEMPLATE_ID_USER")
-	SENDGRID_TICKET_REJECTED_TEMPLATE_ID_USER = env("SENDGRID_TICKET_REJECTED_TEMPLATE_ID_USER")
-	SENDGRID_TICKET_UPDATED_TEMPLATE_ID_USER = env("SENDGRID_TICKET_UPDATED_TEMPLATE_ID_USER")
-	SENDGRID_BUCKET_CREATED_TEMPLATE_ID_USER = env("SENDGRID_BUCKET_CREATED_TEMPLATE_ID_USER")
-	# sendgrid templates for admins
-	SENDGRID_TICKET_CREATED_TEMPLATE_ID_ADMIN = env("SENDGRID_TICKET_CREATED_TEMPLATE_ID_ADMIN")
-	SENDGRID_TICKET_DELETED_TEMPLATE_ID_ADMIN = env("SENDGRID_TICKET_DELETED_TEMPLATE_ID_ADMIN")
-	SENDGRID_TICKET_UPDATED_TEMPLATE_ID_ADMIN = env("SENDGRID_TICKET_UPDATED_TEMPLATE_ID_ADMIN")
 
 
 # Misc
