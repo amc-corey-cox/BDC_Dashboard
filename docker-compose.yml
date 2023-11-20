@@ -15,6 +15,7 @@ services:
       - "5432:5432"
 
   bdc-dashboard-app:
+    container_name: bdc-dashboard-app
     environment:
       - DEBUG=True
     build:
