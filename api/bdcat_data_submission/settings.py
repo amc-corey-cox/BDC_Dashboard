@@ -128,6 +128,8 @@ TEMPLATES = [
     },
 ]
 
+TEST_RUNNER = 'testrunner.GetStaticTestRunner'
+
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
