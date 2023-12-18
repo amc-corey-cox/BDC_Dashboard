@@ -1,8 +1,10 @@
-from django.test import SimpleTestCase, TestCase
+import responses
+from django.test import SimpleTestCase, TestCase, override_settings
 from django.urls import reverse, resolve
 
 from django.contrib.auth import get_user_model
 
+from .jira_agent import *
 from .views import TicketsList, UserProfile, TicketDetail, DocumentationView, AboutView
 
 
@@ -82,3 +84,28 @@ class ViewsTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'base_generic.html')
         self.assertTemplateUsed(response, 'tracker/profile.html')
+
+
+class JiraAgentTest(TestCase):
+    def test_issue_fields_and_field_names_consistency(self):
+        issue_fields_keys = set(ISSUE_FIELDS.keys())
+        field_names_values = set(FIELD_NAMES.values())
+
+        self.assertEqual(issue_fields_keys, field_names_values)
+
+    @responses.activate
+    @override_settings(JIRA_TOKEN='your_test_token', JIRA_BASE_URL='https://test-jira-instance')
+    def test_jira_agent_initialization(self):
+        # Mock the response for get_board_config method
+        responses.add(responses.GET, 'https://test-jira-instance/rest/agile/1.0/board/579/configuration',
+                      json={'id': 579, 'name': 'Test Board Config'})
+
+        jira_agent = JiraAgent()
+
+        self.assertEqual(jira_agent.jira_token, 'your_test_token')
+        self.assertEqual(jira_agent.base_url, 'https://test-jira-instance')
+        self.assertEqual(jira_agent.project, JIRA_PROJECT)
+        self.assertEqual(jira_agent.board_id, JIRA_BOARD_ID)
+        self.assertEqual(jira_agent.epic_issuetype, JIRA_EPIC_ISSUETYPE)
+        self.assertEqual(jira_agent.fields, ISSUE_FIELDS)
+        self.assertEqual(jira_agent.field_names, FIELD_NAMES)
