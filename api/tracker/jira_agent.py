@@ -96,6 +96,11 @@ class JiraAgent:
         return self.get_data(api_endpoint)
 
     def get_board_statuses(self, remove_statuses=None, selected_status=""):
+        if isinstance(remove_statuses, str):
+            remove_statuses = [remove_statuses]
+        if remove_statuses is None:
+            remove_statuses = []
+
         all_statuses = self.board_config["columnConfig"]["columns"]
         statuses = [status for status in all_statuses if status["name"] not in remove_statuses]
 
