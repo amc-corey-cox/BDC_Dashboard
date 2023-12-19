@@ -96,6 +96,11 @@ class JiraAgent:
         return self.get_data(api_endpoint)
 
     def get_board_statuses(self, remove_statuses=None, selected_status=""):
+        if isinstance(remove_statuses, str):
+            remove_statuses = [remove_statuses]
+        if remove_statuses is None:
+            remove_statuses = []
+
         all_statuses = self.board_config["columnConfig"]["columns"]
         statuses = [status for status in all_statuses if status["name"] not in remove_statuses]
 
@@ -106,21 +111,21 @@ class JiraAgent:
 
         return statuses
 
-    def get_fields_info(self):
-        api_endpoint = f"/rest/api/latest/field"
-        field_info_list = self.get_data(api_endpoint)
-        return {field["id"]: field for field in field_info_list if field["id"] in self.fields}
+    # def get_fields_info(self):
+    #     api_endpoint = f"/rest/api/latest/field"
+    #     field_info_list = self.get_data(api_endpoint)
+    #     return {field["id"]: field for field in field_info_list if field["id"] in self.fields}
 
     def get_fields_string(self, fields=None):
         if fields is None:
             fields = self.fields.keys()
         return "fields=" + ",".join(fields)
 
-    def get_board_issues(self, fields=None):
-        board_filter = self.board_config["filter"]
-        fields_string = self.get_fields_string(fields)
-        api_endpoint = f"/rest/api/latest/search?jql=filter={board_filter['id']}&{fields_string}"
-        return self.get_data(api_endpoint)
+    # def get_board_issues(self, fields=None):
+    #     board_filter = self.board_config["filter"]
+    #     fields_string = self.get_fields_string(fields)
+    #     api_endpoint = f"/rest/api/latest/search?jql=filter={board_filter['id']}&{fields_string}"
+    #     return self.get_data(api_endpoint)
 
     def get_epics_by_contact(self, contact, fields=None):
         search_string = f"/rest/api/latest/search?jql=project={self.project}+AND+issuetype={self.epic_issuetype}"
