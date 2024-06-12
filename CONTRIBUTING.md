@@ -70,30 +70,41 @@ SECRET_KEY=
 POSTGRES_DB=tickets
 
 # The username of the Postgres User
-POSTGRES_USER=postgres
+POSTGRES_USER=bdc_db_user
 
 # A (secure) password for the Postgres User
 POSTGRES_PASSWORD=
 
 # The external IP for the Compute Engine instance with Postgres
-POSTGRES_HOST=
+POSTGRES_HOST=bdc-dashboard-db
 
 # The port for the Postgres Database
 POSTGRES_PORT=5432
 
-# The client ID for Google OAuth2
-GOOGLE_CLIENT_ID=
+# The base URL for the Jira API
+JIRA_BASE_URL='https://'
 
-# The client secret for Google OAuth2
-GOOGLE_CLIENT_SECRET=
+# The token for Authorization in the Jira API
+JIRA_TOKEN=''
+
+# The ID of the board in Jira where data will be collected
+JIRA_BOARD_ID=''
+
+# The project ID for the Jira data
+JIRA_PROJECT=''
+
+# The issue type for epic issues in Jira
+JIRA_EPIC_ISSUETYPE=10000
 
 ```
 
-You will need to update `SECRET_KEY`, `POSTGRES_PASSWORD`, `POSTGRES_HOST`, `GOOGLE_CLIENT_ID`, and `GOOGLE_CLIENT_SECRET` with settings appropriate to your configuration. If you don't have a Django `SECRET_KEY` you can create one with the following command (Django local installation required).
+You will need to update `SECRET_KEY`, `POSTGRES_PASSWORD`, `JIRA_BASE_URL`, `JIRA_TOKEN`, `JIRA_BOARD_ID`, and `JIRA_PROJECT` with settings appropriate to your configuration. If you don't have a Django `SECRET_KEY` you can create one with the following command (Django local installation required).
 
 ``` shell
 python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'
 ```
+
+Other settings may need to be adjusted depending on your environment or during deployment.
 
 ## Build Tracker Docker Container
 With the PostgreSQL database set up and running and the environment variables set, the repository should be ready for development. To test the development environment, we will build the Docker container and access the application.
@@ -107,7 +118,7 @@ docker-compose up --build -d
 To access the application navigate to `http://localhost:8000/` in your browser. You should see a login screen for the application with a button for `NIH login`. Login will not work at this time. In order to log in to the application we'll need to set the Django superuser. First, enter the local Docker container shell.
 
 ``` shell
-docker exec -it bdc_dashboard_api_1 /bin/bash
+docker exec -it bdc_dashboard_app /bin/bash
 ```
 
 Then create a Django superuser on the Docker container.
