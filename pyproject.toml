@@ -29,8 +29,8 @@ google-auth = "2.15.0"
 google-cloud-secret-manager = "2.13.0"
 googleapis-common-protos = "1.57.0"
 grpc-google-iam-v1 = "0.12.4"
-grpcio = "1.51.0"
-grpcio-status = "1.51.0"
+grpcio = "1.51.3"
+grpcio-status = "1.51.3"
 idna = "3.4"
 libcst = "0.4.9"
 mypy-extensions = "0.4.3"
@@ -73,3 +73,4 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.black]
 line-length = 160
+
