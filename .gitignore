@@ -1,6 +1,9 @@
 # Keys
 keys/
 
+# Docker Images
+images/
+
 # python temp files
 __pycache__
 
