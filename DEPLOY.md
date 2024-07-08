@@ -6,7 +6,89 @@ This guide will walk you through the deployment process for the Data Submission 
 ## Getting started
 See the CONTRIBUTING.md file for information on how to set up the repository for development and install the prerequisites. 
 
-## Deployment Instructions
+## New Instance Deployment Instructions
+Deployment of the Data Submission Tracker requires an AWS EC2 instance. Once the instance is set up, we will clone the repository, install prerequisites, clone the repository, set up the PostgreSQL database, and deploy the Django server.
+
+### Create a new AWS EC2 instance
+If you do not already have access to an AWS instance for the DST, you will need to create one. To set up the appropriate instance for the DST, create a new EC2 instance with the following specifications:
+
+- **Instance Type**: t2.micro
+- **Operating System**: Ubuntu Server 24.04 LTS
+- **Storage**: 12 GB
+- **Security Group**: Open ports 22, 80, 800, and 443
+  - The existing security group for the DST is called `launch-wizard-1`
+  - Note: We'll be changing the security group to `bdcat-data-tracker-sg` in the future
+- **Key Pair**: Use the DataSubmissionTool key pair or create a new one
+- **Tags**: Add the following tags to the instance
+  - Name: DataSubmissionTool
+  - Owner: Your Name
+- **Network**: Use the default VPC or create a new one
+- **Public IP**: Enable a public IP address for the instance?
+- **Elastic IP**: Allocate an Elastic IP address for the instance?
+- **Security Group**: Use the existing security group or create a new one
+
+### Connect to the EC2 instance
+Once the instance is set up, connect to the instance using SSH. You can use the following command to connect to the instance:
+
+```bash
+ssh -i DataSubmissionTool.pem ubuntu@<instance-public-ip>
+```
+
+### Clone the repository
+Once you are connected to the instance, clone the Data Submission Tracker repository to the instance. You can use the following command to clone the repository:
+
+```bash
+export GITHUB_USER=your-github-username
+export GITHUB_TOKEN=your-github-token
+git clone git clone  https://${GITHUB_USER}:${GITHUB_TOKEN}@github.com/amc-corey-cox/BDC_Dashboard.git
+```
+
+### Install prerequisites
+Before deploying the Django server, you will need to install the necessary prerequisites on the EC2 instance. You can use the following commands to install the prerequisites:
+
+```bash
+cd BDC_Dashboard
+sudo apt update
+sudo apt upgrade
+sudo apt install docker-compose
+```
+
+### Copy the .env file
+The Data Submission Tracker uses environment variables to configure the Django server. You will need to copy the `.env` file to the `api` directory. You can use the following command to copy the `.env` file:
+
+```bash
+cp api/.env.sample api/.env
+```
+Set up the environment variables in the `.env` file with the appropriate values for your deployment.
+
+### Build the Docker images
+The Data Submission Tracker uses Docker containers to run the Django server and PostgreSQL database. You will need to build the Docker images for the Django server and PostgreSQL database. You can use the following commands to build the Docker images:
+
+```bash 
+docker-compose build
+```
+
+### Set up the PostgreSQL database
+Before deploying the Django server, you will need to set up the PostgreSQL database. You can use the following commands to set up the PostgreSQL database:
+
+```bash 
+docker-compose up -d db
+docker-compose exec app python manage.py migrate
+docker-compose exec app python manage.py createsuperuser
+```
+
+
+### Deploy the Django server
+Once the prerequisites are installed and the Docker images are built, you can deploy the Django server. You can use the following command to deploy the Django server:
+
+```bash
+docker-compose up -d
+```
+
+### Access the Data Submission Tracker
+Once the Django server is deployed, you can access the Data Submission Tracker by navigating to the public IP address of the EC2 instance in your web browser. You should see the Data Submission Tracker homepage, where you can log in and begin using the tool.
+
+## Updating the Data Submission Tracker
 
 
 # Old Deployment Instructions

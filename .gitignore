@@ -1,6 +1,9 @@
 # Keys
 keys/
 
+# python temp files
+__pycache__
+
 # Unit test / coverage reports
 htmlcov/
 .tox/
