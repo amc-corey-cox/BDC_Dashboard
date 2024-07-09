@@ -7,7 +7,7 @@ This guide will walk you through the deployment process for the Data Submission 
 See the CONTRIBUTING.md file for information on how to set up the repository for development and install the prerequisites. 
 
 ## New Instance Deployment Instructions
-Deployment of the Data Submission Tracker requires an AWS EC2 instance. Once the instance is set up, we will clone the repository, install prerequisites, clone the repository, set up the PostgreSQL database, and deploy the Django server.
+Deployment of the Data Submission Tracker requires an AWS EC2 instance. Once the instance is set up, we will install docker, clone the repository, run the docker images, and set up the PostgreSQL database. Then the Django server will be deployed and accessible through the public IP address of the EC2 instance.
 
 ### Create a new AWS EC2 instance
 If you do not already have access to an AWS instance for the DST, you will need to create one. To set up the appropriate instance for the DST, create a new EC2 instance with the following specifications:
@@ -34,23 +34,55 @@ Once the instance is set up, connect to the instance using SSH. You can use the 
 ssh -i DataSubmissionTool.pem ubuntu@<instance-public-ip>
 ```
 
+### Install Docker
+We're using docker containers to run the Django server and PostgreSQL database. We will need to install Docker on the EC2 instance.
+
+#### Prepare for installation
+Make sure everything is up-to-date and allow using a repository over HTTPS
+```shell
+sudo apt update
+sudo apt install -y ca-certificates curl gnupg
+```
+
+#### Add Docker GPG Key
+We need the Docker official GPG public key to use their apt repository.
+```shell
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
+```
+
+#### Update Apt to fetch Docker Repository
+We need to update the Apt cache in order to install from the Docker repository.
+```shell
+sudo apt update
+```
+This should show a line accessing downloader.docker.com for the systems installed release.
+
+#### Install Docker and tools
+Now we can install Docker Engine, containerd, and Docker Compose. This will install the latest version, which is currently version 24.0.2.
+```shell
+sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose docker-compose-plugin
+```
+If you need to install a different version see the [Docker Engine Installation](https://docs.docker.com/engine/install/ubuntu/#install-docker-engine) page.
+
+#### Fix Docker permissions
+Docker requires root access to run. This is a security risk and we need to fix it. The recommended way to do this is to add your user to the docker group. This will allow your user to run docker commands without sudo.
+```shell
+sudo usermod -aG docker ${USER}
+```
+You will then need to log in again or run the command below to gain the group permissions.
+```shell
+newgrp docker
+```
+
 ### Clone the repository
 Once you are connected to the instance, clone the Data Submission Tracker repository to the instance. You can use the following command to clone the repository:
 
 ```bash
 export GITHUB_USER=your-github-username
 export GITHUB_TOKEN=your-github-token
-git clone git clone  https://${GITHUB_USER}:${GITHUB_TOKEN}@github.com/amc-corey-cox/BDC_Dashboard.git
-```
-
-### Install prerequisites
-Before deploying the Django server, you will need to install the necessary prerequisites on the EC2 instance. You can use the following commands to install the prerequisites:
-
-```bash
-cd BDC_Dashboard
-sudo apt update
-sudo apt upgrade
-sudo apt install docker-compose
+git clone https://${GITHUB_USER}:${GITHUB_TOKEN}@github.com/amc-corey-cox/BDC_Dashboard.git
 ```
 
 ### Copy the .env file
@@ -61,34 +93,29 @@ cp api/.env.sample api/.env
 ```
 Set up the environment variables in the `.env` file with the appropriate values for your deployment.
 
-### Build the Docker images
+### Build and run the Docker images
 The Data Submission Tracker uses Docker containers to run the Django server and PostgreSQL database. You will need to build the Docker images for the Django server and PostgreSQL database. You can use the following commands to build the Docker images:
 
 ```bash 
-docker-compose build
+./docker-compose-up.sh
 ```
 
 ### Set up the PostgreSQL database
 Before deploying the Django server, you will need to set up the PostgreSQL database. You can use the following commands to set up the PostgreSQL database:
 
 ```bash 
-docker-compose up -d db
-docker-compose exec app python manage.py migrate
-docker-compose exec app python manage.py createsuperuser
+docker exec -it bdc-dashboard-app /bin/bash
+python manage.py createsuperuser
 ```
-
-
-### Deploy the Django server
-Once the prerequisites are installed and the Docker images are built, you can deploy the Django server. You can use the following command to deploy the Django server:
-
-```bash
-docker-compose up -d
-```
+Enter the appropriate values for the superuser when prompted.
 
 ### Access the Data Submission Tracker
 Once the Django server is deployed, you can access the Data Submission Tracker by navigating to the public IP address of the EC2 instance in your web browser. You should see the Data Submission Tracker homepage, where you can log in and begin using the tool.
 
 ## Updating the Data Submission Tracker
+
+
+
 
 
 # Old Deployment Instructions

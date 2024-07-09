@@ -118,7 +118,7 @@ docker-compose up --build -d
 To access the application navigate to `http://localhost:8000/` in your browser. You should see a login screen for the application with a button for `NIH login`. Login will not work at this time. In order to log in to the application we'll need to set the Django superuser. First, enter the local Docker container shell.
 
 ``` shell
-docker exec -it bdc-dashboard-app /bin/bash
+docker exec -it bdc-dashboard-db /bin/bash
 ```
 
 Then create a Django superuser on the Docker container.
@@ -142,7 +142,7 @@ Docker is an application containerization environment that allows software to be
 ### Uninstall unofficial packages or conflicting dependencies
 Some distributions have unofficial Docker packages installed or dependencies that Docker will install separately. We need to uninstall these to prevent conflicts.
 ```shell
-for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do sudo apt-get remove $pkg; done
+for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do sudo apt remove -y $pkg; done
 ```
 I had a stub installation to satisfy another packages spurious dependency. Here's how to check if a docker command still exists.
 ```shell
@@ -201,7 +201,7 @@ Docker recommends updating QEMU to the latest version and requires at least vers
 ```
 If this gives an error (mine did), you need to install QEMU.
 ```shell
-sudo apt install qemu-system-x86
+sudo apt install -y qemu-system-x86
 ```
 Unless you experience problems it is probably best to use the version of QEMU that is installed by your distribution. You can check the version.
 ```shell
@@ -210,7 +210,7 @@ kvm --version
 For Ubuntu, the current version is 6.2. I'm currently using this for development and will update this file if I have any problems or decide to upgrade. The latest version as of this writing is 8.0.2.  
 I have also installed some other recommended virtualization packages that may be useful or necessary for running and testing VMs locally.
 ```shell
-sudo apt install qemu-kvm libvirt-clients libvirt-daemon-system bridge-utils virtinst libvirt-daemon
+sudo apt install -y qemu-kvm libvirt-clients libvirt-daemon-system bridge-utils virtinst libvirt-daemon
 ```
 These may not be required and could even create conflicts but all the information I found on installing QEMU suggested installing these as well. These sources also recommend enabling libvirtd.
 ```shell
@@ -224,8 +224,8 @@ You can install the Docker packages from a package by downloading the package fr
 ### Prepare for installation
 Make sure everything is up-to-date and allow using a repository over HTTPS
 ```shell
-sudo apt-get update
-sudo apt-get install ca-certificates curl gnupg
+sudo apt update
+sudo apt install -y ca-certificates curl gnupg
 ```
 
 ### Add Docker GPG Key
@@ -255,7 +255,7 @@ This should show a line accessing downloader.docker.com for the systems installe
 ### Install Docker and tools
 Now we can install Docker Engine, containerd, and Docker Compose. This will install the latest version, which is currently version 24.0.2.
 ```shell
-sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose docker-compose-plugin
+sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose docker-compose-plugin
 ```
 If you need to install a different version see the [Docker Engine Installation](https://docs.docker.com/engine/install/ubuntu/#install-docker-engine)  
 
@@ -277,7 +277,7 @@ newgrp docker
 ### Install Docker Desktop
 Docker Desktop is a GUI for managing Docker containers and VMs.
 ```shell
-sudo apt install gnome-terminal
+sudo apt install -y gnome-terminal
 sudo apt remove docker-desktop
 rm -r $HOME/.docker/desktop
 sudo rm /usr/local/bin/com.docker.cli
@@ -286,8 +286,8 @@ sudo apt purge docker-desktop
 Download the latest version of Docker Desktop from the [Docker Desktop](https://www.docker.com/products/docker-desktop) page. The latest version as of this writing is 4.1.1.
 
 ```shell
-sudo apt-get update
-sudo apt-get install ./docker-desktop-<version>-<arch>.deb
+sudo apt update
+sudo apt install -y ./docker-desktop-<version>-<arch>.deb
 ```
 
 ---
@@ -299,7 +299,7 @@ pyenv is a Python version manager. It allows you to install and manage multiple 
 
 First, we need to install the python build dependencies.
 ```shell
-sudo apt update; sudo apt install build-essential libssl-dev zlib1g-dev \
+sudo apt update; sudo apt install -y build-essential libssl-dev zlib1g-dev \
 libbz2-dev libreadline-dev libsqlite3-dev curl \
 libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
 ```
