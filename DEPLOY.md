@@ -109,6 +109,60 @@ python manage.py createsuperuser
 ```
 Enter the appropriate values for the superuser when prompted.
 
+### Set up Let's Encrypt SSL certificate
+The Data Submission Tracker uses Let's Encrypt to secure the Django server with an SSL certificate. You will need to set up the Let's Encrypt SSL certificate for the Django server. You can use the following commands to set up the Let's Encrypt SSL certificate:
+
+```bash
+sudo apt install -y certbot python3-certbot-nginx
+sudo certbot --nginx
+```
+Follow the prompts to set up the Let's Encrypt SSL certificate for the Django server.
+
+### Configure Nginx
+The Data Submission Tracker uses Nginx as a reverse proxy server to route traffic to the Django server. You will need to configure Nginx to route traffic to the Django server. You can use the following commands to configure Nginx:
+
+```bash
+sudo apt install nginx
+sudo rm /etc/nginx/sites-enabled/default
+sudo cp /home/ubuntu/BDC_Dashboard/deployment/nginx/bdc-dashboard /etc/nginx/sites-available/
+sudo ln -s /etc/nginx/sites-available/bdc-dashboard /etc/nginx/sites-enabled/
+sudo systemctl restart nginx
+```
+
+#### Nginx Configuration
+The Nginx configuration file is located at `/etc/nginx/sites-available/bdc-dashboard`. You can edit this file to configure the Nginx server. The configuration file should look like this:
+
+```nginx
+server {
+    listen 80;
+    server_name your-deployed-domain.com www.your-deployed-domain.com;
+
+    # Redirect all HTTP requests to HTTPS
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name your-deployed-domain.com www.your-deployed-domain.com;
+
+    ssl_certificate /etc/letsencrypt/live/your-deployed-domain.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/your-deployed-domain.com/privkey.pem;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+
+    location / {
+        http://localhost:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+```
+
+
+
+
 ### Access the Data Submission Tracker
 Once the Django server is deployed, you can access the Data Submission Tracker by navigating to the public IP address of the EC2 instance in your web browser. You should see the Data Submission Tracker homepage, where you can log in and begin using the tool.
 
