@@ -16,7 +16,7 @@ ISSUE_FIELDS = {
   "subtasks": "Subtasks",
   "attachment": "Attachment",
   "customfield_15000": "Additional Data Requirements",
-  "customfield_15001": "Blockers",
+  # "customfield_15001": "Blockers",
   "customfield_15200": "Award Identifier",
   "customfield_15201": "Award Entity",
   "customfield_15202": "Contacts",
@@ -63,10 +63,6 @@ FIELD_NAMES = {
     "status": "status",
     }
 
-JIRA_PROJECT = "BDJW"
-JIRA_BOARD_ID = 586
-JIRA_EPIC_ISSUETYPE = 10000
-
 
 class JiraAgent:
     def __init__(self):
@@ -77,9 +73,9 @@ class JiraAgent:
             "Content-Type": "application/json",
         }
         self.base_url = settings.JIRA_BASE_URL
-        self.project = JIRA_PROJECT
-        self.board_id = JIRA_BOARD_ID
-        self.epic_issuetype = JIRA_EPIC_ISSUETYPE
+        self.project = settings.JIRA_PROJECT
+        self.board_id = settings.JIRA_BOARD_ID
+        self.epic_issuetype = settings.JIRA_EPIC_ISSUETYPE
         self.board_config = self.get_board_config()
         self.fields = ISSUE_FIELDS
         self.field_names = FIELD_NAMES

@@ -133,7 +133,8 @@ class TicketDetail(LoginRequiredMixin, TemplateView):
             "Study": ["summary", "description", "status"],
             "Assignee and Reporter": ["assignee", "reporter"],
             "Dates": ["customfield_12004", "customfield_12005"],
-            "Custom Fields": ["customfield_15000", "customfield_15001", "customfield_15200", "customfield_15201",
+            "Custom Fields": ["customfield_15000",  # "customfield_15001",
+                              "customfield_15200", "customfield_15201",
                               "customfield_15202", "customfield_15203",  # "customfield_15205", "customfield_15301",
                               "customfield_15206", "customfield_15204", "customfield_15208",  # "customfield_15207",
                               "customfield_15209", "customfield_15210"],
@@ -161,6 +162,10 @@ class TicketDetail(LoginRequiredMixin, TemplateView):
 
         context["issue_content"] = issue_content
         return context
+
+
+class CreateSubmission(TemplateView):
+    template_name = "tracker/create_submission.html"
 
 
 class UserProfile(TemplateView):

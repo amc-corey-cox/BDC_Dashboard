@@ -5,6 +5,7 @@
 {% include "tracker/workflow_arrows.html" %}
 
 <div id="board" class="container">
+  <div class="board-section"><a href="/create_submission">Create or Find Data Submission</a></div>
   {% for status_idx, status_data in statuses.items %}
       <div class="board-section">
         <div class="board-section-header">
