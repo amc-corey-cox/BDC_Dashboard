@@ -1,52 +1,55 @@
 {% extends "base_generic.html" %}
 {% block content %}
-<h2 class="text-muted" style="text-align: center" xmlns="http://www.w3.org/1999/html">Create or Find Data Submission</h2>
-  <div>Fill out the form below to create a new Data Submission.</div>
-  <div>If your Data Submission does not show in your list of Data Submissions, fill out the form below, and we will
-    identify the appropriate Data Submission and link it to your account.</div>
-
-
+<div id="board" class="container">
+  <div class="board-section-header">
+    <p class="h5">Create or Find Data Submission</p>
+    <p class="text-muted">Use this form to create a new Data Submission or to locate a missing Data Submission.</p>
+  </div>
+  <div class="board-item">
     <form method="post">
-        {% csrf_token %}
-        <div class="d-flex align-items-center">
-            <div class="form-check me-3">
-                <input class="form-check-input" type="checkbox" value="" id="intramural" name="intramural">
-                <label class="form-check-label" for="intramural">Intramural</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="new" name="new">
-                <label class="form-check-label" for="new">New Submission</label>
-            </div>
+      {% csrf_token %}
+      <div class="d-flex align-items-center">
+        <div class="form-check me-3">
+          <input class="form-check-input" type="checkbox" value="" id="intramural" name="intramural">
+          <label class="form-check-label" for="intramural">Intramural</label>
         </div>
-        <div class="form-group">
-            <label for="study_name">Study Name</label>
-            <input type="text" class="form-control" id="study_name" name="study_name" required
-                placeholder="Official name of the study">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="find" name="find">
+          <label class="form-check-label" for="find">Find Submission</label>
         </div>
-        <div class="form-group">
-            <label for="institution_name">Institution Name</label>
-            <input type="text" class="form-control" id="institution_name" name="institution_name" required
-                placeholder="Institution overseeing the study">
-        </div>
-        <div class="form-group">
-            <label for="principal_investigator">Principal Investigator</label>
-            <input type="text" class="form-control" id="principal_investigator" name="principal_investigator" required
-                placeholder="Lead- or Co-Investigators overseeing the study">
-        </div>
-        <div class="form-group">
-            <label for="funding_id">Funding ID</label>
-            <input type="text" class="form-control" id="funding_id" name="funding_id"
-               placeholder="Grant Number/Award Number/ZIA Number">
-        </div>
-        <div class="form-group">
-            <label for="expected_date">Date you expect to upload data</label>
-            <input type="date" class="form-control" id="expected_date" name="expected_date">
-        </div>
-        <div class="form-group">
-            <label for="email_contact">Preferred Email Contact</label>
-            <input type="email" class="form-control" id="email_contact" name="email_contact"
-                placeholder="The e-mail address where you prefer to be contacted">
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+      <div class="form-group">
+        <label for="study_name">Study Name</label>
+        <input type="text" class="form-control" id="study_name" name="study_name" required
+          placeholder="Official name of the study">
+      </div>
+      <div class="form-group">
+        <label for="institution_name">Institution Name</label>
+        <input type="text" class="form-control" id="institution_name" name="institution_name" required
+          placeholder="Institution overseeing the study">
+      </div>
+      <div class="form-group">
+        <label for="principal_investigator">Principal Investigator</label>
+        <input type="text" class="form-control" id="principal_investigator" name="principal_investigator" required
+          placeholder="Lead- or Co-Investigators overseeing the study">
+      </div>
+      <div class="form-group">
+        <label for="funding_id">Funding ID</label>
+        <input type="text" class="form-control" id="funding_id" name="funding_id"
+         placeholder="Grant Number/Award Number/ZIA Number">
+      </div>
+      <div class="form-group">
+        <label for="expected_date">Date Expected</label>
+        <input type="date" class="form-control" id="expected_date" name="expected_date">
+        <p class="text-muted">The date you expect to upload the data submission</p>
+      </div>
+      <div class="form-group">
+        <label for="email_contact">Preferred Email Contact</label>
+        <input type="email" class="form-control" id="email_contact" name="email_contact"
+          placeholder="The e-mail address where you prefer to be contacted">
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
     </form>
+  </div>
+</div>
 {% endblock %}

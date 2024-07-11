@@ -2,6 +2,8 @@ import re
 # from django.contrib.auth.mixins import (LoginRequiredMixin, PermissionRequiredMixin, )
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
+
+from .freshdesk_agent import FreshdeskAgent
 # from .models import Ticket, User, STATUS_TYPES
 from .models import User
 from .jira_agent import JiraAgent, ISSUE_FIELDS
@@ -166,6 +168,8 @@ class TicketDetail(LoginRequiredMixin, TemplateView):
 
 class CreateSubmission(TemplateView):
     template_name = "tracker/create_submission.html"
+
+    # freshdesk_agent = FreshdeskAgent()
 
 
 class UserProfile(TemplateView):
