@@ -39,6 +39,7 @@ FRESHDESK_TICKET_FIELDS = {
 
 class FreshdeskAgent:
     def __init__(self):
+        self.base_url = settings.FRESHDESK_BASE_URL
         self.auth_user = settings.FRESHDESK_AUTH_USER
         self.auth_password = settings.FRESHDESK_AUTH_PASSWORD
         self.headers = {
@@ -56,6 +57,6 @@ class FreshdeskAgent:
         else:
             return None
 
-    def get_issue_by_tag(self, tag):
-        api_endpoint = f"/api/v2/tickets?tag={tag}"
+    def get_issue_by_jira_issue_id(self, jira_id):
+        api_endpoint = f'api/v2/search/tickets?query="custom_string:{jira_id}"'
         return self.get_data(api_endpoint)

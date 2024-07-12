@@ -118,6 +118,7 @@ class TicketDetail(LoginRequiredMixin, TemplateView):
         ticket_id = kwargs['pk']
 
         jira_agent = JiraAgent()
+        freshdesk_agent = FreshdeskAgent()
 
         issue = jira_agent.get_issue(ticket_id)
         issue_status = issue['fields']['status']['name']
@@ -163,13 +164,15 @@ class TicketDetail(LoginRequiredMixin, TemplateView):
                 #     issue_content[title]["fields"][field]["value"] = issue["fields"][field]
 
         context["issue_content"] = issue_content
+
+        context["freshdesk_issues"] = freshdesk_agent.get_data()
         return context
 
 
 class CreateSubmission(TemplateView):
     template_name = "tracker/create_submission.html"
 
-    # freshdesk_agent = FreshdeskAgent()
+    freshdesk_agent = FreshdeskAgent()
 
 
 class UserProfile(TemplateView):
