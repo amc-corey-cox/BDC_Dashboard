@@ -165,7 +165,7 @@ class TicketDetail(LoginRequiredMixin, TemplateView):
 
         context["issue_content"] = issue_content
 
-        context["freshdesk_issues"] = freshdesk_agent.get_data()
+        context["freshdesk_tickets"] = freshdesk_agent.get_ticket_by_jira_issue_id(ticket_id)
         return context
 
 

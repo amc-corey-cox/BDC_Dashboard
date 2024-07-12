@@ -43,20 +43,23 @@ class FreshdeskAgent:
         self.auth_user = settings.FRESHDESK_AUTH_USER
         self.auth_password = settings.FRESHDESK_AUTH_PASSWORD
         self.headers = {
-            "Authorization": f"Basic {self.auth_user}:{self.auth_password}",
+            'Authorization': 'Basic d1hZVm5PdXd6T0VYWE5tUnhOd1c6WA==',
             "Accept": "application/json",
             "Content-Type": "application/json",
         }
         self.base_url = settings.FRESHDESK_BASE_URL
         self.fields = FRESHDESK_TICKET_FIELDS
 
-    def get_data(self, api_endpoint):
-        response = requests.get(self.base_url + api_endpoint, headers=self.headers)
+    def get_data(self, api_endpoint, params=None):
+        response = requests.get(self.base_url + api_endpoint, params=params, headers=self.headers)
         if response.status_code == 200:
             return response.json()
         else:
             return None
 
-    def get_issue_by_jira_issue_id(self, jira_id):
-        api_endpoint = f'api/v2/search/tickets?query="custom_string:{jira_id}"'
-        return self.get_data(api_endpoint)
+    def get_ticket_by_jira_issue_id(self, jira_id):
+        params = {
+            'query': f'\'custom_string:"{jira_id}"\'',
+        }
+        api_endpoint = f'/api/v2/search/tickets'
+        return self.get_data(api_endpoint, params)["results"]
