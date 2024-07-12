@@ -1,14 +1,14 @@
 <div class="arrowsBanner">
-  {% for status in workflow %}
-    <div class="arrowBase
-      {% if not forloop.last %} arrowHead {% endif %}
-      {% if not forloop.first %} arrowTail {% endif %}
-      {% if status.selected %} selectedArrow {% endif %}">
-    {% if status.selected %}
-      <span class="arrowText">{{ status.name }}</span>
-    {% else %}
-      <span class="arrowText">{{ status.name }}</span>
-    {% endif %}
-    </div>
-  {% endfor %}
+    {% for status in workflow %}
+        <div class="arrowBase
+          {% if not forloop.last %} arrowHead {% endif %}
+          {% if not forloop.first %} arrowTail {% endif %}
+          {% if status.selected %} selectedArrow {% endif %}">
+            {% if status.selected %}
+                <span class="arrowText">{{ status.name }}</span>
+            {% else %}
+                <span class="arrowText">{{ status.name }}</span>
+            {% endif %}
+        </div>
+    {% endfor %}
 </div>

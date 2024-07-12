@@ -2,48 +2,46 @@
 <h2 class="text-muted" style="text-align: center">Profile</h2>
 
 {% if user.is_authenticated %}
-<div class="card text-center m-2">
-  <div class="alert alert-success ">
-    <h4 class="text-center">
-      <p>You are logged in as:</p>
-      <p>Name: {{ user.name }}</p> 
-      <p>Email: {{ user.email }}</p>
-   
-    </h4>
-  </div>
-  <div class="card-body">
-    <p>Role privileges:
-      {% if user.is_staff%} <strong>DATA ADMIN</strong> {% else %} <strong>DATA CUSTODIAN</strong> {% endif %}</p>
-    <p>Date Joined: <strong>{{ user.date_joined }}</strong></p>
-  </div>
-  <div class="card-footer">
-    <p>Last Login: <em>{{ user.last_login }}</em></p>
-    <a href="/accounts/logout" class="btn btn-danger btn-md mb-2 form-element" role="button">
-      Logout
-    </a>
-  </div>
-</div>
+    <div class="card text-center m-2">
+        <div class="alert alert-success ">
+            <h4 class="text-center">
+                <p>You are logged in as:</p>
+                <p>Name: {{ user.name }}</p>
+                <p>Email: {{ user.email }}</p>
+
+            </h4>
+        </div>
+        <div class="card-body">
+            <p>Role privileges:
+                {% if user.is_staff%} <strong>DATA ADMIN</strong> {% else %} <strong>DATA CUSTODIAN</strong> {% endif %}</p>
+            <p>Date Joined: <strong>{{ user.date_joined }}</strong></p>
+        </div>
+        <div class="card-footer">
+            <p>Last Login: <em>{{ user.last_login }}</em></p>
+            <a href="/accounts/logout" class="btn btn-danger btn-md mb-2 form-element" role="button"> Logout </a>
+        </div>
+    </div>
 {% else %}
-<div class="card text-center m-2">
-  <div class="alert alert-success ">
-    <h4 class="text-center">
-      Please Login Below
-    </h4>
-  </div>
-  <div class="card-footer">
-  {% get_providers as socialaccount_providers %}
-	{% for provider in socialaccount_providers %}
-	<form action="{% provider_login_url provider.id process='login' %}" method="post">
-	  {% csrf_token %}
-	  <button class="btn btn-success btn-md form-element" type="submit">{{ provider.name }}</button>
-	</form>
-	{% endfor %}
-  </div>
-</div>
+    <div class="card text-center m-2">
+        <div class="alert alert-success ">
+            <h4 class="text-center">
+                Please Login Below
+            </h4>
+        </div>
+        <div class="card-footer">
+            {% get_providers as socialaccount_providers %}
+            {% for provider in socialaccount_providers %}
+                <form action="{% provider_login_url provider.id process='login' %}" method="post">
+                    {% csrf_token %}
+                    <button class="btn btn-success btn-md form-element" type="submit">{{ provider.name }}</button>
+                </form>
+            {% endfor %}
+        </div>
+    </div>
 {% endif %}
 
 {% for user in users %}
-{{ user }}
+    {{ user }}
 {% endfor %}
 
 {% endblock %}

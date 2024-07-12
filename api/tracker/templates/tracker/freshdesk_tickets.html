@@ -1,34 +1,34 @@
 <div>
-  {% if freshdesk_tickets %}
-    <h2>Open Freshdesk Tickets</h2>
+    {% if freshdesk_tickets %}
+        <h2>Open Freshdesk Tickets</h2>
 
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th scope="col">Ticket ID</th>
-          <th scope="col">Subject</th>
-          <th scope="col">Status</th>
-          <th scope="col">Priority</th>
-          <th scope="col">Type</th>
-          <th scope="col">Created At</th>
-          <th scope="col">Updated At</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for ticket in freshdesk_tickets %}
-          <tr>
-            <td>{{ ticket.id }}</td>
-            <td>{{ ticket.subject }}</td>
-            <td>{{ ticket.status }}</td>
-            <td>{{ ticket.priority }}</td>
-            <td>{{ ticket.type }}</td>
-            <td>{{ ticket.created_at }}</td>
-            <td>{{ ticket.updated_at }}</td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  {% else %}
-    <p>No Freshdesk Tickets found.</p>
-  {% endif %}
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">Ticket ID</th>
+                <th scope="col">Subject</th>
+                <th scope="col">Status</th>
+                <th scope="col">Priority</th>
+                <th scope="col">Type</th>
+                <th scope="col">Created At</th>
+                <th scope="col">Updated At</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for ticket in freshdesk_tickets %}
+                <tr>
+                    <td>{{ ticket.id }}</td>
+                    <td>{{ ticket.subject }}</td>
+                    <td>{{ ticket.status }}</td>
+                    <td>{{ ticket.priority }}</td>
+                    <td>{{ ticket.type }}</td>
+                    <td>{{ ticket.created_at }}</td>
+                    <td>{{ ticket.updated_at }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No Freshdesk Tickets found.</p>
+    {% endif %}
 </div>
