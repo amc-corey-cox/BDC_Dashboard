@@ -118,7 +118,7 @@ class TicketDetail(LoginRequiredMixin, TemplateView):
         ticket_id = kwargs['pk']
 
         jira_agent = JiraAgent()
-        freshdesk_agent = FreshdeskAgent()
+        # freshdesk_agent = FreshdeskAgent()
 
         issue = jira_agent.get_issue(ticket_id)
         issue_status = issue['fields']['status']['name']
@@ -167,6 +167,11 @@ class TicketDetail(LoginRequiredMixin, TemplateView):
 
         context["freshdesk_tickets"] = freshdesk_agent.get_ticket_by_jira_issue_id(ticket_id)
         return context
+
+    def get_freshdesk_context(self, issue_id):
+        freshdesk_agent = FreshdeskAgent()
+        tickets = freshdesk_agent.get_ticket_by_jira_issue_id(issue_id)
+        return freshdesk_agent.get_ticket_by_jira_issue_id(issue_id)
 
 
 class CreateSubmission(TemplateView):

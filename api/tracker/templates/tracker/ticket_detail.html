@@ -8,14 +8,18 @@
     <div id="board" class="container">
         {% if issue.fields.subtasks %}
             <div class="board-section">
-                <h2>Subtasks</h2>
+                <div class="board-section-header">
+                    <p class="h5">Subtasks</p>
+                </div>
                 <div>{% include "tracker/subtasks_section.html" %}</div>
             </div>
         {% endif %}
 
         {% for section, values in issue_content.items %}
             <div class="board-section">
-                <h2>{{ section.title }}</h2>
+                <div class="board-section-header">
+                    <p class="h5">{{ section.title }}</p>
+                </div>
                 <table style="width: 100%;">
                     <tbody>
                     {% for field_values in values.fields.values %}
@@ -29,10 +33,7 @@
             </div>
         {% endfor %}
 
-        {% if freshdesk_tickets %}
-            <div class="board-section">
-                {% include "tracker/freshdesk_tickets.html" %}
-            </div>
-        {% endif %}
+    {% include "tracker/freshdesk_tickets.html" %}
+
     </div>
 {% endblock %}

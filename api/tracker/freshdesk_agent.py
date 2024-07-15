@@ -62,4 +62,13 @@ class FreshdeskAgent:
             'query': f'\'custom_string:"{jira_id}"\'',
         }
         api_endpoint = f'/api/v2/search/tickets'
-        return self.get_data(api_endpoint, params)["results"]
+        tickets = self.get_data(api_endpoint, params)["results"]
+
+        for ticket in tickets:
+            ticket["conversations"] = self.get_ticket_conversations(ticket["id"])
+
+        return tickets
+
+    def get_ticket_conversations(self, ticket_id):
+        api_endpoint = f'/api/v2/tickets/{ticket_id}/conversations'
+        return self.get_data(api_endpoint)["results"]["conversations"]

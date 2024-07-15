@@ -1,34 +1,29 @@
-<div>
+<div class="board-section">
     {% if freshdesk_tickets %}
-        <h2>Open Freshdesk Tickets</h2>
-
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th scope="col">Ticket ID</th>
-                <th scope="col">Subject</th>
-                <th scope="col">Status</th>
-                <th scope="col">Priority</th>
-                <th scope="col">Type</th>
-                <th scope="col">Created At</th>
-                <th scope="col">Updated At</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for ticket in freshdesk_tickets %}
-                <tr>
-                    <td>{{ ticket.id }}</td>
-                    <td>{{ ticket.subject }}</td>
-                    <td>{{ ticket.status }}</td>
-                    <td>{{ ticket.priority }}</td>
-                    <td>{{ ticket.type }}</td>
-                    <td>{{ ticket.created_at }}</td>
-                    <td>{{ ticket.updated_at }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+        <div class="board-section-header">
+            <p class="h5">Open Freshdesk Tickets</p>
+        </div>
+        {% for ticket in freshdesk_tickets %}
+            <div class="board-item">
+                <div class="card m-2 issue-card">
+                    <div class="card-header" style="display: flex; justify-content: space-between;">
+                        <strong>{{ ticket.subject }}</strong>
+                        <a href="{{ ticket.url }}">
+                            <button class="btn btn-lozenge">Detail</button>
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text" style="margin-bottom: 0px;">{{ ticket.description_text }}</p>
+                        {% for conversation in ticket.conversations %}
+                            <p class="card-text">{{ comment }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
     {% else %}
-        <p>No Freshdesk Tickets found.</p>
+        <div class="board-section-header">
+            <p class="h5">No Open Freshdesk Tickets</p>
+        </div>
     {% endif %}
 </div>
