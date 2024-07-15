@@ -16,7 +16,7 @@
                 </div>
                 <div class="board-item">
                     {% for issue in status_data.issues %}
-                        <div class="card m-2 custom-card">
+                        <div class="card m-2 issue-card">
                             <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
                                 <div>
                                     <strong>{{ issue.fields.parent.fields.summary }}  -  {{ issue.fields.summary }}</strong>

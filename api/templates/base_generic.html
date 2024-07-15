@@ -35,10 +35,10 @@
         </a>
         <hr />
         <div class="list-group">
-          <a class="list-group-item list-group-item-action banner-action" href="/">
+          <a class="list-group-item list-group-item-action" href="/">
             My Submissions
           </a>
-          <a class="list-group-item list-group-item-action banner-action" href="/profile">User Profile</a>
+          <a class="list-group-item list-group-item-action" href="/profile">User Profile</a>
 <!--          <a class="list-group-item list-group-item-action banner-action" href="/create">-->
 <!--            Create Ticket-->
 <!--          </a>-->
@@ -46,21 +46,21 @@
 <!--          <a class="list-group-item list-group-item-action banner-action" href="/custodian_instructions">-->
 <!--            Data Custodian Instructions-->
 <!--          </a>-->
-          <a class="list-group-item list-group-item-action banner-action" href="/user_docs">
+          <a class="list-group-item list-group-item-action" href="/user_docs">
             Documentation
           </a>
-          <a class="list-group-item list-group-item-action banner-action" href="/about">
+          <a class="list-group-item list-group-item-action" href="/about">
             About the Tracker
           </a>
         </div>
         <hr />
           {% if user.is_authenticated %}
-        <div class="list-group-item d-column text-center banner-action">
+        <div class="list-group-item d-column text-center">
           <strong>{{ user.name }}</strong><br/>
           <strong>{{ user.email }}</strong>
           <br>
           {% if request.path != "/accounts/logout/" %}
-          <a href="/accounts/logout" class="btn btn-lozenge banner-action w-50" role="button"
+          <a href="/accounts/logout" class="btn btn-lozenge w-50" role="button"
              style="padding-left: 0; padding-right: 0;"
               >
             Logout
