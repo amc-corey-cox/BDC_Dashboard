@@ -2,9 +2,10 @@ from django.conf import settings
 import requests
 
 # Freshdesk field names to descriptions
-FRESHDESK_TICKET_FIELDS = {
+TICKET_FIELDS = {
     "subject": "Subject",
     "description": "Description",
+    "description_text": "Description Text",
     "status": "Status",
     "priority": "Priority",
     "type": "Type",
@@ -48,7 +49,7 @@ class FreshdeskAgent:
             "Content-Type": "application/json",
         }
         self.base_url = settings.FRESHDESK_BASE_URL
-        self.fields = FRESHDESK_TICKET_FIELDS
+        self.fields = TICKET_FIELDS
 
     def get_data(self, api_endpoint, params=None):
         response = requests.get(self.base_url + api_endpoint, params=params, headers=self.headers)
@@ -57,18 +58,19 @@ class FreshdeskAgent:
         else:
             return None
 
-    def get_ticket_by_jira_issue_id(self, jira_id):
+    def get_associated_tickets(self, jira_id):
         params = {
             'query': f'\'custom_string:"{jira_id}"\'',
         }
         api_endpoint = f'/api/v2/search/tickets'
         tickets = self.get_data(api_endpoint, params)["results"]
 
-        for ticket in tickets:
-            ticket["conversations"] = self.get_ticket_conversations(ticket["id"])
+        ticket_content = []
+        for ticket_id in (ticket["id"] for ticket in tickets):
+            ticket_content.append(self.get_ticket_w_conversations(ticket_id))
 
-        return tickets
+        return ticket_content
 
-    def get_ticket_conversations(self, ticket_id):
-        api_endpoint = f'/api/v2/tickets/{ticket_id}/conversations'
-        return self.get_data(api_endpoint)["results"]["conversations"]
+    def get_ticket_w_conversations(self, ticket_id):
+        api_endpoint = f'/api/v2/tickets/{ticket_id}?include=conversations'
+        return self.get_data(api_endpoint)

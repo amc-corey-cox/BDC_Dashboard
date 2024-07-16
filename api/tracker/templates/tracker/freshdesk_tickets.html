@@ -13,9 +13,9 @@
                         </a>
                     </div>
                     <div class="card-body">
-                        <p class="card-text" style="margin-bottom: 0px;">{{ ticket.description_text }}</p>
+                        <p class="card-text">{{ ticket.description_text }}</p>
                         {% for conversation in ticket.conversations %}
-                            <p class="card-text">{{ comment }}</p>
+                            <p class="card-text">{{ conversation.body_text }}</p>
                         {% endfor %}
                     </div>
                 </div>

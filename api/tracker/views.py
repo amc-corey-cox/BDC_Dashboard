@@ -115,12 +115,12 @@ class TicketDetail(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        ticket_id = kwargs['pk']
+        issue_id = kwargs['pk']
 
         jira_agent = JiraAgent()
-        # freshdesk_agent = FreshdeskAgent()
+        freshdesk_agent = FreshdeskAgent()
 
-        issue = jira_agent.get_issue(ticket_id)
+        issue = jira_agent.get_issue(issue_id)
         issue_status = issue['fields']['status']['name']
         issue_status = issue_status.upper() if issue_status != "Data Available" else "BDC RELEASED"
 
@@ -165,13 +165,8 @@ class TicketDetail(LoginRequiredMixin, TemplateView):
 
         context["issue_content"] = issue_content
 
-        context["freshdesk_tickets"] = freshdesk_agent.get_ticket_by_jira_issue_id(ticket_id)
+        context["freshdesk_tickets"] = freshdesk_agent.get_associated_tickets(issue_id)
         return context
-
-    def get_freshdesk_context(self, issue_id):
-        freshdesk_agent = FreshdeskAgent()
-        tickets = freshdesk_agent.get_ticket_by_jira_issue_id(issue_id)
-        return freshdesk_agent.get_ticket_by_jira_issue_id(issue_id)
 
 
 class CreateSubmission(TemplateView):
