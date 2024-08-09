@@ -202,3 +202,34 @@ def create_submission(request):
         return redirect('success_page')  # Redirect to a success page after submission
 
     return render(request, 'tracker/create_submission.html')
+
+
+def new_ticket_freshdesk(request):
+    if request.method == 'POST':
+        study_name = request.POST.get('study_name')
+        institution_name = request.POST.get('institution_name')
+        principal_investigator = request.POST.get('principal_investigator')
+        funding_id = request.POST.get('funding_id')
+        expected_date = request.POST.get('expected_date')
+        email_contact = request.POST.get('email_contact')
+
+        # Create a Freshdesk ticket
+        agent = FreshdeskAgent()
+
+        if request.POST.get('post_type') == 'create_submission':
+            agent.create_ticket(
+                subject=f"New Data Submission: {study_name}",
+                description=f"Institution: {institution_name}\nPI: {principal_investigator}\nFunding ID: {funding_id}\nExpected Date: {expected_date}\nContact Email: {email_contact}",
+                email=email_contact
+            )
+        elif request.POST.get('post_type') == 'Update':
+
+        agent.create_ticket(
+            subject=f"New Data Submission: {study_name}",
+            description=f"Institution: {institution_name}\nPI: {principal_investigator}\nFunding ID: {funding_id}\nExpected Date: {expected_date}\nContact Email: {email_contact}",
+            email=email_contact
+        )
+
+        return redirect('success_page')  # Redirect to a success page after submission
+
+    return render(request, 'tracker/create_submission.html')
