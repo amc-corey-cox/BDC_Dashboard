@@ -223,11 +223,10 @@ def new_ticket_freshdesk(request):
                 email=email_contact
             )
         elif request.POST.get('post_type') == 'Update':
-
-        agent.create_ticket(
-            subject=f"New Data Submission: {study_name}",
-            description=f"Institution: {institution_name}\nPI: {principal_investigator}\nFunding ID: {funding_id}\nExpected Date: {expected_date}\nContact Email: {email_contact}",
-            email=email_contact
+            agent.create_ticket(
+                subject=f"New Data Submission: {study_name}",
+                description=f"Institution: {institution_name}\nPI: {principal_investigator}\nFunding ID: {funding_id}\nExpected Date: {expected_date}\nContact Email: {email_contact}",
+                email=email_contact
         )
 
         return redirect('success_page')  # Redirect to a success page after submission
