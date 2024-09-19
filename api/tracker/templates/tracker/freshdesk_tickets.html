@@ -1,4 +1,5 @@
 <div class="board-section">
+    <a href="/new_ticket_freshdesk">Create New Ticket</a>
     {% if freshdesk_tickets %}
         <div class="board-section-header">
             <p class="h5">Open Freshdesk Tickets</p>
@@ -8,7 +9,6 @@
             <p class="h5">No Open Freshdesk Tickets</p>
         </div>
     {% endif %}
-    <a href="/create_submission">Create New Ticket</a>
     {% for ticket in freshdesk_tickets %}
         <div class="board-item">
             <div class="card m-2 issue-card">

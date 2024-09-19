@@ -176,6 +176,11 @@ class CreateSubmission(TemplateView):
 
     freshdesk_agent = FreshdeskAgent()
 
+class CreateFreshdeskTicket(TemplateView):
+    template_name = "tracker/freshdesk_create.html"
+
+    freshdesk_agent = FreshdeskAgent()
+
 
 class UserProfile(TemplateView):
     template_name = "tracker/profile.html"
@@ -231,4 +236,4 @@ def new_ticket_freshdesk(request):
 
         return redirect('success_page')  # Redirect to a success page after submission
 
-    return render(request, 'tracker/create_submission.html')
+    return render(request, 'tracker/freshdesk_create.html')
