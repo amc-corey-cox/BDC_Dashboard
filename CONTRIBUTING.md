@@ -118,7 +118,7 @@ docker-compose up --build -d
 To access the application navigate to `http://localhost:8000/` in your browser. You should see a login screen for the application with a button for `NIH login`. Login will not work at this time. In order to log in to the application we'll need to set the Django superuser. First, enter the local Docker container shell.
 
 ``` shell
-docker exec -it bdc-dashboard-db /bin/bash
+docker exec -it bdc-dashboard-app /bin/bash
 ```
 
 Then create a Django superuser on the Docker container.

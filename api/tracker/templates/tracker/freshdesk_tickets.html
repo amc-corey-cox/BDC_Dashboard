@@ -1,0 +1,34 @@
+<div class="board-section">
+    <a href="/new_ticket_freshdesk">Create New Ticket</a>
+    {% if freshdesk_tickets %}
+        <div class="board-section-header">
+            <p class="h5">Open Freshdesk Tickets</p>
+        </div>
+    {% else %}
+        <div class="board-section-header">
+            <p class="h5">No Open Freshdesk Tickets</p>
+        </div>
+    {% endif %}
+    {% for ticket in freshdesk_tickets %}
+        <div class="board-item">
+            <div class="card m-2 issue-card">
+                <div class="card-header" style="display: flex; justify-content: space-between;">
+                    <strong>{{ ticket.subject }}</strong>
+                    <a href="{{ ticket.url }}">
+                        <button class="btn btn-lozenge">Detail</button>
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div class="board-card-item">
+                        <p class="card-text">{{ ticket.description_text }}</p>
+                    </div>
+                    {% for conversation in ticket.conversations %}
+                        <div class="board-card-item">
+                            <p class="card-text">{{ conversation.body_text }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>

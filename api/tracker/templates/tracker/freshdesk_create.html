@@ -1,0 +1,27 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <div id="board" class="container">
+
+        <div class="board-section-header">
+            <p class="h5">Get help on your Data Submission</p>
+            <p class="text-muted">Use this form to create a new Freshdesk ticket for help on your Data Submission.</p>
+        </div>
+        <div class="board-item">
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="study_name">Subject</label>
+                    <input type="text" class="form-control" id="study_name" name="study_name" required
+                           placeholder="Subject for your Ticket">
+                </div>
+                <div class="form-group">
+                    <label for="institution_name">Description</label>
+                    <input type="text" class="form-control" id="institution_name" name="institution_name" required
+                           placeholder="Description of the problem or question about your submission">
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

@@ -2,6 +2,10 @@ import re
 # from django.contrib.auth.mixins import (LoginRequiredMixin, PermissionRequiredMixin, )
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
+
+from django.shortcuts import render, redirect
+
+from .freshdesk_agent import FreshdeskAgent
 # from .models import Ticket, User, STATUS_TYPES
 from .models import User
 from .jira_agent import JiraAgent, ISSUE_FIELDS
@@ -113,11 +117,12 @@ class TicketDetail(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        ticket_id = kwargs['pk']
+        issue_id = kwargs['pk']
 
         jira_agent = JiraAgent()
+        freshdesk_agent = FreshdeskAgent()
 
-        issue = jira_agent.get_issue(ticket_id)
+        issue = jira_agent.get_issue(issue_id)
         issue_status = issue['fields']['status']['name']
         issue_status = issue_status.upper() if issue_status != "Data Available" else "BDC RELEASED"
 
@@ -133,7 +138,8 @@ class TicketDetail(LoginRequiredMixin, TemplateView):
             "Study": ["summary", "description", "status"],
             "Assignee and Reporter": ["assignee", "reporter"],
             "Dates": ["customfield_12004", "customfield_12005"],
-            "Custom Fields": ["customfield_15000", "customfield_15001", "customfield_15200", "customfield_15201",
+            "Custom Fields": ["customfield_15000",  # "customfield_15001",
+                              "customfield_15200", "customfield_15201",
                               "customfield_15202", "customfield_15203",  # "customfield_15205", "customfield_15301",
                               "customfield_15206", "customfield_15204", "customfield_15208",  # "customfield_15207",
                               "customfield_15209", "customfield_15210"],
@@ -160,9 +166,74 @@ class TicketDetail(LoginRequiredMixin, TemplateView):
                 #     issue_content[title]["fields"][field]["value"] = issue["fields"][field]
 
         context["issue_content"] = issue_content
+
+        context["freshdesk_tickets"] = freshdesk_agent.get_associated_tickets(issue_id)
         return context
+
+
+class CreateSubmission(TemplateView):
+    template_name = "tracker/create_submission.html"
+
+    freshdesk_agent = FreshdeskAgent()
+
+class CreateFreshdeskTicket(TemplateView):
+    template_name = "tracker/freshdesk_create.html"
+
+    freshdesk_agent = FreshdeskAgent()
 
 
 class UserProfile(TemplateView):
     template_name = "tracker/profile.html"
     model = User
+
+
+def create_submission(request):
+    if request.method == 'POST':
+        study_name = request.POST.get('study_name')
+        institution_name = request.POST.get('institution_name')
+        principal_investigator = request.POST.get('principal_investigator')
+        funding_id = request.POST.get('funding_id')
+        expected_date = request.POST.get('expected_date')
+        email_contact = request.POST.get('email_contact')
+
+        # Create a Freshdesk ticket
+        agent = FreshdeskAgent()
+        agent.create_ticket(
+            subject=f"New Data Submission: {study_name}",
+            description=f"Institution: {institution_name}\nPI: {principal_investigator}\nFunding ID: {funding_id}\nExpected Date: {expected_date}\nContact Email: {email_contact}",
+            email=email_contact
+        )
+
+        return redirect('success_page')  # Redirect to a success page after submission
+
+    return render(request, 'tracker/create_submission.html')
+
+
+def new_ticket_freshdesk(request):
+    if request.method == 'POST':
+        study_name = request.POST.get('study_name')
+        institution_name = request.POST.get('institution_name')
+        principal_investigator = request.POST.get('principal_investigator')
+        funding_id = request.POST.get('funding_id')
+        expected_date = request.POST.get('expected_date')
+        email_contact = request.POST.get('email_contact')
+
+        # Create a Freshdesk ticket
+        agent = FreshdeskAgent()
+
+        if request.POST.get('post_type') == 'create_submission':
+            agent.create_ticket(
+                subject=f"New Data Submission: {study_name}",
+                description=f"Institution: {institution_name}\nPI: {principal_investigator}\nFunding ID: {funding_id}\nExpected Date: {expected_date}\nContact Email: {email_contact}",
+                email=email_contact
+            )
+        elif request.POST.get('post_type') == 'Update':
+            agent.create_ticket(
+                subject=f"New Data Submission: {study_name}",
+                description=f"Institution: {institution_name}\nPI: {principal_investigator}\nFunding ID: {funding_id}\nExpected Date: {expected_date}\nContact Email: {email_contact}",
+                email=email_contact
+        )
+
+        return redirect('success_page')  # Redirect to a success page after submission
+
+    return render(request, 'tracker/freshdesk_create.html')

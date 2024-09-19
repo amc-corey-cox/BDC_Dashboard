@@ -1,24 +1,39 @@
 {% extends "base_generic.html" %}
+
 {% block content %}
-  <h2 class="text-muted" style="text-align: center">Issue {{ issue.key }} Details</h2>
+    <h2 class="text-muted" style="text-align: center">Issue {{ issue.key }} Details</h2>
 
-  {% include "tracker/workflow_arrows.html" %}
+    {% include "tracker/workflow_arrows.html" %}
 
-  {% if issue.fields.subtasks %}
-    <h2>Subtasks</h2>
-      <div>{% include "tracker/subtasks_section.html" %}</div>
-  {% endif %}
-  {% for section, values in issue_content.items %}
-    <h2>{{ section.title }}</h2>
-      <table>
-        <tbody>
-          {% for field_values in values.fields.values %}
-            <tr>
-              <td style="width: 250px;">{{ field_values.name }}</td>
-              <td><input type="text" value="{{ field_values.value }}" class="read-only-field" readonly></td>
-            </tr>
-          {% endfor %}
-      </tbody>
-      </table>
-  {% endfor %}
+    <div id="board" class="container">
+        {% if issue.fields.subtasks %}
+            <div class="board-section">
+                <div class="board-section-header">
+                    <p class="h5">Subtasks</p>
+                </div>
+                <div>{% include "tracker/subtasks_section.html" %}</div>
+            </div>
+        {% endif %}
+
+        {% for section, values in issue_content.items %}
+            <div class="board-section">
+                <div class="board-section-header">
+                    <p class="h5">{{ section.title }}</p>
+                </div>
+                <table style="width: 100%;">
+                    <tbody>
+                    {% for field_values in values.fields.values %}
+                        <tr>
+                            <td style="width: 250px;">{{ field_values.name }}</td>
+                            <td ><input style="width: 100%;" type="text" value="{{ field_values.value }}" class="read-only-field" readonly></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endfor %}
+
+    {% include "tracker/freshdesk_tickets.html" %}
+
+    </div>
 {% endblock %}
